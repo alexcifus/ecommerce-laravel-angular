@@ -7,6 +7,8 @@ use App\Models\Product\Categorie;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\CategorieResource;
 use App\Http\Resources\Product\CategorieCollection;
+use App\Http\Controllers\Admin\Product\CategorieController;
+use Illuminate\Support\Facades\Storage;
 
 class CategorieController extends Controller
 {
@@ -31,7 +33,7 @@ class CategorieController extends Controller
         $categories_seconds = Categorie::where("categorie_second_id","<>",NULL)->where("categorie_third_id",NULL)->get();
 
         return response()->json([
-            'categories-first' => $categories-first,
+            'categories_first' => $categories_first,
             'categories_seconds' => $categories_seconds,
         ]);
     }
@@ -46,7 +48,7 @@ class CategorieController extends Controller
         }
         if($request->hasFile('image')){
             $path = Storage::putFile('categories', $request->file('image'));
-            $request->request->add(['image' => $path]);
+            $request->request->add(['imagen' => $path]);
 
         }
         $categorie = Categorie::create($request->all());
@@ -74,11 +76,11 @@ class CategorieController extends Controller
         }
         $categorie = Categorie::findOrFail($id);
         if($request->hasFile('image')){
-            if($categorie->imagene){
-                Storage::delete($categorie->image);
+            if($categorie->imagen){
+                Storage::delete($categorie->imagen);
             }
             $path = Storage::putFile('categories', $request->file('image'));
-            $request->request->add(['image' => $path]);
+            $request->request->add(['imagen' => $path]);
 
         }
         $categorie->update($request->all());

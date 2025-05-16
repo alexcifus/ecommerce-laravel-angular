@@ -18,7 +18,7 @@ class CategorieResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'icon' => $this->resource->icon,
-            'image' => $this->resource->image ? env("APP_URL")."storage/".$this->resource->imagen : NULL,
+            'imagen' => $this->resource->image ? env("APP_URL")."storage/".$this->resource->imagen : NULL,
             'categorie_second_id'=> $this->resource->categorie_second_id,
             'categorie_second' => $this->resource->categorie_second ? [
                 "name" => $this->resource->categorie_second->name,

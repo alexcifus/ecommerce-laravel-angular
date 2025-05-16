@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\Product\CategorieController;
+
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -29,7 +31,7 @@ Route::group([
     'middleware' => 'auth:api',
     "prefix" => "admin",    
 ], function ($router) {
-    Route::get("categories/config", [CategoryController::class,"config"]);
-    Route::resource("categories", CategoryController::class);
-    Route::post("categories/{id}", [CategoryController::class, "update"]);
+    Route::get("categories/config", [CategorieController::class,"config"]);
+    Route::resource("categories", CategorieController::class);
+    Route::post("categories/{id}", [CategorieController::class, "update"]);
 });

@@ -40,7 +40,7 @@ export class CategoriesService {
 
   createCategories(data:any){
     this.isLoadingSubject.next(true);
-    console.log('Token enviado:', this.authservice.token); 
+   //console.log('Token enviado:', this.authservice.token); 
     let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
     let URL = URL_SERVICIOS+"/admin/categories";
     return this.http.post(URL,data,{headers: headers}).pipe(
