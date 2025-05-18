@@ -22,13 +22,25 @@ export class CreateCategorieComponent {
 
   isLoading$: any;
 
+categories_first:any = [];
+categories_seconds:any = [];
 constructor(
   public categoriesService: CategoriesService,
   public toastr: ToastrService,
-) { }
+) {
+  
+ }
 
   ngOnInit(): void {
     this.isLoading$ = this.categoriesService.isLoading$;
+    this.config();
+  }
+
+  config(){
+    this.categoriesService.configCategories().subscribe((resp:any)=>{
+      this.categories_first = resp.categories_first;
+      this.categories_seconds = resp.categories_seconds;
+    })
   }
 
   processFile($event:any){
@@ -56,11 +68,15 @@ constructor(
 
   save(){
 
-    if(!this.name || !this.icon || !this.position){
+    if(!this.name || !this.position){
       this.toastr.error('Validacion','Los campos con el * son obligatorios');
       return;
     }
-
+    
+    if(this.type_categorie == 1 && !this.icon ){
+      this.toastr.error('Validacion','El icono es obligatoria');
+      return;
+      }
     if(this.type_categorie == 1 && !this.file_imagen){
       this.toastr.error('Validacion','La imagen es obligatoria');
       return;
@@ -81,12 +97,10 @@ constructor(
     formDAta.append('name',this.name);
     formDAta.append('icon',this.icon);
     formDAta.append('position',this.position+"");
-    formDAta.append('type_categorie',this.type_categorie+"");
-
+    formDAta.append('type_categorie',this.type_categorie+""); 
     if(this.file_imagen){
       formDAta.append('image',this.file_imagen);
     }
-
     if(this.categorie_second_id){
       formDAta.append('categorie_second_id',this.categorie_second_id);
     }
@@ -97,6 +111,7 @@ constructor(
     this.categoriesService.createCategories(formDAta).subscribe((resp:any)=>{
       console.log(resp);
     })
+
 
   }
 }
