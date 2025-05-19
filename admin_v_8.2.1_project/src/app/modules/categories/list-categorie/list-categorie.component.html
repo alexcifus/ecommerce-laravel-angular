@@ -1,5 +1,6 @@
 <div class="card">
     <!--begin::Card header-->
+    <span class="spinner-border spinner-border-sm align-middle ms-2" *ngIf="isLoading$  | async"></span>
     <div class="card-header border-0 pt-6">
         <!--begin::Card title-->
         <div class="card-title">
@@ -7,7 +8,7 @@
             <div class="d-flex align-items-center position-relative my-1">
                 <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                     <span class="path1"></span><span class="path2"></span></i>
-                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Categoria">
+                <input type="text" (keyup.enter)="searchTo()" [(ngModel)]="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Categoria">
             </div>
             <!--end::Search-->
         </div>
@@ -112,44 +113,59 @@
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 fw-semibold">
-                        <tr>
-                            <td style="width: 300px;"> 
-                                <div class="d-flex align-items-center">
-                                    <div class="symbol symbol-50px me-5">
-                                        <img src="/metronic8/demo1/assets/media/stock/600x400/img-26.jpg" class="" alt="">
-                                    </div>
-                                    
-                                    <div class="d-flex justify-content-start flex-column">
-                                        <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">Gaming</a>
-                                        <!-- <span class="text-muted fw-semibold text-muted d-block fs-7">HTML, JS, ReactJS</span> -->
-                                    </div>
-                                </div>                                
-                            </td>
-                            <td>
-                                Icono                
-                            </td>
-                            <td>
-                                <span class="badge badge-light-primary fs-7 fw-bold">Approved</span>
-                            </td>
-                            <td>
-                                Computer
-                            </td>
-                            <td>
-                                Desktop
-                            </td> 
-                            <td class="text-end">
-                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                    <i class="ki-duotone ki-switch fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>
-                                
-                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                    <i class="ki-duotone ki-pencil fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>
+                        <ng-container *ngFor="let categorie of categories">
+                            <tr>
+                                <td style="width: 300px;"> 
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-50px me-5" *ngIf="categorie.imagen">
+                                            <img [src]="categorie.imagen" class="" alt="">
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-start flex-column">
+                                            <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">{{ categorie.name }}</a>
+                                            <!-- <span class="text-muted fw-semibold text-muted d-block fs-7">HTML, JS, ReactJS</span> -->
+                                        </div>
+                                    </div>                                
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="categorie.icon">
+                                        <div [id]="'svg-categorie-'+categorie.id">{{ getDomParser(categorie) }}</div>
+                                    </ng-container>
+                                </td>
+                                <td>
+                                    <span class="badge badge-light-primary fs-7 fw-bold" *ngIf="categorie.state == 1">Activo</span>
+                                    <span class="badge badge-light-danger fs-7 fw-bold" *ngIf="categorie.state == 2">Inactivo</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="categorie.categorie_second">
+                                        {{ categorie.categorie_second.name }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="categorie.categorie_third">
+                                        {{ categorie.categorie_third.name }}
+                                    </span>
+                                </td> 
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                        <i class="ki-duotone ki-pencil fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>
 
-                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                                    <i class="ki-duotone ki-trash fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>                                </a>
-                            </td> 
-                        </tr>
-                    </tbody>
+                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                        <i class="ki-duotone ki-trash fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>                                </a>
+                                </td> 
+                            </tr>
+                        </ng-container>
+                    </tbody> 
                 </table>
+                <ngb-pagination
+                    [collectionSize]="totalPages"
+                    [(page)]="currentPage"
+                    [pageSize]="2"
+                    [rotate]="true"
+                    [boundaryLinks]="true"
+                    (pageChange)="loadPage($event)"
+                ></ngb-pagination>
+
             </div>
         </div>
     </div>
