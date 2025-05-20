@@ -110,8 +110,23 @@ constructor(
 
     this.categoriesService.createCategories(formDAta).subscribe((resp:any)=>{
       console.log(resp);
+
+      if(resp.message == 403){
+        this.toastr.error('Validacion','La categoría ya existe');
+        return;
+      }
+
+
+      this.name = '';
+      this.icon = '';
+      this.position = 1;
+      this.type_categorie = 1;
+      this.file_imagen = null;
+      this.imagen_previsualiza = 'https://preview.keenthemes.com/metronic8/demo1/assets/media/svg/illustrations/easy/2.svg';
+      this.categorie_second_id = '';
+      this.categorie_third_id = '';
+      this.toastr.success('Exito','La categoría se refistró correctamente');
+      this.config();
     })
-
-
   }
 }
