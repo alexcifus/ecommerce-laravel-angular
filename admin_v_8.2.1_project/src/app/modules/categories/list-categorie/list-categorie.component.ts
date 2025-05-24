@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CategoriesService } from '../service/categories.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteCategorieComponent } from '../delete-categorie/delete-categorie.component';
 
 @Component({
   selector: 'app-list-categorie',
@@ -44,10 +45,21 @@ export class ListCategorieComponent {
 
   }
 
-
   getDomParser(categorie:any){
     var miDiv:any = document.getElementById('svg-categorie-'+categorie.id);
     miDiv.innerHTML = categorie.icon;
     return '';
+  }
+
+  deleteCategorie(categorie:any){
+    const modalRef = this.modalService.open(DeleteCategorieComponent, {centered: true, size: 'md'});
+    modalRef.componentInstance.categorie = categorie;
+
+    modalRef.componentInstance.CategorieD.subscribe((resp:any)=>{
+      let INDEX = this.categories.findIndex((item:any) => item.id == categorie.id);
+      if(INDEX != -1){
+        this.categories.splice(INDEX,1);
+      }
+    })
   }
 }

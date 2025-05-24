@@ -24,6 +24,7 @@ export class CreateCategorieComponent {
 
 categories_first:any = [];
 categories_seconds:any = [];
+categories_seconds_backups:any = [];
 constructor(
   public categoriesService: CategoriesService,
   public toastr: ToastrService,
@@ -64,6 +65,13 @@ constructor(
 
   changeTypeCategorie(val:number){
     this.type_categorie = val;
+    this.categorie_third_id = '';
+    this.categorie_second_id = '';
+  }
+
+  changeDepartamento(){
+    this.categories_seconds_backups = this.categories_seconds.filter((item:any) => item.categorie_second_id == this.categorie_third_id)
+
   }
 
   save(){
@@ -95,7 +103,9 @@ constructor(
 
     let formDAta = new FormData();
     formDAta.append('name',this.name);
-    formDAta.append('icon',this.icon);
+    if(this.icon){
+      formDAta.append('icon',this.icon);
+    }
     formDAta.append('position',this.position+"");
     formDAta.append('type_categorie',this.type_categorie+""); 
     if(this.file_imagen){

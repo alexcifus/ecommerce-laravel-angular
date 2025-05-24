@@ -26,8 +26,10 @@ export class EditCategorieComponent {
 
 categories_first:any = [];
 categories_seconds:any = [];
+categories_seconds_backups:any = [];
 
 CATEGORIE_ID:string = '';
+CATEGORIE:any = null;
 constructor(
   public categorieService: CategoriesService,
   public toastr: ToastrService,
@@ -47,6 +49,7 @@ constructor(
 
   this.categorieService.showCategorie(this.CATEGORIE_ID).subscribe((resp:any)=>{
     console.log(resp);
+    this.CATEGORIE = resp.categorie;
     this.type_categorie = resp.categorie.type_categorie;
     this.name = resp.categorie.name;
     this.icon = resp.categorie.icon;
@@ -85,6 +88,13 @@ constructor(
 
   changeTypeCategorie(val:number){
     this.type_categorie = val;
+    this.categorie_third_id = '';
+    this.categorie_second_id = '';
+  }
+
+  changeDepartamento(){
+    this.categories_seconds_backups = this.categories_seconds.filter((item:any) => item.categorie_second_id == this.categorie_third_id)
+
   }
 
   save(){
@@ -116,7 +126,13 @@ constructor(
 
     let formDAta = new FormData();
     formDAta.append('name',this.name);
-    formDAta.append('icon',this.icon);
+    if(this.icon){
+      formDAta.append('icon',this.icon);
+    }else{
+      if(this.CATEGORIE.icon){
+        formDAta.append('icon','');
+      }
+    }
     formDAta.append('position',this.position+"");
     formDAta.append('type_categorie',this.type_categorie+""); 
     if(this.file_imagen){
