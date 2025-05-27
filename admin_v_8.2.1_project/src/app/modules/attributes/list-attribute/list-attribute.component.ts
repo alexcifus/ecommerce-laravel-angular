@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteAttributeComponent } from '../delete-attribute/delete-attribute.component';
 import { AttributesService } from '../service/attributes.service';
+import { CreateAttributeComponent } from '../create-attribute/create-attribute.component';
 
 @Component({
   selector: 'app-list-attribute',
@@ -23,21 +24,22 @@ export class ListAttributeComponent {
   }
 
   ngOnInit(): void {
-    // this.listAttributes();
+    this.listAttributes();
     this.isLoading$ = this.attributesService.isLoading$;  
   }
   listAttributes(page = 1){
     this.attributesService.listAttributes(page,this.search).subscribe((resp:any)=>{
       console.log(resp);
-      this.attributes = resp.attributes.data;
+      this.attributes = resp.attributes;
       this.totalPages = resp.total;
       this.currentPage = page;
     })
   }
 
   
-  getNameAttribute(type_attribute:number){
+  getNameAttribute(type_attribute:any){
     var name_attribute = '';
+    type_attribute = parseInt(type_attribute);
     switch(type_attribute){
       case 1:
         name_attribute = 'Texto';
@@ -68,6 +70,11 @@ export class ListAttributeComponent {
   }
 
   openModalCreateAttribute(){
+    const modalRef = this.modalService.open(CreateAttributeComponent, {centered: true, size: 'md'});
+
+    modalRef.componentInstance.AttributeC.subscribe((attrib:any)=>{
+      this.attributes.unshift(attrib);
+    });
 
   }
   openModalEditAttribute(attribute:any){
