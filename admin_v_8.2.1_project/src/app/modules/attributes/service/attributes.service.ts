@@ -40,19 +40,19 @@ export class AttributesService {
     );
   }
 
-  updateAttributes(categorie_id:string,data:any){
+  updateAttributes(attribute_id:string,data:any){
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
-    let URL = URL_SERVICIOS+"/admin/attributes/"+categorie_id;
-    return this.http.post(URL,data,{headers: headers}).pipe(
+    let URL = URL_SERVICIOS+"/admin/attributes/"+attribute_id;
+    return this.http.put(URL,data,{headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
 
-  deleteAttribute(categorie_id:string){
+  deleteAttribute(attribute_id:string){
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
-    let URL = URL_SERVICIOS+"/admin/attributes/"+categorie_id;
+    let URL = URL_SERVICIOS+"/admin/attributes/"+attribute_id;
     return this.http.delete(URL, {headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );

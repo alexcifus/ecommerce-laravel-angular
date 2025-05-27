@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AttributesService } from '../service/attributes.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-delete-attribute',
@@ -6,5 +9,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./delete-attribute.component.scss']
 })
 export class DeleteAttributeComponent {
+   @Input() attribute:any;
+  
+    @Output() AttributeD: EventEmitter<any> = new EventEmitter();
+    isLoading:any;
+    constructor(
+      public attributeService: AttributesService,
+      public toastr: ToastrService,
+      public modal: NgbActiveModal,
+    ) {
+  
+    }
+  
+    ngOnInit(): void {
+      this.isLoading = this.attributeService.isLoading$;
+    }
+    delete(){
+      
+      this.attributeService.deleteAttribute(this.attribute.id).subscribe((resp:any)=>{
+        this.AttributeD.emit({message:200});
+        this.modal.close();
+      })
+    }
 
 }
