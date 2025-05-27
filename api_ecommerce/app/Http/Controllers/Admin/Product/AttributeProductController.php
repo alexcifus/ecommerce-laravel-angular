@@ -72,7 +72,9 @@ class AttributeProductController extends Controller
     }
 
     public function store_propertie(Request $request) {
-        $isValida = Propertie::where('name', $request->name)->first();
+        $isValida = Propertie::where('name', $request->name)
+                            ->where("attribute_id",$request->attribute_id)
+                            ->first();
         if ($isValida) {
             return response()->json(['message' => 403]);
         }

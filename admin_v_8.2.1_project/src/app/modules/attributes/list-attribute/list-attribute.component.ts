@@ -4,6 +4,7 @@ import { DeleteAttributeComponent } from '../delete-attribute/delete-attribute.c
 import { AttributesService } from '../service/attributes.service';
 import { CreateAttributeComponent } from '../create-attribute/create-attribute.component';
 import { EditeAttributeComponent } from '../edite-attribute/edite-attribute.component';
+import { SubAttributeCreateComponent } from '../sub-attribute-create/sub-attribute-create.component';
 
 @Component({
   selector: 'app-list-attribute',
@@ -78,6 +79,7 @@ export class ListAttributeComponent {
     });
 
   }
+
   openModalEditAttribute(attribute:any){
     const modalRef = this.modalService.open(EditeAttributeComponent, {centered: true, size: 'md'});
     modalRef.componentInstance.attribute = attribute;
@@ -102,6 +104,11 @@ export class ListAttributeComponent {
         this.attributes.splice(INDEX,1);
       }
     })
+  }
+
+  openModalRegisterProperties(attribute:any){
+    const modalRef = this.modalService.open(SubAttributeCreateComponent, {centered: true, size: 'md'});
+    modalRef.componentInstance.attribute = attribute;
   }
 
 }

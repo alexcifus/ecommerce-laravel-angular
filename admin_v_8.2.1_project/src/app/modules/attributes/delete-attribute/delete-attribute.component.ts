@@ -9,27 +9,27 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./delete-attribute.component.scss']
 })
 export class DeleteAttributeComponent {
-   @Input() attribute:any;
-  
-    @Output() AttributeD: EventEmitter<any> = new EventEmitter();
-    isLoading:any;
-    constructor(
-      public attributeService: AttributesService,
-      public toastr: ToastrService,
-      public modal: NgbActiveModal,
-    ) {
-  
-    }
-  
-    ngOnInit(): void {
-      this.isLoading = this.attributeService.isLoading$;
-    }
-    delete(){
-      
-      this.attributeService.deleteAttribute(this.attribute.id).subscribe((resp:any)=>{
-        this.AttributeD.emit({message:200});
-        this.modal.close();
-      })
-    }
+  @Input() attribute:any;
+
+  @Output() AttributeD: EventEmitter<any> = new EventEmitter();
+  isLoading:any;
+  constructor(
+    public attributeService: AttributesService,
+    public toastr: ToastrService,
+    public modal: NgbActiveModal,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.isLoading = this.attributeService.isLoading$;
+  }
+  delete(){
+    
+    this.attributeService.deleteAttribute(this.attribute.id).subscribe((resp:any)=>{
+      this.AttributeD.emit({message:200});
+      this.modal.close();
+    })
+  }
 
 }
