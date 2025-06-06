@@ -17,9 +17,9 @@ class CategorieController extends Controller
      */
     public function index(Request $request)
     {
-        $serch = $request->search;
+        $search = $request->search;
 
-        $categories = Categorie::where('name', 'like', '%' . $serch . '%')->orderBy('id', 'desc')->paginate(25);
+        $categories = Categorie::where('name', 'like', '%' . $search . '%')->orderBy('id', 'desc')->paginate(25);
         return response()->json([
             'total' => $categories->total(),
             'categories' => CategorieCollection::make($categories),
