@@ -5,7 +5,7 @@
         <div class="row mb-6">
             <div class="col-lg-8 fv-row fv-plugins-icon-container">
                 <label class="fw-semibold fs-6 py-2">Tiulo: (*)</label>
-                <input type="text" name="title" [(ngModel)]="title" class="form-control form-control-lg form-control-solid" placeholder="Por ejemplo: The best tablet Collection 2023">
+                <input type="text" name="title" (keyup.enter)="addItems()" [(ngModel)]="title" class="form-control form-control-lg form-control-solid" placeholder="Por ejemplo: The best tablet Collection 2023">
             </div>
 
             <div class="col-lg-4 fv-row fv-plugins-icon-container">
@@ -97,7 +97,7 @@
             </div>
         </div>
         <div class="row mb-6">
-            <div class="col-lg-6 col-md-6 col-sm-12 my-2">
+            <div class="col-lg-6 col-md-6 col-sm-12 my-2" *ngIf="!isShowMultiselect">
                 <label class="fw-semibold fs-6 py-2">Tags: </label>
                 <ng-multiselect-dropdown
                     [placeholder]="'custom placeholder'"
