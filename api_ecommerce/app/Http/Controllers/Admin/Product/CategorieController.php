@@ -7,7 +7,6 @@ use App\Models\Product\Categorie;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\CategorieResource;
 use App\Http\Resources\Product\CategorieCollection;
-use App\Http\Controllers\Admin\Product\CategorieController;
 use Illuminate\Support\Facades\Storage;
 
 class CategorieController extends Controller
