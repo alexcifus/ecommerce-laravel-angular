@@ -10,6 +10,8 @@ use App\Models\Product\Product;
 use App\Models\Product\Categorie;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\ProductCollection;
 
 class ProductController extends Controller
 {
@@ -29,7 +31,7 @@ class ProductController extends Controller
         return response()->json([
 
             "total" => $products->total,
-            "products" => $products,
+            "products" => ProductCollection::make ($products),
         ]);
     }
 
@@ -40,11 +42,11 @@ class ProductController extends Controller
         $categories_thirds = Categorie::where("state",1)->where("categorie_second_id","<>",NULL)->where("categorie_third_id","<>",NULL)->get();
 
         $brands = Brand::where("state",1)->get(); 
-
         return response()->json([
             'categories_first' => $categories_first,
             'categories_seconds' => $categories_seconds,
             'categories_thirds' => $categories_thirds,
+            'brands' => $brands,
         ]);
     }
 
@@ -78,7 +80,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        return response()->json(["product" => $product]);
+        return response()->json(["product" => ProductResource:: make($product)]);
     }
 
     /**

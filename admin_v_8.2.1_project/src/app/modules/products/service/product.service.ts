@@ -29,10 +29,10 @@ export class ProductService {
     );
   }
 
-  confiAll(){
+  configAll(){
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
-    let URL = URL_SERVICIOS+"/admin/product/config";
+    let URL = URL_SERVICIOS+"/admin/products/config";
     return this.http.get(URL, {headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );

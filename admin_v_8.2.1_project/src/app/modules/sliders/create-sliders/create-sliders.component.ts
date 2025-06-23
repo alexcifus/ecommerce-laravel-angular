@@ -83,7 +83,7 @@ export class CreateSlidersComponent {
       this.color = '';
       this.file_imagen = null;
       this.imagen_previsualiza = 'https://preview.keenthemes.com/metronic8/demo1/assets/media/svg/illustrations/easy/2.svg';
-      this.toastr.success('Exito','El slider se refistró correctamente');
+      this.toastr.success('Exito','El slider se registró correctamente');
     })
   }
 }
