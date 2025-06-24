@@ -14,6 +14,7 @@ import { NgbModule, NgbModalModule, NgbPaginationModule } from '@ng-bootstrap/ng
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { DeleteImagenAddComponent } from './edit-product/delete-imagen-add/delete-imagen-add.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     CreateProductComponent,
     EditProductComponent,
     ListProductsComponent,
-    DeleteProductComponent
+    DeleteProductComponent,
+    DeleteImagenAddComponent
   ],
   imports: [
     CommonModule,

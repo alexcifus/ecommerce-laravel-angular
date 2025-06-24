@@ -9,6 +9,7 @@ use App\Models\Product\Brand;
 use App\Models\Product\Product;
 use App\Models\Product\Categorie;
 use App\Http\Controllers\Controller;
+use App\Models\Product\ProductImage;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
@@ -30,7 +31,7 @@ class ProductController extends Controller
 
         return response()->json([
 
-            "total" => $products->total,
+            "total" => $products->total(),
             "products" => ProductCollection::make ($products),
         ]);
     }
@@ -60,7 +61,6 @@ class ProductController extends Controller
             return response()->json(["message" => 403,"mensage_text" => "El producto ya existe"]);
         }
         if($request->hasFile("portada")){
-
             $path = Storage::putFile("products", $request->file("portada"));
             $request->request->add(["imagen" => $path]);
         }
@@ -70,6 +70,27 @@ class ProductController extends Controller
         $product = Product::create($request->all());
         return response()->json([
             "message" => 200
+        ]);
+    }
+
+    public function imagens(Request $request)
+    {
+        $product_id = $request->product_id;
+
+        if($request->hasFile("imagen_add")){
+            $path = Storage::putFile("products", $request->file("imagen_add"));
+        }
+
+        $product_imagen = ProductImage::create([
+            "imagen" => $path,
+            "product_id" => $product_id,
+        ]);
+
+        return response()->json([
+            "imagen" => [
+                "id" => $product_imagen->id,
+                "imagen" => env("APP_URL")."storage/".$product_imagen->imagen,
+            ]
         ]);
     }
 
@@ -118,6 +139,18 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
  
+        return response()->json([
+            "message" => 200,
+        ]); 
+    }
+
+    public function delete_imagen(string $id)
+    {
+        $product = ProductImage::findOrFail($id);
+        if($product->imagen){
+                Storage::delete($product->imagen);
+            }
+        $product->delete(); 
         return response()->json([
             "message" => 200,
         ]); 

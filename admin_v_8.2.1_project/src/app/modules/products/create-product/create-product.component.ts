@@ -91,7 +91,7 @@ export class CreateProductComponent {
     this.isShowMultiselect = true;
     let time_date = new Date().getTime();
     this.dropdownList.push({ item_id: time_date, item_text: this.word });
-    this.selectedItems.push({ item_id: time_date, item_text: this.word });
+    //this.selectedItems.push({ item_id: time_date, item_text: this.word });
     setTimeout(() => {
       this.word = '';
       this.isShowMultiselect = false;
@@ -128,6 +128,10 @@ export class CreateProductComponent {
     this.categories_thirds_backups = this.categories_thirds.filter((item:any) => 
       item.categorie_second_id == this.categorie_second_id
     )
+  }
+  
+  public onChange(event:any) {
+    this.description = event.editor.getData(); // Para obtener el valor del textarea
   }
 
   onItemSelect(item: any) {
@@ -189,8 +193,5 @@ export class CreateProductComponent {
     })
   }
 
-  public onChange(event:any) {
-    this.description = event.editor.getData(); // Para obtener el valor del textarea
-  }
 
 }

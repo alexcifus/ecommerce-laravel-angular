@@ -5,6 +5,7 @@ import { AttributesService } from '../service/attributes.service';
 import { CreateAttributeComponent } from '../create-attribute/create-attribute.component';
 import { EditeAttributeComponent } from '../edite-attribute/edite-attribute.component';
 import { SubAttributeCreateComponent } from '../sub-attribute-create/sub-attribute-create.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-attribute',
@@ -21,6 +22,7 @@ export class ListAttributeComponent {
   constructor(
     public attributesService: AttributesService,
     public modalService: NgbModal,
+    public toastr: ToastrService,
   ) {
 
   }
@@ -35,7 +37,10 @@ export class ListAttributeComponent {
       this.attributes = resp.attributes;
       this.totalPages = resp.total;
       this.currentPage = page;
-    })
+    },(err:any) => {
+        console.log(err);
+        this.toastr.error('API RESPONSE - COMUNIQUESE CON EL DESARROLLADOR', err.error.message,);
+      })
   }
 
   
