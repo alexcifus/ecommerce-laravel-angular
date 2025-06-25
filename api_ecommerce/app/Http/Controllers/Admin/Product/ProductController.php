@@ -27,7 +27,7 @@ class ProductController extends Controller
         $categorie_third_id = $request->categorie_third_id;
         $brand_id = $request->brand_id;
 
-        $products= Product::filterAdvanceProduct($search,$categorie_first_id,$categorie_second_id,$categorie_third_id)->orderBy("id")->paginate(25);
+        $products= Product::filterAdvanceProduct($search,$categorie_first_id,$categorie_second_id,$categorie_third_id,$brand_id)->orderBy("id")->paginate(25);
 
         return response()->json([
 
@@ -138,7 +138,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
- 
+        // PORQUE NO SE PUEDE ELIMINAR UN PRODUCTO QUE YA TENGA UNA VENTA
         return response()->json([
             "message" => 200,
         ]); 

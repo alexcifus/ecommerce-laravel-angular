@@ -55,7 +55,7 @@ class Product extends Model
         return $this->hasMany(ProductImage::class,"product_id"); 
     }
 
-    public function scopeFilterAdvanceProduct($query,$search,$categorie_first_id,$categorie_second_id,$categorie_third_id){
+    public function scopeFilterAdvanceProduct($query,$search,$categorie_first_id,$categorie_second_id,$categorie_third_id,$brand_id){
         
         
                         
@@ -75,6 +75,10 @@ class Product extends Model
         }
         if($categorie_third_id){
             $query->where("categorie_third_id",$categorie_third_id);
+
+        }
+        if($brand_id){
+            $query->where("brand_id",$brand_id);
 
         }
         

@@ -32,22 +32,21 @@
             </div>
             <div class="col-lg-4 fv-row fv-plugins-icon-container">
                 <label class="fw-semibold fs-6 py-2">Marcas: *</label>
-            <select
-                class="form-control form-select-solid fw-bolder"
-                name="marca"
-                placeholder="Selec. Marca"
-                [(ngModel)]="marca_id"
-                >
-                <option value="">Selec.</option>
-                <ng-container *ngFor="let item of marcas">
-                    <option [value]="item.id">{{ item.name }}</option>
-                </ng-container>
+                <select
+                    class="form-control form-select-solid fw-bolder"
+                    name="marca"
+                    placeholder="Selec. Marca"
+                    [(ngModel)]="marca_id"
+                    >
+                    <option value="">Selec.</option>
+                    <ng-container *ngFor="let item of marcas">
+                        <option [value]="item.id">{{ item.name }}</option>
+                    </ng-container>
                 </select>
             </div>
             
         </div>
         <div class="row mb-6">
-
             <div class="col-4">
                 <label class="fw-semibold fs-6 py-2">Departamento:(Primer nivel *)</label>
                 <select
@@ -62,7 +61,6 @@
                             <option [value]="item.id">{{ item.name }}</option>
                         </ng-container>
                     </select>
-
             </div>
             <div class="col-4">
                 <label class="fw-semibold fs-6 py-2">Categoría:(Segundo nivel (Opcional))</label>
@@ -73,11 +71,11 @@
                     [(ngModel)]="categorie_second_id"
                     (change)="changeCategorie()"
                     >
-                        <option value="">Selec.</option>
-                        <ng-container *ngFor="let item of categories_seconds_backups">
-                            <option [value]="item.id">{{ item.name }}</option>
-                        </ng-container>
-                    </select>
+                    <option value="">Selec.</option>
+                    <ng-container *ngFor="let item of categories_seconds_backups">
+                        <option [value]="item.id">{{ item.name }}</option>
+                    </ng-container>
+                </select>
 
             </div>
             <div class="col-4">

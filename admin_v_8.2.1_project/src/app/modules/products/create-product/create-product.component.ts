@@ -189,9 +189,6 @@ export class CreateProductComponent {
         this.imagen_previsualiza = 'https://preview.keenthemes.com/metronic8/demo1/assets/media/svg/illustrations/easy/2.svg';
         this.toastr.success('Exito','El producto se registró correctamente');
       }
-
     })
   }
-
-
 }
