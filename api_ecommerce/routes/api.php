@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\CategorieController;
 use App\Http\Controllers\Admin\Product\AttributeProductController;
+use App\Http\Controllers\Admin\Product\ProductVariationsController;
+use App\Http\Controllers\Admin\Product\ProductSpecificationsController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -54,4 +56,10 @@ Route::group([
     Route::post("products/{id}", [ProductController::class, "update"]);
 
     Route::resource("brands", BrandController::class);
+
+    
+    Route::get("variations/config", [ProductVariationsController::class,"config"]);
+    Route::resource("variations", ProductVariationsController::class);
+
+    Route::resource("specifications", ProductSpecificationsController::class);
 });

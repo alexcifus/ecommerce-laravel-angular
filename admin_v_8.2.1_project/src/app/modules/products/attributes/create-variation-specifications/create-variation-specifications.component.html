@@ -31,9 +31,10 @@
                                     name="departament"
                                     placeholder="Selec. Atributo"
                                     [(ngModel)]="specification_attribute_id"
+                                    (change)="changeSpecifications()"
                                     >
                                         <option value="">Selec.</option>
-                                        <ng-container *ngFor="let item of attributes">
+                                        <ng-container *ngFor="let item of attributes_specifications">
                                             <option [value]="item.id">{{ item.name }}</option>
                                         </ng-container>
                                     </select>
@@ -44,13 +45,13 @@
 
                                 <ng-container *ngIf="type_attribute_specification == 1">
                                     <!-- TEXTO -->
-                                    <input type="text" name="campo_1" [(ngModel)]="campo_1"  
+                                    <input type="text" name="value_add" [(ngModel)]="value_add"  
                                     class="form-control form-control-lg form-control-solid" 
                                     placeholder="Por ejemplo: The best tablet">
                                 </ng-container>
                                 <ng-container *ngIf="type_attribute_specification == 2">
                                     <!-- NUMERO -->
-                                    <input type="number" name="campo_2" [(ngModel)]="campo_2"  
+                                    <input type="number" name="value_add" [(ngModel)]="value_add"  
                                     class="form-control form-control-lg form-control-solid" 
                                     placeholder="Por ejemplo: 123">
                                 </ng-container>
@@ -59,12 +60,12 @@
                                      <select
                                         class="form-control form-select-solid fw-bolder"
                                         name="departament"
-                                        [(ngModel)]="campo_3"
+                                        [(ngModel)]="propertie_id"
                                     >
                                     <option value="">Selec.</option>
-                                        <!-- <ng-container *ngFor="let item of attributes">
+                                        <ng-container *ngFor="let item of properties">
                                             <option [value]="item.id">{{ item.name }}</option>
-                                        </ng-container> -->
+                                        </ng-container>
                                 </select>
 
                                 </ng-container>
@@ -73,8 +74,8 @@
                                      <ng-multiselect-dropdown
                                         [placeholder]="'custom placeholder'"
                                         [settings]="dropdownSettings"
-                                        [data]="dropdownListVariations"
-                                        [(ngModel)]="selectedItemsVariations"
+                                        [data]="dropdownList"
+                                        [(ngModel)]="selectedItems"
                                         (onSelect)="onItemSelect($event)"
                                         (onSelectAll)="onSelectAll($event)"
                                     >
@@ -85,7 +86,7 @@
                             <div class="col-4">
                                 <label class="fw-semibold fs-6 py-2">Agregar:(*)</label>
                                 <br>
-                                <button class="btn btn-primary btn-sm"> +</button>
+                                <button class="btn btn-primary btn-sm" (click)="save()"> +</button>
                             </div>
 
                          </div>
@@ -272,11 +273,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row mb-6">
-            <div class="col-3">
-                <button class="btn btn-primary" (click)="save()">Guardar</button>
             </div>
         </div>
     </div>

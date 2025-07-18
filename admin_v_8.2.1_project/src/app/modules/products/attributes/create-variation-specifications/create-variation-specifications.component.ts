@@ -40,6 +40,11 @@ export class CreateVariationSpecificationsComponent {
   selectedItemsVariations: any = [];
   precio_add:number = 0;
   stock_add:number = 0;
+
+  attributes_specifications: any = [];
+  properties: any = [];
+  propertie_id:any = null;
+  value_add:any = null;
   constructor(
     public attributeService: AttributesService,
     public toastr: ToastrService,
@@ -67,8 +72,8 @@ export class CreateVariationSpecificationsComponent {
     // ];
     this.dropdownSettings = {
       singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
+      idField: 'id',
+      textField: 'name',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       // itemsShowLimit: 3,
@@ -81,7 +86,14 @@ export class CreateVariationSpecificationsComponent {
     });
 
     this.showProduct();
+    this.configAll();
+  }
 
+  configAll(){
+    this.attributeService.configAll().subscribe((resp:any) => {
+      console.log(resp);
+      this.attributes_specifications = resp.attributes_specifications;
+    })
   }
 
   showProduct(){
@@ -94,6 +106,25 @@ export class CreateVariationSpecificationsComponent {
     })
 
   }
+
+  changeSpecifications() {
+    let ATTRIBUTE = this.attributes_specifications.find((item:any) => item.id == this.specification_attribute_id);
+    if (ATTRIBUTE) {
+      this.type_attribute_specification = ATTRIBUTE.type_attribute;
+      if(this.type_attribute_specification == 3 || this.type_attribute_specification == 4){
+        this.properties = ATTRIBUTE.properties;
+        this.dropdownList = ATTRIBUTE.properties;
+      }else{
+        this.properties = [];
+        this.dropdownList = [];
+      }
+    } else {
+      this.type_attribute_specification = 0;
+      this.properties = [];
+      this.dropdownList = [];
+    } 
+  }
+  
 
   addItems() {
     this.isShowMultiselect = true;
@@ -123,8 +154,22 @@ export class CreateVariationSpecificationsComponent {
   }
 
   save(){
-    
+
+    if(!this.specification_attribute_id || (!this.propertie_id && !this.value_add)){
+      this.toastr.error('Validación', 'Llene los campos necesarios');
+      return;
+    }
+
+    let data = {
+      product_id: this.PRODUCT_ID,
+      attribute_id: this.specification_attribute_id,
+      propertie_id: this.propertie_id,
+      value_add: this.value_add,
+    }
+
+  this.attributeService.createSpecification(data).subscribe((resp:any) => {
+    console.log(resp);
+   })
   }
-  
 
 }
