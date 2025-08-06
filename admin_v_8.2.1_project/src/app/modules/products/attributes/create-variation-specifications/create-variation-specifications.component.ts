@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { ToastrService } from 'ngx-toastr';
+import { EditAnidadoVariationsComponent } from '../edit-anidado-variations/edit-anidado-variations.component';
+import { EditVariationSpecificationsComponent } from '../edit-variation-specifications/edit-variation-specifications.component';
+import { DeleteVariationSpecificationsComponent } from '../delete-variation-specifications/delete-variation-specifications.component';
 
 @Component({
   selector: 'app-create-variation-specifications',
@@ -45,6 +48,7 @@ export class CreateVariationSpecificationsComponent {
   properties: any = [];
   propertie_id:any = null;
   value_add:any = null;
+  specifications:any = [];
   constructor(
     public attributeService: AttributesService,
     public toastr: ToastrService,
@@ -87,6 +91,7 @@ export class CreateVariationSpecificationsComponent {
 
     this.showProduct();
     this.configAll();
+    this.listSpecification();
   }
 
   configAll(){
@@ -96,18 +101,26 @@ export class CreateVariationSpecificationsComponent {
     })
   }
 
+  listSpecification(){
+    this.attributeService.listSpecification(this.PRODUCT_ID).subscribe((resp:any) => {
+      console.log(resp);
+      this.specifications = resp.specifications;
+    })
+  }
+
   showProduct(){
     this.attributeService.showProduct(this.PRODUCT_ID).subscribe((resp:any) => {
     console.log(resp);
     this.PRODUCT_SELECTED = resp.product;
     this.title = resp.product.title;
     this.sku = resp.product.sku;
-
     })
-
   }
 
   changeSpecifications() {
+    this.value_add = null;
+    this.propertie_id = null;
+    this.selectedItems = [];
     let ATTRIBUTE = this.attributes_specifications.find((item:any) => item.id == this.specification_attribute_id);
     if (ATTRIBUTE) {
       this.type_attribute_specification = ATTRIBUTE.type_attribute;
@@ -138,10 +151,9 @@ export class CreateVariationSpecificationsComponent {
     }, 100);
   }
 
-   onItemSelect(item: any) {
+  onItemSelect(item: any) {
       console.log(item);
     }
-
   onSelectAll(items: any) {
       console.log(items);
     }
@@ -154,12 +166,18 @@ export class CreateVariationSpecificationsComponent {
   }
 
   save(){
-
-    if(!this.specification_attribute_id || (!this.propertie_id && !this.value_add)){
+    
+    if(this.type_attribute_specification == 4 && this.selectedItems.length == 0){
+      this.toastr.error('Validación', 'Necesitas seleccionar algunos items');
+      return;
+    } 
+    if(this.selectedItems.length > 0){
+      this.value_add = JSON.stringify(this.selectedItems);
+    }
+    if(!this.specification_attribute_id || ( !this.propertie_id && !this.value_add)){
       this.toastr.error('Validación', 'Llene los campos necesarios');
       return;
     }
-
     let data = {
       product_id: this.PRODUCT_ID,
       attribute_id: this.specification_attribute_id,
@@ -169,7 +187,54 @@ export class CreateVariationSpecificationsComponent {
 
   this.attributeService.createSpecification(data).subscribe((resp:any) => {
     console.log(resp);
+    if(resp.message == 403){
+      this.toastr.error('Validación', resp.message_text);
+    }else{
+      this.toastr.success('Éxito', "se registró la especificación correctamente");
+      this.specifications.unshift(resp.specification);
+      this.value_add = null;
+      this.propertie_id = null;
+      this.specification_attribute_id = '';
+    }
    })
+  }
+
+  editSpecification(specification:any){
+    const modal = this.modalService.open(EditVariationSpecificationsComponent, { size: 'md', centered: true });
+    modal.componentInstance.specification = specification;
+    modal.componentInstance.attributes_specifications = this.attributes_specifications;
+
+    modal.componentInstance.EspecificationE.subscribe((edit:any) =>{
+      console.log(edit);
+      let INDEX = this.specifications.findIndex((item:any)  => item.id == edit.specification.id);
+      if( INDEX != -1){
+        this.specifications[INDEX] = edit.specification;
+      }
+    })
+  }
+
+  deleteSpecification(specification:any){
+    const modal = this.modalService.open(DeleteVariationSpecificationsComponent, { size: 'md', centered: true });
+    modal.componentInstance.specification = specification;
+
+    modal.componentInstance.EspecificationD.subscribe((edit:any) =>{
+      console.log(edit);
+      let INDEX = this.specifications.findIndex((item:any)  => item.id == specification.id);
+      if( INDEX != -1){
+        this.specifications.splice(INDEX,1);
+      }
+    })
+  }
+
+  getValueAttribute(attricute_special:any){
+    if(attricute_special.propertie_id){
+      return attricute_special.propertie.name;
+    }
+    if(attricute_special.value_add){
+      return attricute_special.value_add;
+    }
+
+    return "---";
   }
 
 }

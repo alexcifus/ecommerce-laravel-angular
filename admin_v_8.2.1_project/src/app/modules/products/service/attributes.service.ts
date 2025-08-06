@@ -38,11 +38,38 @@ export class AttributesService {
       );
   }
 
+   listSpecification(product_id:string){
+      this.isLoadingSubject.next(true);
+      let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
+      let URL = URL_SERVICIOS+"/admin/specifications?product_id="+product_id;
+      return this.http.get(URL, {headers: headers}).pipe(
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   createSpecification(data:any){
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
     let URL = URL_SERVICIOS+"/admin/specifications";
     return this.http.post(URL,data,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  updateSpecification(specification_id:string,data:any){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/specifications/"+specification_id;
+    return this.http.put(URL,data,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  deleteSpecification(specification_id:string){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/specifications/"+specification_id;
+    return this.http.delete(URL, {headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
   }

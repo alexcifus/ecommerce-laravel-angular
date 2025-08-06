@@ -15,7 +15,7 @@ class ProductVariationsController extends Controller
     public function index(Request $request)
     {
         $product_id = $request->product_id;
-        $variations = ProductVariation::where('product_id', $product_id)->orderBy("id","des")->get();
+        $variations = ProductVariation::where('product_id', $product_id)->orderBy("id","desc")->get();
         return response()->json([
             "variations" => $variations->map(function($variation) {
                 return [
@@ -162,7 +162,7 @@ class ProductVariationsController extends Controller
                     "message_text" => "Ya existe una variación con esta propiedad, intente otra combinación."
                 ]);
             }
-        $product_variation = ProductVariation::findOrfile($id);
+        $product_variation = ProductVariation::findOrFail($id);
         $product_variation->update($request->all());
         return response()->json([
             "message" => 200,
@@ -191,7 +191,7 @@ class ProductVariationsController extends Controller
      */
     public function destroy(string $id)
     {
-        $product_variation = ProductVariation::findOrfile($id);
+        $product_variation = ProductVariation::findOrFail($id);
         $product_variation->delete();
         //UNA VALIDACION PARA QUE NO SE PUEDA ELIMINAR EN CASO EL PRODUCTO O LA VALIDACION ESTE EN EL CARRITO DE COMPRA O EN EL DETALLADO DE ALGUNA COMPRA;
         return response()->json([

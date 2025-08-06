@@ -14,10 +14,11 @@ class ProductSpecificationsController extends Controller
     public function index(Request $request)
     {
         $product_id = $request->product_id;
-        $specifications = ProductSpecification::where('product_id', $product_id)->orderBy("id","des")->get();
+        $specifications = ProductSpecification::where('product_id', $product_id)->orderBy("id","desc")->get();
         return response()->json([
             "specifications" => $specifications->map(function($specification) {
                 return [
+                    "id" => $specification->id,
                     "product_id" => $specification->product_id,
                     "attribute_id" => $specification->attribute_id,
                     "attribute" => $specification->attribute ?[
@@ -116,11 +117,12 @@ class ProductSpecificationsController extends Controller
                     "message_text" => "Ya existe una especificación con esta propiedad, intente otra combinación."
                 ]);
             }
-        $product_specification = ProductSpecification::findOrfile($id);
+        $product_specification = ProductSpecification::findOrFail($id);
         $product_specification->update($request->all());
         return response()->json([
             "message" => 200,
             "specification" => [
+                "id" => $product_specification->id,
                 "product_id" => $product_specification->product_id,
                     "attribute_id" => $product_specification->attribute_id,
                     "attribute" => $product_specification->attribute ?[
@@ -142,7 +144,7 @@ class ProductSpecificationsController extends Controller
      */
     public function destroy(string $id)
     {
-        $product_variation = ProductSpecification::findOrfile($id);
+        $product_variation = ProductSpecification::findOrFail($id);
         $product_variation->delete();
         //UNA VALIDACION PARA QUE NO SE PUEDA ELIMINAR EN CASO EL PRODUCTO O LA VALIDACION ESTE EN EL CARRITO DE COMPRA O EN EL DETALLADO DE ALGUNA COMPRA;
         return response()->json([
