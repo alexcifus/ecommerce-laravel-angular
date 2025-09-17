@@ -9,25 +9,41 @@ import { AttributesService } from '../../service/attributes.service';
   styleUrls: ['./delete-variation-specifications.component.scss']
 })
 export class DeleteVariationSpecificationsComponent {
-@Input() specification:any;
-  
-@Output() EspecificationD: EventEmitter<any> = new EventEmitter();
-isLoading:any;
-constructor(
-  public attributeService: AttributesService,
-  public toastr: ToastrService,
-  public modal: NgbActiveModal,
-) {
+  @Input() specification:any;
+  @Input() is_variation:any;
+    
+  @Output() EspecificationD: EventEmitter<any> = new EventEmitter();
+  isLoading:any;
+  constructor(
+    public attributeService: AttributesService,
+    public toastr: ToastrService,
+    public modal: NgbActiveModal,
+  ) {
 
-}
+  }
 
-ngOnInit(): void {
-  this.isLoading = this.attributeService.isLoading$;
-}
-delete(){
-  this.attributeService.deleteSpecification(this.specification.id).subscribe((resp:any)=>{
-    this.EspecificationD.emit({message:200});
-    this.modal.close();
-  })
-}
+  ngOnInit(): void {
+    this.isLoading = this.attributeService.isLoading$;
+  }
+  delete(){
+    if(!this.is_variation){
+      this.deleteSpecification();
+    }else{
+      this.deleteVariation();
+    }
+  }
+
+  deleteSpecification(){
+    this.attributeService.deleteSpecification(this.specification.id).subscribe((resp:any)=>{
+      this.EspecificationD.emit({message:200});
+      this.modal.close();
+    })
+  }
+
+  deleteVariation(){
+    this.attributeService.deleteSpecification(this.specification.id).subscribe((resp:any)=>{
+      this.EspecificationD.emit({message:200});
+      this.modal.close();
+    })
+  }
 }

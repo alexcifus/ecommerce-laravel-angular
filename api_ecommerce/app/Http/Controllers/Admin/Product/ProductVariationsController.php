@@ -19,6 +19,7 @@ class ProductVariationsController extends Controller
         return response()->json([
             "variations" => $variations->map(function($variation) {
                 return [
+                    "id" => $variation->id,
                     "product_id" => $variation->product_id,
                     "attribute_id" => $variation->attribute_id,
                     "attribute" => $variation->attribute ?[
@@ -86,6 +87,17 @@ class ProductVariationsController extends Controller
      */
     public function store(Request $request)
     {
+        $variation_exist = ProductVariation::where('product_id', $request->product_id)->count();
+        if($variation_exist > 0){
+            $variation_atributes_exist = ProductVariation::where('product_id', $request->product_id)
+                                        ->where('attribute_id', $request->attribute_id)
+                                        ->count();
+            if($variation_atributes_exist == 0){
+                return response()->json([
+                    "message" => 403, "message_text" => "No puede agregar una variación con un atributo diferente al ya existente, por favor verifique."
+                ]);
+            }
+        }
         $is_valid_variation = null;
         if($request->propertie_id){
             $is_valid_variation = ProductVariation::where('product_id', $request->product_id)
@@ -110,20 +122,21 @@ class ProductVariationsController extends Controller
         return response()->json([
             "message" => 200,
             "variation" => [
+                "id" => $product_variation->id,
                 "product_id" => $product_variation->product_id,
-                    "attribute_id" => $product_variation->attribute_id,
-                    "attribute" => $product_variation->attribute ?[
-                        "name" => $product_variation->attribute->name,
-                        "type_attribute" => $product_variation->attribute->type_attribute
-                    ]:NULL,
-                    "propertie_id" => $product_variation->propertie_id,
-                    "propertie" => $product_variation->propertie_id ? [
-                        "name" => $product_variation->propertie->name,
-                        "code" => $product_variation->propertie->code,
-                    ]:NULL,
-                    "value_add" => $product_variation->value_add,
-                    "add_price" => $product_variation->add_price,
-                    "stock" => $product_variation->stock
+                "attribute_id" => $product_variation->attribute_id,
+                "attribute" => $product_variation->attribute ?[
+                    "name" => $product_variation->attribute->name,
+                    "type_attribute" => $product_variation->attribute->type_attribute
+                ]:NULL,
+                "propertie_id" => $product_variation->propertie_id,
+                "propertie" => $product_variation->propertie_id ? [
+                    "name" => $product_variation->propertie->name,
+                    "code" => $product_variation->propertie->code,
+                ]:NULL,
+                "value_add" => $product_variation->value_add,
+                "add_price" => $product_variation->add_price,
+                "stock" => $product_variation->stock
             ]
         ]);
     }
@@ -141,6 +154,19 @@ class ProductVariationsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $variation_exist = ProductVariation::where('product_id', $request->product_id)->count();
+        if($variation_exist > 0){
+            $variation_atributes_exist = ProductVariation::where('product_id', $request->product_id)
+                                        ->where('attribute_id', $request->attribute_id)
+                                        ->count();
+            if($variation_atributes_exist == 0){
+                return response()->json([
+                    "message" => 403, "message_text" => "No puede agregar una variación con un atributo diferente al ya existente, por favor verifique."
+                ]);
+            }
+        }
+
+
         $is_valid_variation = null;
         if($request->propertie_id){
             $is_valid_variation = ProductVariation::where('product_id', $request->product_id)
@@ -165,23 +191,24 @@ class ProductVariationsController extends Controller
         $product_variation = ProductVariation::findOrFail($id);
         $product_variation->update($request->all());
         return response()->json([
+            "id" => $product_variation->id,
             "message" => 200,
              "message" => 200,
             "variation" => [
                 "product_id" => $product_variation->product_id,
-                    "attribute_id" => $product_variation->attribute_id,
-                    "attribute" => $product_variation->attribute ?[
-                        "name" => $product_variation->attribute->name,
-                        "type_attribute" => $product_variation->attribute->type_attribute
-                    ]:NULL,
-                    "propertie_id" => $product_variation->propertie_id,
-                    "propertie" => $product_variation->propertie_id ? [
-                        "name" => $product_variation->propertie->name,
-                        "code" => $product_variation->propertie->code,
-                    ]:NULL,
-                    "value_add" => $product_variation->value_add,
-                    "add_price" => $product_variation->add_price,
-                    "stock" => $product_variation->stock
+                "attribute_id" => $product_variation->attribute_id,
+                "attribute" => $product_variation->attribute ?[
+                    "name" => $product_variation->attribute->name,
+                    "type_attribute" => $product_variation->attribute->type_attribute
+                ]:NULL,
+                "propertie_id" => $product_variation->propertie_id,
+                "propertie" => $product_variation->propertie_id ? [
+                    "name" => $product_variation->propertie->name,
+                    "code" => $product_variation->propertie->code,
+                ]:NULL,
+                "value_add" => $product_variation->value_add,
+                "add_price" => $product_variation->add_price,
+                "stock" => $product_variation->stock
             ]
         ]);
     }

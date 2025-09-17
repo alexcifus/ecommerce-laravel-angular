@@ -68,17 +68,17 @@ class ProductSpecificationsController extends Controller
             "message" => 200,
             "specification" => [
                 "product_id" => $product_specification->product_id,
-                    "attribute_id" => $product_specification->attribute_id,
-                    "attribute" => $product_specification->attribute ?[
-                        "name" => $product_specification->attribute->name,
-                        "type_attribute" => $product_specification->attribute->type_attribute
-                    ]:NULL,
-                    "propertie_id" => $product_specification->propertie_id,
-                    "propertie" => $product_specification->propertie_id ? [
-                        "name" => $product_specification->propertie->name,
-                        "code" => $product_specification->propertie->code,
-                    ]:NULL,
-                    "value_add" => $product_specification->value_add
+                "attribute_id" => $product_specification->attribute_id,
+                "attribute" => $product_specification->attribute ?[
+                    "name" => $product_specification->attribute->name,
+                    "type_attribute" => $product_specification->attribute->type_attribute
+                ]:NULL,
+                "propertie_id" => $product_specification->propertie_id,
+                "propertie" => $product_specification->propertie_id ? [
+                    "name" => $product_specification->propertie->name,
+                    "code" => $product_specification->propertie->code,
+                ]:NULL,
+                "value_add" => $product_specification->value_add
             ]
         ]);
     }
@@ -124,17 +124,17 @@ class ProductSpecificationsController extends Controller
             "specification" => [
                 "id" => $product_specification->id,
                 "product_id" => $product_specification->product_id,
-                    "attribute_id" => $product_specification->attribute_id,
-                    "attribute" => $product_specification->attribute ?[
-                        "name" => $product_specification->attribute->name,
-                        "type_attribute" => $product_specification->attribute->type_attribute
-                    ]:NULL,
-                    "propertie_id" => $product_specification->propertie_id,
-                    "propertie" => $product_specification->propertie_id ? [
-                        "name" => $product_specification->propertie->name,
-                        "code" => $product_specification->propertie->code,
-                    ]:NULL,
-                    "value_add" => $product_specification->value_add
+                "attribute_id" => $product_specification->attribute_id,
+                "attribute" => $product_specification->attribute ?[
+                    "name" => $product_specification->attribute->name,
+                    "type_attribute" => $product_specification->attribute->type_attribute
+                ]:NULL,
+                "propertie_id" => $product_specification->propertie_id,
+                "propertie" => $product_specification->propertie_id ? [
+                    "name" => $product_specification->propertie->name,
+                    "code" => $product_specification->propertie->code,
+                ]:NULL,
+                "value_add" => $product_specification->value_add
             ]
         ]);
     }

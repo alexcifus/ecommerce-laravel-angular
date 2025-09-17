@@ -73,4 +73,39 @@ export class AttributesService {
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
+  // VARIACIONES
+  listVariations(product_id:string){
+      this.isLoadingSubject.next(true);
+      let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
+      let URL = URL_SERVICIOS+"/admin/variations?product_id="+product_id;
+      return this.http.get(URL, {headers: headers}).pipe(
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+  createVariations(data:any){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/variations";
+    return this.http.post(URL,data,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  updateVariations(variation_id:string,data:any){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/variations/"+variation_id;
+    return this.http.put(URL,data,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  deleteVariations(variation_id:string){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/variations/"+variation_id;
+    return this.http.delete(URL, {headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 }
