@@ -16,6 +16,7 @@ class ProductVariation extends Model
         'value_add',
         'add_price',
         'stock',
+        'product_variation_id',
     ];
      public function setCreateAtAttribute($value){
         date_default_timezone_set('Europe/Madrid');
@@ -40,4 +41,15 @@ class ProductVariation extends Model
     {
         return $this->belongsTo(Propertie::class);
     }
+
+    public function variation_father()
+    {
+        return $this->belongsTo(ProductVariation::class,"product_variation_id");
+    }
+
+    public function variation_children()
+    {
+        return $this->hasMany(ProductVariation::class,"product_variation_id");
+    }
+
 }

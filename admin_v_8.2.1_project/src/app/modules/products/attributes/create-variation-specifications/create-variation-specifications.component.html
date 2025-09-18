@@ -1,10 +1,10 @@
 <div class="card">
     <!--begin::Card body-->
-    <span class="spinner-border spinner-border-sm align-middle ms-2" *ngIf="isLoading$  | async"></span>
-    <div class="card-body border-top p-9">
+    <span class="spinner-border spinner-border-sm align-middle ms-2" *ngIf="isLoading$ | async"></span>
+    <div class="card-body border-top p-9">t
         <div class="row mb-6">
             <div class="col-lg-8 fv-row fv-plugins-icon-container">
-                <label class="fw-semibold fs-6 py-2">Tiulo: (*)</label>
+                <label class="fw-semibold fs-6 py-2">Titulo: (*)</label>
                 <input type="text" name="title" [(ngModel)]="title" disabled class="form-control form-control-lg form-control-solid" placeholder="Por ejemplo: The best tablet Collection 2023">
             </div>
 
@@ -19,7 +19,7 @@
 
         <div class="row mb-6 align-items-center">
             <div class="col-6">
-                <label class="fw-semibold fs-6 py-2">Especificaiones: (*)</label>
+                <label class="fw-semibold fs-6 py-2">Especificaciones: (*)</label>
                 <div class="row">
                     <div class="col-12">
                         <!-- Formularios -->
@@ -28,7 +28,7 @@
                                 <label class="fw-semibold fs-6 py-2">Atributos:(*)</label>
                                 <select
                                     class="form-control form-select-solid fw-bolder"
-                                    name="departament"
+                                    name="specification_attribute_id"
                                     placeholder="Selec. Atributo"
                                     [(ngModel)]="specification_attribute_id"
                                     (change)="changeSpecifications()"
@@ -95,17 +95,17 @@
             </div>
             <div class="col-6">
                 <label class="fw-semibold fs-6 py-2">Variaciones: (*)</label>
-                <div class="row" align-items-center>
+                <div class="row align-items-center">
                     <div class="col-12">
                         <!-- Formularios -->
-                          <div class="row">
+                          <div class="row align-items-center">
                             <div class="col-4">
                                 <div class="row">
                                     <div class="col-12">
                                         <label class="fw-semibold fs-6 py-2">Atributos:(*)</label>
                                         <select
                                             class="form-control form-select-solid fw-bolder"
-                                            name="departament"
+                                            name="variations_attribute_id"
                                             placeholder="Selec. Atributo"
                                             [(ngModel)]="variations_attribute_id"
                                             (change)="changeVariations()"
@@ -277,6 +277,9 @@
                                             </td>  
     
                                             <td class="text-end">
+
+                                                <a href="#" onclick="return false;" (click)="openAnidado(variation)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                    <i class="ki-duotone ki-questionnaire-tablet fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>
                                                
                                                 <a href="#" onclick="return false;" (click)="editVariation(variation)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                                     <i class="ki-duotone ki-pencil fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>

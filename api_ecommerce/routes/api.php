@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Product\CategorieController;
 use App\Http\Controllers\Admin\Product\AttributeProductController;
 use App\Http\Controllers\Admin\Product\ProductVariationsController;
 use App\Http\Controllers\Admin\Product\ProductSpecificationsController;
+use App\Http\Controllers\Admin\Product\ProductVariationsAnidadoController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -60,6 +61,7 @@ Route::group([
     
     Route::get("variations/config", [ProductVariationsController::class,"config"]);
     Route::resource("variations", ProductVariationsController::class);
+    Route::resource("anidado_variations", ProductVariationsAnidadoController::class);
 
     Route::resource("specifications", ProductSpecificationsController::class);
 });

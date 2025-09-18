@@ -25,4 +25,8 @@ class Brand extends Model
         date_default_timezone_set('Europe/Madrid');
         $this->attributes['updated_at'] = Carbon::now();
     } 
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

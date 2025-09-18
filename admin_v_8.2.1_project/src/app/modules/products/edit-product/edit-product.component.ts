@@ -23,6 +23,8 @@ export class EditProductComponent {
   file_imagen:any = null;
   marca_id: string = '';
   marcas:any = [];
+  state:number = 1;
+  stock:number = 0;
   config: any = {
     versionCheck: false,
   }
@@ -112,6 +114,8 @@ export class EditProductComponent {
     this.title = resp.product.title;
     this.sku = resp.product.sku;
     this.resumen = resp.product.resumen;
+    this.state = resp.product.state;
+    this.stock = resp.product.stock;
     this.price_eur = resp.product.price_eur;
     this.price_usd = resp.product.price_usd;
     this.description = resp.product.description;
@@ -205,10 +209,10 @@ export class EditProductComponent {
     if(!this.imagen_add){
       this.toastr.error('Validacion','ES REQUERIDO SUBIR UNA IMAGEN');
       return;
-    }let formDAta = new FormData();
-    formDAta.append('imagen_add',this.imagen_add);
-    formDAta.append('product_id',this.PRODUCT_ID);
-    this.productService.imagen_add(formDAta).subscribe((resp:any) => {
+    }let formData = new FormData();
+    formData.append('imagen_add',this.imagen_add);
+    formData.append('product_id',this.PRODUCT_ID);
+    this.productService.imagen_add(formData).subscribe((resp:any) => {
       console.log(resp);
       this.images_files.unshift(resp.imagen);
       this.imagen_add = null;
@@ -238,27 +242,28 @@ export class EditProductComponent {
       return;
     }
 
-    let formDAta = new FormData();
-    formDAta.append('title',this.title);
-    formDAta.append('sku',this.sku);
-    formDAta.append('price_usd',this.price_usd+"");
-    formDAta.append('price_eur',this.price_eur+"");
-    formDAta.append('brand_id',this.marca_id);
+    let formData = new FormData();
+    formData.append('title',this.title);
+    formData.append('sku',this.sku);
+    formData.append('price_usd',this.price_usd+"");
+    formData.append('price_eur',this.price_eur+"");
+    formData.append('brand_id',this.marca_id);
+    formData.append('stock',this.stock+"");
     if(this.file_imagen){
-      formDAta.append('portada',this.file_imagen);
+      formData.append('portada',this.file_imagen);
     }
-    formDAta.append('categorie_first_id',this.categorie_first_id);
+    formData.append('categorie_first_id',this.categorie_first_id);
     if(this.categorie_second_id){
-      formDAta.append('categorie_second_id',this.categorie_second_id);
+      formData.append('categorie_second_id',this.categorie_second_id);
     }
     if(this.categorie_third_id){
-      formDAta.append('categorie_third_id',this.categorie_third_id);
+      formData.append('categorie_third_id',this.categorie_third_id);
     }
-    formDAta.append('description',this.description);
-    formDAta.append('resumen',this.resumen);
-    formDAta.append('multiselect',JSON.stringify(this.selectedItems));
-        
-    this.productService.updateProducts(this.PRODUCT_ID,formDAta).subscribe((resp:any)=>{
+    formData.append('description',this.description);
+    formData.append('resumen',this.resumen);
+    formData.append('multiselect',JSON.stringify(this.selectedItems));
+    formData.append('state',this.state+"");    
+    this.productService.updateProducts(this.PRODUCT_ID,formData).subscribe((resp:any)=>{
       console.log(resp);
 
       if(resp.message == 403){

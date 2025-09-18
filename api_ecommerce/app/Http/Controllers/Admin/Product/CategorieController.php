@@ -92,6 +92,13 @@ class CategorieController extends Controller
     public function destroy(string $id)
     {
         $categorie = Categorie::findOrFail($id);
+
+        if($categorie->product_categorie_firsts()->count() > 0 ||
+        $categorie->product_categorie_seconds()->count() > 0 ||
+        $categorie->product_categorie_thirds()->count() > 0){
+            return response()->json(['message' => 403,"message_text" => "LA CATEGORÍA YA ESTA RELACIONADA CON ALGUNOS O UN PRODUCTO"]);
+        }
+
         $categorie->delete();
         //validar que la no esté en ningún producto
         return response()->json(['message' => 200]);

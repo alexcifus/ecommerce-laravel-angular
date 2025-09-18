@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EditAnidadoVariationsComponent } from '../edit-anidado-variations/edit-anidado-variations.component';
 import { EditVariationSpecificationsComponent } from '../edit-variation-specifications/edit-variation-specifications.component';
 import { DeleteVariationSpecificationsComponent } from '../delete-variation-specifications/delete-variation-specifications.component';
+import { CreateAnidadoVariationsComponent } from '../create-anidado-variations/create-anidado-variations.component';
 
 @Component({
   selector: 'app-create-variation-specifications',
@@ -334,4 +335,9 @@ export class CreateVariationSpecificationsComponent {
     })
   }
 
+  openAnidado(variation:any){
+    const modal = this.modalService.open(CreateAnidadoVariationsComponent, { size: 'lg', centered: true });
+    modal.componentInstance.variation = variation;
+    modal.componentInstance.attributes_variations = this.attributes_variations;
+  }
 }

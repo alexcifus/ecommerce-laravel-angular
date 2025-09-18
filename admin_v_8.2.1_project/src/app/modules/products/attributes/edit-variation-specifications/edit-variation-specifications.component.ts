@@ -13,82 +13,82 @@ export class EditVariationSpecificationsComponent {
 
   @Output() EspecificationE: EventEmitter<any> = new EventEmitter();
   
-    @Input() specification:any
-    @Input() attributes_variations:any = [];
-    @Input() is_variation:any;//FALSE VA A SER UNA EDICION PARA LAS ESPECIFICACIONES Y SI ES TRUE UNA EDICION PARA LAS VARIACIONES
-    
-    isLoading$: any;
-
-    specification_attribute_id:string = '';
-    type_attribute_specification:number = 1;
-    variations_attribute_id:string = '';
-    type_attribute_variation:number = 4;
-    attributes:any = [];
-
-    dropdownList:any = [];
-    selectedItems:any = [];//CAMPO_4
-    dropdownSettings:IDropdownSettings = {};
-
-    @Input() attributes_specifications: any = [];
-    properties: any = [];
-    propertie_id:any = null;
-    value_add:any = null;
-    specifications:any = [];
-
-
-    precio_add:any = 0; // add_price
-    stock_add:any = 0; // stock
-    constructor(
-      public attributesService: AttributesService, // Replace with actual service type
-      public modal: NgbActiveModal,
-      public toastr: ToastrService,
-    ) {
+  @Input() specification:any
+  @Input() attributes_variations:any = [];
+  @Input() is_variation:any;//FALSE VA A SER UNA EDICION PARA LAS ESPECIFICACIONES Y SI ES TRUE UNA EDICION PARA LAS VARIACIONES
   
+  isLoading$: any;
+
+  specification_attribute_id:string = '';
+  type_attribute_specification:number = 1;
+  variations_attribute_id:string = '';
+  type_attribute_variation:number = 4;
+  attributes:any = [];
+
+  dropdownList:any = [];
+  selectedItems:any = [];//CAMPO_4
+  dropdownSettings:IDropdownSettings = {};
+
+  @Input() attributes_specifications: any = [];
+  properties: any = [];
+  propertie_id:any = null;
+  value_add:any = null;
+  specifications:any = [];
+
+
+  precio_add:any = 0; // add_price
+  stock_add:any = 0; // stock
+  constructor(
+    public attributesService: AttributesService, // Replace with actual service type
+    public modal: NgbActiveModal,
+    private toastr: ToastrService,
+  ) {
+
+  }
+  
+  ngOnInit(): void {
+
+
+    this.isLoading$ = this.attributesService.isLoading$;
+
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      // itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+
+    if(!this.is_variation){
+      this.specification_attribute_id = this.specification.attribute_id;
+      this.changeSpecifications();
+    }else{
+      this.variations_attribute_id = this.specification.attribute_id;
+      console.log(this.variations_attribute_id);
+      this.changeVariations();
     }
-    
-    ngOnInit(): void {
-
-
-      this.isLoading$ = this.attributesService.isLoading$;
-
-      this.dropdownSettings = {
-        singleSelection: false,
-        idField: 'id',
-        textField: 'name',
-        selectAllText: 'Select All',
-        unSelectAllText: 'UnSelect All',
-        // itemsShowLimit: 3,
-        allowSearchFilter: true
-      };
-
-      if(!this.is_variation){
-        this.specification_attribute_id = this.specification.attribute_id;
-        this.changeSpecifications();
-      }else{
-        this.variations_attribute_id = this.specification.attribute_id;
-        console.log(this.variations_attribute_id);
-        this.changeVariations();
-      }
-      // setTimeout(() => {
-        setTimeout(() => {
-          let old_type_attribute = this.type_attribute_specification;
-          this.propertie_id = this.specification.propertie_id ? this.specification.propertie_id : null;
-          if(this.specification.attribute.type_attribute == 4){
-            this.type_attribute_specification = 0;
-            this.selectedItems = this.specification.value_add ? JSON.parse(this.specification.value_add) : null;
-            setTimeout(() => {
-              this.type_attribute_specification = old_type_attribute;
-            }, 25);
-          }else{
-          this.value_add = this.specification.value_add ? this.specification.value_add : null;
-          }
-        }, 25);
-        if(this.is_variation){
-          this.precio_add = this.specification.add_price;
-          this.stock_add = this.specification.stock;
+    // setTimeout(() => {
+      setTimeout(() => {
+        let old_type_attribute = this.type_attribute_specification;
+        this.propertie_id = this.specification.propertie_id ? this.specification.propertie_id : null;
+        if(this.specification.attribute.type_attribute == 4){
+          this.type_attribute_specification = 0;
+          this.selectedItems = this.specification.value_add ? JSON.parse(this.specification.value_add) : null;
+          setTimeout(() => {
+            this.type_attribute_specification = old_type_attribute;
+          }, 25);
+        }else{
+        this.value_add = this.specification.value_add ? this.specification.value_add : null;
         }
-      // }, 50);
-    }
+      }, 25);
+      if(this.is_variation){
+        this.precio_add = this.specification.add_price;
+        this.stock_add = this.specification.stock;
+      }
+    // }, 50);
+  }
 
   store(){
     if(!this.is_variation){
