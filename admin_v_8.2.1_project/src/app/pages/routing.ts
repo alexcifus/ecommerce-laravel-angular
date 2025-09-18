@@ -68,6 +68,10 @@ const Routing: Routes = [
     loadChildren: () => import('../modules/brands/brands.module').then((m) => m.BrandsModule),
   },
   {
+    path: 'cupones',
+    loadChildren: () => import('../modules/cupones/cupones.module').then((m) => m.CuponesModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
