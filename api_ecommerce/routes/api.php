@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\CategorieController;
@@ -64,4 +65,7 @@ Route::group([
     Route::resource("anidado_variations", ProductVariationsAnidadoController::class);
 
     Route::resource("specifications", ProductSpecificationsController::class);
+
+    Route::get("cupones/config",[CuponeController::class,"config"]);
+    Route::resource("cupones",CuponeController::class);
 });
