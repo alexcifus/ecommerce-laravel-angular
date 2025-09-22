@@ -46,12 +46,12 @@ const Routing: Routes = [
     path: 'apps/permissions',
     loadChildren: () => import('./permission/permission.module').then((m) => m.PermissionModule),
   },
-  //NUESTROS MODULOS
+  // NUESTROS MODULOS
   {
     path: 'categories',
     loadChildren: () => import('../modules/categories/categories.module').then((m) => m.CategoriesModule),
   },
-    {
+  {
     path: 'attributes',
     loadChildren: () => import('../modules/attributes/attributes.module').then((m) => m.AttributesModule),
   },
@@ -72,6 +72,10 @@ const Routing: Routes = [
     loadChildren: () => import('../modules/cupones/cupones.module').then((m) => m.CuponesModule),
   },
   {
+    path: 'discount',
+    loadChildren: () => import('../modules/discount/discount.module').then((m) => m.DiscountModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
@@ -83,3 +87,4 @@ const Routing: Routes = [
 ];
 
 export { Routing };
+

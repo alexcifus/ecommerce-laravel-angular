@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\Product\CategorieController;
 use App\Http\Controllers\Admin\Product\AttributeProductController;
 use App\Http\Controllers\Admin\Product\ProductVariationsController;
@@ -68,4 +69,6 @@ Route::group([
 
     Route::get("cupones/config",[CuponeController::class,"config"]);
     Route::resource("cupones",CuponeController::class);
+
+    Route::resource("discounts",DiscountController::class);
 });

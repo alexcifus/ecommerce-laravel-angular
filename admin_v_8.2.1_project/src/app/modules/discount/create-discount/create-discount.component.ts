@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
-import { CuponesService } from '../service/cupones.service';
 import { ToastrService } from 'ngx-toastr';
+import { DiscountService } from '../service/discount.service';
 
 @Component({
-  selector: 'app-create-cupone',
-  templateUrl: './create-cupone.component.html',
-  styleUrls: ['./create-cupone.component.scss']
+  selector: 'app-create-discount',
+  templateUrl: './create-discount.component.html',
+  styleUrls: ['./create-discount.component.scss']
 })
-export class CreateCuponeComponent {
-
-  code:any;
+export class CreateDiscountComponent {
+ 
   type_discount:number = 1;
   discount:number = 0;
-  type_count:number = 1;
-  num_use:number = 0;
-  type_cupone:number = 1;
+  type_campaing:number = 1;
+  discount_type:number = 1;
   product_id:any;
   categorie_id:any;
   brand_id:any;
+  start_date:any;
+  end_date:any;
+
   isLoading$:any;
   
   categories_first:any = [];
@@ -28,7 +29,7 @@ export class CreateCuponeComponent {
   products_add:any = [];
   brands_add:any = [];
   constructor(
-    public cuponesService: CuponesService,
+    public discountService: DiscountService,
     private toastr: ToastrService,
   ) {
     
@@ -37,9 +38,8 @@ export class CreateCuponeComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.isLoading$ = this.cuponesService.isLoading$;
-    this.cuponesService.configCupones().subscribe((resp:any) => {
-      console.log('configCupones()', resp);
+    this.isLoading$ = this.discountService.isLoading$;
+    this.discountService.configDiscounts().subscribe((resp:any) => {
       this.categories_first = resp.categories;
       this.products = resp.products;
       this.brands = resp.brands;
@@ -48,11 +48,11 @@ export class CreateCuponeComponent {
   changeTypeDiscount(value:number){
     this.type_discount = value;
   }
-  changeTypeCount(value:number){
-    this.type_count = value;
+  changeTypeCampaing(value:number){
+    this.type_campaing = value;
   }
   changeTypeCupone(value:number){
-    this.type_cupone = value;
+    this.discount_type = value;
     this.products_add = [];
     this.categories_add = [];
     this.brands_add = [];
@@ -64,61 +64,55 @@ export class CreateCuponeComponent {
 
   save(){
 
-    if(!this.code || !this.discount){
+    if(!this.discount || !this.start_date || !this.end_date){
       this.toastr.error("Validacion","Necesitas llenar todos los campos");
       return;
     }
 
-    if(this.type_count == 2 && this.num_use == 0){
-      this.toastr.error("Validacion","ES NECESARIO PONERLE UNA CANTIDAD DE USOS AL CUPON");
-      return;
-    }
-
-    if(this.type_cupone == 1 && this.products_add.length == 0 ){
+    if(this.discount_type == 1 && this.products_add.length == 0 ){
       this.toastr.error("Validacion","ES NECESARIO SELECCIONAR UNO O VARIOS PRODUCTOS");
       return;
     }
 
-    if(this.type_cupone == 2 && this.categories_add.length == 0 ){
+    if(this.discount_type == 2 && this.categories_add.length == 0 ){
       this.toastr.error("Validacion","ES NECESARIO SELECCIONAR UNO O VARIAS CATEGORIAS");
       return;
     }
 
-    if(this.type_cupone == 3 && this.brands_add.length == 0 ){
+    if(this.discount_type == 3 && this.brands_add.length == 0 ){
       this.toastr.error("Validacion","ES NECESARIO SELECCIONAR UNO O VARIAS MARCAS");
       return;
     }
     
     let data = {
       type_discount: this.type_discount,
-      type_count: this.type_count,
-      type_cupone: this.type_cupone,
-      num_use: this.num_use,
+      discount_type: this.discount_type,
       discount: this.discount,
-      code:this.code,
       product_selected: this.products_add,
       categorie_selected: this.categories_add,
-      brand_selected: this.brands_add
+      brand_selected: this.brands_add,
+      start_date: this.start_date,
+      end_date: this.end_date,
+      type_campaing: this.type_campaing,
     }
 
-    this.cuponesService.createCupones(data).subscribe((resp:any) => {
+    this.discountService.createDiscounts(data).subscribe((resp:any) => {
       console.log(resp);
       if(resp.message == 403){
         this.toastr.error("Validación",resp.message_text);
       }else{
-        this.toastr.success("Exito","EL CUPON SE REGISTRO CORRECTAMENTE");
+        this.toastr.success("Exito","LA CAMPAÑA DE DESCUENTO SE REGISTRO CORRECTAMENTE");
         this.type_discount = 1;
-        this.type_count = 1;
-        this.type_cupone = 1;
-        this.num_use = 0;
+        this.discount_type = 1;
         this.discount = 0;
-        this.code = null;
         this.products_add = [];
         this.categories_add = [];
         this.brands_add = [];
         this.product_id = null;
         this.categorie_id = null;
         this.brand_id = null;
+        this.start_date = null;
+        this.end_date = null;
       }
 
     })
