@@ -3,9 +3,10 @@
 namespace App\Models\Product;
 
 use Carbon\Carbon;
+use App\Models\Discount\DiscountBrand;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Brand extends Model
 {
@@ -16,17 +17,21 @@ class Brand extends Model
         "state",
         "imagen"
     ];
-    
-    public function setCreateAtAttribute($value){
-        date_default_timezone_set('Europe/Madrid');
-        $this->attributes['created_at'] = Carbon::now();
+
+    public function setCreatedAtAttribute($value){
+        date_default_timezone_set("Europe/Madrid");
+        $this->attributes["created_at"] = Carbon::now();
     }
-    public function setUpdatedAttribute($value){
-        date_default_timezone_set('Europe/Madrid');
-        $this->attributes['updated_at'] = Carbon::now();
-    } 
+    public function setUpdatedtAttribute($value){
+        date_default_timezone_set("Europe/Madrid");
+        $this->attributes["updated_at"] = Carbon::now();
+    }
 
     public function products(){
         return $this->hasMany(Product::class);
+    }
+
+    public function discount_brands() {
+        return $this->hasMany(DiscountBrand::class,"brand_id");
     }
 }
