@@ -1108,7 +1108,7 @@ function HOMEINIT($) {
 	var slider = new Swiper('.tp-product-related-slider-active', {
 		slidesPerView: 4,
 		spaceBetween: 24,
-		loop: true,
+		loop: false,
 		rtl: rtl_setting,
 		enteredSlides: false,
 		pagination: {
@@ -2186,4 +2186,54 @@ function MODAL_PRODUCT_DETAIL($){
 			$(this).addClass('active').siblings().removeClass('active');
 		});
 	},50)
-}	
+}
+
+function LANDING_PRODUCT($){
+	var tp_rtl = localStorage.getItem('tp_dir');
+	let rtl_setting = tp_rtl == 'rtl' ? true : false;
+	
+	var slider = new Swiper('.tp-product-related-slider-active', {
+		slidesPerView: 4,
+		spaceBetween: 24,
+		loop: false,
+		rtl: rtl_setting,
+		enteredSlides: false,
+		pagination: {
+			el: ".tp-related-slider-dot",
+			clickable: true,
+			renderBullet: function (index, className) {
+				return '<span class="' + className + '">' + '<button>' + (index + 1) + '</button>' + "</span>";
+			},
+		},
+		// Navigation arrows
+		navigation: {
+			nextEl: ".tp-related-slider-button-next",
+			prevEl: ".tp-related-slider-button-prev",
+		},
+
+		scrollbar: {
+			el: '.tp-related-swiper-scrollbar',
+			draggable: true,
+			dragClass: 'tp-swiper-scrollbar-drag',
+			snapOnRelease: true,
+		  },
+
+		breakpoints: {
+			'1200': {
+				slidesPerView: 4,
+			},
+			'992': {
+				slidesPerView: 3,
+			},
+			'768': {
+				slidesPerView: 2,
+			},
+			'576': {
+				slidesPerView: 2,
+			},
+			'0': {
+				slidesPerView: 1,
+			},
+		},
+	});
+}

@@ -30,11 +30,11 @@ class Product extends Model
     ];
 
     public function setCreatedAtAttribute($value){
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $this->attributes["created_at"] = Carbon::now();
     }
     public function setUpdatedtAttribute($value){
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"] = Carbon::now();
     }
 
@@ -64,9 +64,13 @@ class Product extends Model
         return $this->hasMany(ProductVariation::class,"product_id")->where("product_variation_id",NULL);
     }
 
+    public function specifications() {
+        return $this->hasMany(ProductSpecification::class,"product_id");
+    }
+
     // discount_categorie
     public function getDiscountCategorieAttribute() {
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $discount = null;
         foreach ($this->categorie_first->discount_categories as $key => $discount_categorie) {
             if($discount_categorie->discount && $discount_categorie->discount->type_campaing == 1 &&
@@ -83,7 +87,7 @@ class Product extends Model
     }
 
     public function getDiscountProductAttribute() {
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $discount = null;
         foreach ($this->discount_products as $key => $discount_product) {
             if($discount_product->discount && $discount_product->discount->type_campaing == 1 &&
@@ -100,7 +104,7 @@ class Product extends Model
     }
 
     public function getDiscountBrandAttribute() {
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $discount = null;
         foreach ($this->brand->discount_brands as $key => $discount_brand) {
             if($discount_brand->discount && $discount_brand->discount->type_campaing == 1 &&

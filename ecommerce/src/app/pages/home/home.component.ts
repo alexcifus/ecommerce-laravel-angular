@@ -1,10 +1,12 @@
-import { Component, afterNextRender } from '@angular/core';
+import { Component, afterNextRender, afterRender } from '@angular/core';
 import { HomeService } from './service/home.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ModalProductComponent } from '../guest-view/component/modal-product/modal-product.component';
+import { CookieService } from 'ngx-cookie-service';
 
-declare function SLIDER_PRINCIPAL($: any):any;
+declare function SLIDER_PRINCIPAL([]):any;
 declare var $:any;
 declare function DATA_VALUES([]):any;
 declare function PRODUCTS_CAROUSEL_HOME([]):any;
@@ -12,7 +14,7 @@ declare function MODAL_PRODUCT_DETAIL([]):any;
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule,RouterModule,CommonModule],
+  imports: [FormsModule,RouterModule,CommonModule,ModalProductComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -39,12 +41,14 @@ export class HomeComponent {
 
   product_selected:any = null;
   variation_selected:any = null;
+  currency:string = 'PEN';
   constructor(
     public homeService: HomeService,
+    private cookieService: CookieService,
   ) {
-    afterNextRender(() => {
+    // afterNextRender(() => {
       this.homeService.home().subscribe((resp:any) => {
-        console.log(resp);
+        // console.log(resp);
         this.SLIDERS = resp.sliders_principal;
         this.CATEGORIES_RANDOMS = resp.categories_randoms;
         this.TRADING_PRODUCT_NEW = resp.product_tranding_new.data;
@@ -62,13 +66,29 @@ export class HomeComponent {
         this.DISCOUNT_FLASH = resp.discount_flash;
         this.DISCOUNT_FLASH_PRODUCTS = resp.discount_flash_products;
 
-        setTimeout(() => {
-          SLIDER_PRINCIPAL($);
-          DATA_VALUES($);
-          PRODUCTS_CAROUSEL_HOME($);
-        }, 50);
+       
       })
+    // })
+    afterRender(() => {
+      setTimeout(() => {
+        SLIDER_PRINCIPAL($);
+        DATA_VALUES($);
+        PRODUCTS_CAROUSEL_HOME($);
+        this.SLIDERS.forEach((SLIDER:any) => {
+          this.getLabelSlider(SLIDER)
+          this.getSubtitleSlider(SLIDER)
+        });
+        this.BANNERS_SECUNDARIOS.forEach((BANNER:any,index:number) => {
+          if(index == 0){
+            this.getTitleBannerSecundario(BANNER,'title-banner-s-'+BANNER.id);
+          }else{
+            this.getTitleBannerSecundario(BANNER,'title-banner-sa-'+BANNER.id);
+          }
+        });
+      }, 50);
+      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
     })
+
   }
 
   ngOnInit(): void {
@@ -95,11 +115,20 @@ export class HomeComponent {
   }
 
   getNewTotal(PRODUCT:any,DISCOUNT_FLASH_P:any){
-    if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
-      // 100 / 100*(50*0.01) 100*0.5=50
-      return (PRODUCT.price_pen - PRODUCT.price_pen*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-    }else{//-PEN/-USD 
-      return (PRODUCT.price_pen - DISCOUNT_FLASH_P.discount).toFixed(2);
+    if(this.currency == 'PEN'){
+      if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
+        // 100 / 100*(50*0.01) 100*0.5=50
+        return (PRODUCT.price_pen - PRODUCT.price_pen*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+      }else{//-PEN/-USD 
+        return (PRODUCT.price_pen - DISCOUNT_FLASH_P.discount).toFixed(2);
+      }
+    }else{
+      if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
+        // 100 / 100*(50*0.01) 100*0.5=50
+        return (PRODUCT.price_usd - PRODUCT.price_usd*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+      }else{//-PEN/-USD 
+        return (PRODUCT.price_usd - DISCOUNT_FLASH_P.discount).toFixed(2);
+      }
     }
   }
 
@@ -107,7 +136,19 @@ export class HomeComponent {
     if(PRODUCT.discount_g){
       return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
     }
-    return PRODUCT.price_pen;
+    if(this.currency == 'PEN'){
+      return PRODUCT.price_pen;
+    }else{
+      return PRODUCT.price_usd;
+    }
+  }
+
+  getTotalCurrency(PRODUCT:any){
+    if(this.currency == 'PEN'){
+      return PRODUCT.price_pen;
+    }else{
+      return PRODUCT.price_usd;
+    }
   }
 
   openDetailProduct(PRODUCT:any){

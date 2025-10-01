@@ -42,7 +42,7 @@ class HomeController extends Controller
         $product_last_selling = Product::where("state",2)->inRandomOrder()->limit(3)->get();
 
 
-        date_default_timezone_set("Europe/Madrid");
+        date_default_timezone_set("America/Lima");
         $DISCOUNT_FLASH = Discount::where("type_campaing",2)->where("state",1)
                             ->where("start_date","<=",today())
                             ->where("end_date",">=",today())
@@ -67,7 +67,7 @@ class HomeController extends Controller
                 }
             }
             // Sep 30 2024 20:20:22
-            $DISCOUNT_FLASH->end_date_format = Carbon::parse($DISCOUNT_FLASH->end_date)->format('M d Y H:i:s');
+            $DISCOUNT_FLASH->end_date_format = Carbon::parse($DISCOUNT_FLASH->end_date)->addDays(1)->format('M d Y H:i:s');
         }
 
         return response()->json([
@@ -165,6 +165,31 @@ class HomeController extends Controller
                     })
                 ];
             }),
+        ]);
+    }
+
+    public function show_product(Request $request,$slug){
+        $campaing_discount = $request->get("campaing_discount");
+        $discount = null;
+        if($campaing_discount){
+            $discount = Discount::where("code",$campaing_discount)->first();
+        }
+        $product = Product::where("slug",$slug)->where("state",2)->first();
+
+        if(!$product){
+            return response()->json([
+                "message" => 403,
+                "message_text" => "EL PRODUCTO NO EXISTE" 
+            ]);
+        }
+
+        $product_relateds = Product::where("categorie_first_id",$product->categorie_first_id)->where("state",2)->get();
+
+        return response()->json([
+            "message" => 200,
+            "product" => ProductEcommerceResource::make($product),
+            "product_relateds" => ProductEcommerceCollection::make($product_relateds),
+            "discount_campaing" => $discount,
         ]);
     }
 }
