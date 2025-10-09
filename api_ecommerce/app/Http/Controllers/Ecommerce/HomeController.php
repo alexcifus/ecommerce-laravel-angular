@@ -42,7 +42,7 @@ class HomeController extends Controller
         $product_last_selling = Product::where("state",2)->inRandomOrder()->limit(3)->get();
 
 
-        date_default_timezone_set("America/Lima");
+        date_default_timezone_set("Europe/Madrid");
         $DISCOUNT_FLASH = Discount::where("type_campaing",2)->where("state",1)
                             ->where("start_date","<=",today())
                             ->where("end_date",">=",today())

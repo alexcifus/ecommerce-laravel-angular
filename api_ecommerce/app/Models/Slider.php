@@ -25,11 +25,11 @@ class Slider extends Model
     ];
 
     public function setCreatedAtAttribute($value){
-        date_default_timezone_set("America/Lima");
+        date_default_timezone_set("Europe/Madrid");
         $this->attributes["created_at"] = Carbon::now();
     }
     public function setUpdatedtAttribute($value){
-        date_default_timezone_set("America/Lima");
+        date_default_timezone_set("Europe/Madrid");
         $this->attributes["updated_at"] = Carbon::now();
     }
 }

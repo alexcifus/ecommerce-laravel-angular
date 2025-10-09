@@ -1,10 +1,14 @@
-import { Component, afterNextRender } from '@angular/core';
+import { Component, afterNextRender, afterRender } from '@angular/core';
 import { HomeService } from '../../pages/home/service/home.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService } from '../../pages/home/service/cart.service';
+import { ToastrService } from 'ngx-toastr';
 
+declare function CurrecyChange([]):any;
+declare var $:any;
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -16,9 +20,16 @@ export class HeaderComponent {
 
   categories_menus:any = [];
   currency:string = 'EUR';
+
+  user:any;
+  listCarts:any = [];
+  totalCarts:number = 0;
+  isLoading:boolean = false;
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
+    public cartService: CartService,
+    private toastr: ToastrService,
   ) {
     afterNextRender(() => {
       this.homeService.menus().subscribe((resp:any) => {
@@ -26,6 +37,48 @@ export class HeaderComponent {
         this.categories_menus = resp.categories_menus;
       })
       this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
+      this.user = this.cartService.authService.user;
+      
+      if(this.user){
+        this.cartService.listCart().subscribe((resp:any) => {
+          console.log(resp);
+          resp.carts.data.forEach((cart:any) => {
+            if(cart.currency != this.currency){
+              this.cookieService.set("currency",cart.currency);
+              setTimeout(() => {
+                window.location.reload();
+              }, 25);
+            }
+            this.cartService.changeCart(cart)
+          });
+        })
+      }
+    })
+    afterRender(() => {
+      setTimeout(() => {
+        this.isLoading = true;
+        setTimeout(() => {
+          CurrecyChange($);
+        }, 50);
+      }, 50);
+    })
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    console.log(this.user);
+    this.cartService.currentDataCart$.subscribe((resp:any) => {
+      // console.log(resp);
+      this.listCarts = resp;
+      this.totalCarts = this.listCarts.reduce((sum:number, item:any) => sum + item.total, 0);
+    })
+  }
+  
+  deleteCart(CART:any) {
+    this.cartService.deleteCart(CART.id).subscribe((resp:any) => {
+      this.toastr.info("Eliminación","Se elimino el producto "+CART.product.title + " del carrito de compra");
+      this.cartService.removeCart(CART);
     })
   }
 
@@ -36,9 +89,17 @@ export class HeaderComponent {
   }
 
   changeCurrency(val:string){
-    this.cookieService.set("currency",val);
-    setTimeout(() => {
-      window.location.reload();
-    }, 50);
+    if(this.user){
+      this.cartService.deleteCartsAll().subscribe((resp:any) => {
+        this.cookieService.set("currency",val);
+        window.location.reload();
+        console.log(resp);
+      })
+    }else{
+      this.cookieService.set("currency",val);
+      setTimeout(() => {
+        window.location.reload();
+      }, 25);
+    }
   }
 }

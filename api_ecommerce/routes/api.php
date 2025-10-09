@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
@@ -89,4 +90,13 @@ Route::group([
     Route::get("menus",[HomeController::class,"menus"]);
 
     Route::get("product/{slug}",[HomeController::class,"show_product"]);
+
+    Route::group([
+        "middleware" => 'auth:api',
+    ],function($router) {
+        Route::delete("carts/delete_all",[CartController::class,"delete_all"]);
+        Route::post("carts/apply_cupon",[CartController::class,"apply_cupon"]);
+        Route::resource('carts', CartController::class);
+    });
+
 });

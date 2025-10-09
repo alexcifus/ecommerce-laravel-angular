@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { Component, afterNextRender, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../service/auth.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-declare function password_show_toggle(): any;
+declare global { interface Window { password_show_toggle?: () => void } }
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -14,51 +16,66 @@ declare function password_show_toggle(): any;
 })
 export class LoginComponent {
 
-  email: string = '';
-  password: string = '';
-  code_user: string = '';
+  email = '';
+  password = '';
+  code_user = '';
 
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,
-    private router: Router,
+    public router: Router,
     public activedRoute: ActivatedRoute,
-  ) { }
-  
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    afterNextRender(() => {
+      if (!isPlatformBrowser(this.platformId)) return;    // 👈 evita SSR
+      setTimeout(() => window.password_show_toggle?.(), 0);
+    });
+  }
+
   ngOnInit(): void {
-    // this.toastr.success('Hello world!', 'Toastr fun!');
-    // this.showSuccess();
-    if(this.authService.token && this.authService.user) {
-      setTimeout(() => {
-        this.router.navigateByUrl('/');
-    }, 500);
-    return;
-  }
-  this.activedRoute.queryParams.subscribe((resp:any) => {
-    this.code_user = resp.code;
-})
-
-setTimeout(() => {
-  password_show_toggle();
-}, 50);
-
-if(this.code_user) {
-  let data = {
-    code_user: this.code_user, 
-  }
-  this.authService.verifiedAuth(data).subscribe((resp:any) => {
-    console.log(resp);
-    if(resp.message == 403) {
-      this.toastr.error('Validacion', 'El codigo no pertencee a ningun usuario');
+    // 1) Si hay token pero está EXPIRADO o es inválido, límpialo en vez de redirigir
+    if (this.isTokenValid()) {
+      // usuario ya logueado → ve a inicio (opcional)
+      setTimeout(() => this.router.navigateByUrl('/'), 0);
+      return;
+    } else {
+      // limpia restos de sesión inválida
+      try {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } catch {}
     }
-    if(resp.message == 200) {
-      this.toastr.success('Exito', 'El correo ha sido verificado, puedes iniciar sesion');
-      setTimeout(() => {
-        this.router.navigateByUrl('/login');
-      }, 500);
+
+    // 2) Lee código de verificación (igual que tenías)
+    this.activedRoute.queryParams.subscribe((resp: any) => {
+      this.code_user = resp.code;
+      if (this.code_user) {
+        const data = { code_user: this.code_user };
+        this.authService.verifiedAuth(data).subscribe((r: any) => {
+          if (r.message == 403) this.toastr.error('Validacion', 'EL codigo no pertenece a ningun usuario');
+          if (r.message == 200) {
+            this.toastr.success('Exito', 'EL correo ha sido verificado, ingresar a la tienda');
+            setTimeout(() => this.router.navigateByUrl('/login'), 500);
+          }
+        });
+      }
+    });
+  }
+
+  // ✅ Valida JWT por fecha de expiración (claim "exp")
+  private isTokenValid(): boolean {
+    try {
+      if (!isPlatformBrowser(this.platformId)) return false;
+      const t = localStorage.getItem('token');
+      if (!t) return false;
+      const payload = JSON.parse(atob((t.split('.')[1] || '')));
+      const exp = Number(payload?.exp);
+      const now = Math.floor(Date.now() / 1000);
+      return !!exp && now < exp;
+    } catch {
+      return false;
     }
-  })
-}
   }
 
   login() {
@@ -67,23 +84,14 @@ if(this.code_user) {
       return;
     }
     this.authService.login(this.email, this.password).subscribe((resp: any) => {
-      console.log('respuesta del backend',resp);
-      if(resp.error && resp.error.error == 'Unauthorized') {
+      if (resp?.error?.error === 'Unauthorized') {
         this.toastr.error('Validacion', 'Las credenciales son incorrectas');
         return;
       }
-      if(resp == true) {
+      if (resp === true) {
         this.toastr.success('Exito', 'Bienvenido a la tienda');
-        setTimeout(() => {
-          this.router.navigateByUrl("/");
-        }, 500);
+        setTimeout(() => this.router.navigateByUrl('/'), 500);
       }
-    }, (error) => {
-      console.log(error);
-    })
-  }
-
-  showSuccess() {
-    this.toastr.success('Hello world!', 'Toastr fun!');
+    }, (error) => console.log(error));
   }
 }

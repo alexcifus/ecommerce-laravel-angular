@@ -25,15 +25,25 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/vendor/jquery.js",
+
+              "src/assets/js/nice-select.js",
+              "src/assets/js/slick.js",
+              "src/assets/js/imagesLoaded-pkgd.js",
+              "src/assets/js/isotope-pkgd.js",
+              "src/assets/js/magnific-popup.js",
+              "src/assets/js/range-slider.js",
+              "src/assets/js/meanmenu.js",
+
+              "src/assets/js/main.js"
+],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -88,10 +98,8 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
