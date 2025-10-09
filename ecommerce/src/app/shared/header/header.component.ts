@@ -15,7 +15,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class HeaderComponent {
 
   categories_menus:any = [];
-  currency:string = 'PEN';
+  currency:string = 'EUR';
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -25,7 +25,7 @@ export class HeaderComponent {
         console.log(resp);
         this.categories_menus = resp.categories_menus;
       })
-      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
     })
   }
 

@@ -27,7 +27,7 @@ export class LandingProductComponent {
   CAMPAING_CODE:any;
   DISCOUNT_CAMPAING:any;
 
-  currency:string = 'PEN';
+  currency:string = 'EUR';
   constructor(
     public homeService: HomeService,
     public activedRoute: ActivatedRoute,
@@ -62,7 +62,7 @@ export class LandingProductComponent {
           MODAL_PRODUCT_DETAIL($);
             LANDING_PRODUCT($);
         }, 50);
-        this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+        this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
       })
   }
 
@@ -73,18 +73,18 @@ export class LandingProductComponent {
   }
 
   getNewTotal(PRODUCT:any,DISCOUNT_FLASH_P:any){
-    if(this.currency == 'PEN'){
+    if(this.currency == 'EUR'){
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
-        return (PRODUCT.price_pen - PRODUCT.price_pen*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
-        return (PRODUCT.price_pen - DISCOUNT_FLASH_P.discount).toFixed(2);
+        return (PRODUCT.price_eur - PRODUCT.price_eur*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+      }else{//-EUR/-USD 
+        return (PRODUCT.price_eur - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }else{
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
         return (PRODUCT.price_usd - PRODUCT.price_usd*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
+      }else{//-EUR/-USD 
         return (PRODUCT.price_usd - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }
@@ -95,16 +95,16 @@ export class LandingProductComponent {
     if(PRODUCT.discount_g){
       return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
     }
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur;
     }else{
       return PRODUCT.price_usd;
     }
   }
 
   getTotalCurrency(PRODUCT:any){
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur;
     }else{
       return PRODUCT.price_usd;
     }

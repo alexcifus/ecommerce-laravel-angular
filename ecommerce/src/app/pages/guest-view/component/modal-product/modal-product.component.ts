@@ -27,9 +27,9 @@ export class ModalProductComponent {
   getNewTotal(PRODUCT:any,DISCOUNT_FLASH_P:any){
     if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
       // 100 / 100*(50*0.01) 100*0.5=50
-      return (PRODUCT.price_pen - PRODUCT.price_pen*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-    }else{//-PEN/-USD 
-      return (PRODUCT.price_pen - DISCOUNT_FLASH_P.discount).toFixed(2);
+      return (PRODUCT.price_eur - PRODUCT.price_eur*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+    }else{//-EUR/-USD 
+      return (PRODUCT.price_eur - DISCOUNT_FLASH_P.discount).toFixed(2);
     }
   }
 
@@ -37,7 +37,7 @@ export class ModalProductComponent {
     if(PRODUCT.discount_g){
       return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
     }
-    return PRODUCT.price_pen;
+    return PRODUCT.price_eur;
   }
   
   selectedVariation(variation:any){
