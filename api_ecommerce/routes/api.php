@@ -9,6 +9,7 @@ use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Ecommerce\UserAddressController;
 use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\Product\CategorieController;
 use App\Http\Controllers\Admin\Product\AttributeProductController;
@@ -97,6 +98,7 @@ Route::group([
         Route::delete("carts/delete_all",[CartController::class,"delete_all"]);
         Route::post("carts/apply_cupon",[CartController::class,"apply_cupon"]);
         Route::resource('carts', CartController::class);
+        Route::resource('user_address', UserAddressController::class);
     });
 
 });

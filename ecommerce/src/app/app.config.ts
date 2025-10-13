@@ -7,7 +7,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { PermisionAuth } from './pages/auth/service/auth.guard';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -19,7 +19,10 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
 
     // HttpClient disponible en cliente y servidor + usa interceptores DI
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+  withFetch(),              // <-- activa fetch()
+  withInterceptorsFromDi()  // <-- mantiene tus interceptores DI
+),
 
     CookieService,
     PermisionAuth,
