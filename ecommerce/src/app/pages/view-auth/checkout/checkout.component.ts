@@ -20,7 +20,7 @@ export class CheckoutComponent {
   listCarts:any = [];
   totalCarts:number = 0;
 
-  currency:string = 'EUR';
+  currency:string = 'PEN';
 
   address_list:any = [];
 
@@ -57,7 +57,7 @@ export class CheckoutComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
+    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
     this.cartService.currentDataCart$.subscribe((resp:any) => {
       this.listCarts = resp;
       this.totalCarts = this.listCarts.reduce((sum:number, item:any) => sum + item.total, 0);
@@ -140,12 +140,12 @@ export class CheckoutComponent {
               email: this.email,
             }
           }
-          // this.cartService.checkout(dataSale).subscribe((resp:any) => {
-          //   console.log(resp);
-          //   this.toastr.success("Exito","La compra se a realizado");
-          //   this.router.navigateByUrl("/gracias-por-tu-compra/"+Order.purchase_units[0].payments.captures[0].id);
-          //   // La redirección a la pagina de gracias
-          // });
+          this.cartService.checkout(dataSale).subscribe((resp:any) => {
+            console.log(resp);
+            this.toastr.success("Exito","La compra se a realizado");
+            this.router.navigateByUrl("/gracias-por-tu-compra/"+Order.purchase_units[0].payments.captures[0].id);
+            // La redirección a la pagina de gracias
+          });
           // return actions.order.capture().then(captureOrderHandler);
       },
 

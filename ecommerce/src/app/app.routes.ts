@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
@@ -7,6 +7,7 @@ import { LandingProductComponent } from './pages/guest-view/landing-product/land
 import { authGuard } from './pages/auth/service/auth.guard';
 import { CartComponent } from './pages/view-auth/cart/cart.component';
 import { CheckoutComponent } from './pages/view-auth/checkout/checkout.component';
+import { ThankYouOrderComponent } from './pages/view-auth/thank-you-order/thank-you-order.component';
 
 export const routes: Routes = [
     {
@@ -18,7 +19,7 @@ export const routes: Routes = [
         component: LoginComponent
     },
     {
-        //canActivate: [authGuard],
+        // canActivate: [authGuard],
         path: 'register',
         component: RegisterComponent
     },
@@ -36,10 +37,14 @@ export const routes: Routes = [
         path: 'carrito-de-compra',
         component: CartComponent
     },
-
     {
         canActivate: [authGuard],
         path: 'proceso-de-pago',
         component: CheckoutComponent
+    },
+    {
+        canActivate: [authGuard],
+        path: 'gracias-por-tu-compra/:order',
+        component: ThankYouOrderComponent
     },
 ];

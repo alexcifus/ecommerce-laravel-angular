@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\HomeController;
+use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
@@ -99,6 +100,9 @@ Route::group([
         Route::post("carts/apply_cupon",[CartController::class,"apply_cupon"]);
         Route::resource('carts', CartController::class);
         Route::resource('user_address', UserAddressController::class);
+        
+        Route::get("sale/{id}",[SaleController::class,"show"]);
+        Route::post("checkout",[SaleController::class,"store"]);
     });
 
 });
