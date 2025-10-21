@@ -1,13 +1,14 @@
 import { Component, afterNextRender, afterRender } from '@angular/core';
 import { CartService } from '../../home/service/cart.service';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 declare var $:any;
 declare function MODAL_PRODUCT_DETAIL([]):any;
 @Component({
   selector: 'app-thank-you-order',
   standalone: true,
-  imports: [],
+  imports: [CommonModule ],
   templateUrl: './thank-you-order.component.html',
   styleUrl: './thank-you-order.component.css'
 })

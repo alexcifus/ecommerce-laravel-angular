@@ -50,7 +50,7 @@
                 <span class="offcanvas__currency-selected-currency tp-currency-toggle" id="tp-offcanvas-currency-toggle">Currency : USD</span>
                 <ul class="offcanvas__currency-list tp-currency-list">
                    <li>USD</li>
-                   <li>EUR</li>
+                   <li>ERU</li>
                    <li>BDT </li>
                    <li>INR</li>
                 </ul>
@@ -287,7 +287,7 @@
                                   <a href="cart.html">Cart</a>
                                </li>
                                <li>
-                                  <a href="login.html">Logout</a>
+                                  <a href="#" onclick="return false" (click)="logout()">Logout</a>
                                </li>
                             </ul>
                          </div>
@@ -340,7 +340,7 @@
                 <div class="col-xl-4 col-lg-3 col-md-8 col-6">
                    <div class="tp-header-main-right d-flex align-items-center justify-content-end">
                       <div class="tp-header-login d-none d-lg-block">
-                         <a href="profile.html" class="d-flex align-items-center">
+                         <div class="d-flex align-items-center">
                             <div class="tp-header-login-icon">
                                <span>
                                   <svg width="17" height="21" viewBox="0 0 17 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -349,11 +349,17 @@
                                   </svg>                                       
                                </span>
                             </div>
-                            <div class="tp-header-login-content d-none d-xl-block">
-                               <span>Hello, Sign In</span>
-                               <h5 class="tp-header-login-title">Your Account</h5>
+                            <div class="tp-header-login-content d-none d-xl-block" *ngIf="!user">
+                               <span>Hello, Invitado</span>
+                               <h5 class="tp-header-login-title"><a routerLink="/login">Sign In</a></h5>
                             </div>
-                         </a>
+
+                            <div class="tp-header-login-content d-none d-xl-block" *ngIf="user">
+                              <span>Hello, {{ user.full_name }}</span>
+                              <h5 class="tp-header-login-title"><a routerLink="/perfil-del-cliente" target="_blank">Go Profile</a> </h5>
+                           </div>
+
+                         </div>
                       </div>
                       <div class="tp-header-action d-flex align-items-center ml-50">
                          <div class="tp-header-action-item d-none d-lg-block">

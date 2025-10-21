@@ -20,7 +20,7 @@ export class CheckoutComponent {
   listCarts:any = [];
   totalCarts:number = 0;
 
-  currency:string = 'PEN';
+  currency:string = 'EUR';
 
   address_list:any = [];
 
@@ -38,6 +38,7 @@ export class CheckoutComponent {
   address_selected:any;
   description:string = '';
   @ViewChild('paypal',{static: true}) paypalElement?: ElementRef;
+  price_dolar:number = 0.8806798;
   constructor(
     public cartService: CartService,
     public cookieService: CookieService, 
@@ -57,7 +58,7 @@ export class CheckoutComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
     this.cartService.currentDataCart$.subscribe((resp:any) => {
       this.listCarts = resp;
       this.totalCarts = this.listCarts.reduce((sum:number, item:any) => sum + item.total, 0);
@@ -102,7 +103,7 @@ export class CheckoutComponent {
               {
                 amount: {
                     description: "COMPRAR POR EL ECOMMERCE 2024",
-                    value: this.totalCarts
+                    value: this.totalCarts,
                 }
               }
             ]
@@ -122,8 +123,8 @@ export class CheckoutComponent {
             currency_total: this.currency,
             currency_payment: 'USD',
             discount: 0,
-            subtotal: this.totalCarts,
-            total: this.totalCarts,
+            subtotal: this.totalPaypayl(),
+            total: this.totalPaypayl(),
             price_dolar: 0,
             n_transaccion: Order.purchase_units[0].payments.captures[0].id,
             description: this.description,
@@ -154,6 +155,14 @@ export class CheckoutComponent {
           console.error('An error prevented the buyer from checking out with PayPal');
       }
   }).render(this.paypalElement?.nativeElement);
+  }
+
+  totalPaypayl(){
+    if(this.currency == 'USD'){
+      return this.totalCarts;
+    }else{
+      return (this.totalCarts/this.price_dolar).toFixed(2);
+    }
   }
 
   registerAddress(){

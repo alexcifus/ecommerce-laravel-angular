@@ -53,7 +53,7 @@ export class HomeComponent {
   ) {
     // afterNextRender(() => {
       this.homeService.home().subscribe((resp:any) => {
-        // console.log(resp);
+        console.log(resp);
         this.SLIDERS = resp.sliders_principal;
         this.CATEGORIES_RANDOMS = resp.categories_randoms;
         this.TRADING_PRODUCT_NEW = resp.product_tranding_new.data;

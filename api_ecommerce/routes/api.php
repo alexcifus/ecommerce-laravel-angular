@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\SaleController;
+use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Admin\Cupone\CuponeController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\ProductController;
@@ -101,8 +102,17 @@ Route::group([
         Route::resource('carts', CartController::class);
         Route::resource('user_address', UserAddressController::class);
         
+        Route::get("mercadopago",[SaleController::class,"mercadopago"]);
         Route::get("sale/{id}",[SaleController::class,"show"]);
         Route::post("checkout",[SaleController::class,"store"]);
+        Route::post("checkout-temp",[SaleController::class,"checkout_temp"]);
+        Route::post("checkout-mercadopago",[SaleController::class,"checkout_mercadopago"]);
+        
+        Route::get("profile_client/me",[AuthController::class,"me"]);
+        Route::get("profile_client/orders",[SaleController::class,"orders"]);
+        Route::post("profile_client",[AuthController::class,"update"]);
+
+        Route::resource('reviews', ReviewController::class);
     });
 
 });

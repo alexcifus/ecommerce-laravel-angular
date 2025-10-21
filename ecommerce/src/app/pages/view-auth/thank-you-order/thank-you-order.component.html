@@ -23,7 +23,7 @@
        <div class="container">
           <div class="tp-order-inner">
              <div class="row gx-0">
-                <div class="col-lg-6">
+                <div class="col-lg-6" *ngIf="ORDER_SELECTED">
                    <div class="tp-order-details" data-bg-color="#4F3D97">
                       <div class="tp-order-details-top text-center mb-70">
                          <div class="tp-order-details-icon">
@@ -47,7 +47,7 @@
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
                                   <h4>Order Date:</h4>
-                                  <p>{{ ORDER_SELECTED?.created_at }}</p>
+                                  <p>{{ ORDER_SELECTED.created_at }}</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
@@ -59,13 +59,13 @@
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
                                   <h4>Order Number:</h4>
-                                  <p>#{{ ORDER_SELECTED?.n_transaccion }}</p>
+                                  <p>#{{ ORDER_SELECTED.n_transaccion }}</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
                                   <h4>Payment Method:</h4>
-                                  <p>{{ ORDER_SELECTED?.method_payment }}</p>
+                                  <p>{{ ORDER_SELECTED.method_payment }}</p>
                                </div>
                             </div>
                          </div>
@@ -85,7 +85,7 @@
                                <h4>Total</h4>
                             </li>
 
-                            @for(sale_detail of ORDER_SELECTED?.sale_details;track sale_detail.id) {
+                            @for(sale_detail of ORDER_SELECTED.sale_details;track sale_detail.id) {
                                 <!-- item list -->
                                 <li class="tp-order-info-list-desc">
                                    <p><small>{{ sale_detail.product.title }} <span> x {{ sale_detail.quantity }}</span></small></p>
@@ -96,7 +96,7 @@
                             <!-- subtotal -->
                             <li class="tp-order-info-list-subtotal">
                                <span>Subtotal</span>
-                               <span>{{ ORDER_SELECTED?.total }} {{ ORDER_SELECTED?.currency_payment }}</span>
+                               <span>{{ ORDER_SELECTED.total }} {{ ORDER_SELECTED.currency_payment }}</span>
                             </li>
 
                             <!-- shipping -->
@@ -114,7 +114,7 @@
                             <!-- total -->
                             <li class="tp-order-info-list-total">
                                <span>Total</span>
-                               <span>{{ ORDER_SELECTED?.total }} {{ ORDER_SELECTED?.currency_payment }}</span>
+                               <span>{{ ORDER_SELECTED.total }} {{ ORDER_SELECTED.currency_payment }}</span>
                             </li>
                          </ul>
                       </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use Carbon\Carbon;
 use App\Models\Slider;
+use App\Models\Sale\Review;
 use Illuminate\Http\Request;
 use App\Models\Product\Product;
 use App\Models\Discount\Discount;
@@ -185,11 +186,24 @@ class HomeController extends Controller
 
         $product_relateds = Product::where("categorie_first_id",$product->categorie_first_id)->where("state",2)->get();
 
+        $reviews = Review::where("product_id",$product->id)->get();
         return response()->json([
             "message" => 200,
             "product" => ProductEcommerceResource::make($product),
             "product_relateds" => ProductEcommerceCollection::make($product_relateds),
             "discount_campaing" => $discount,
+            "reviews" => $reviews->map(function($review) {
+                return [
+                    "id" => $review->id,
+                    "user" => [
+                        "fulll_name" => $review->user->name . ' '. $review->user->surname,
+                        'avatar' => $review->user->avatar ? env("APP_URL")."storage/".$review->user->avatar : 'https://cdn-icons-png.flaticon.com/512/6919/6919832.png',
+                    ],
+                    "message" => $review->message,
+                    "rating" => $review->rating,
+                    "created_at" => $review->created_at->format("Y-m-d h:i A")
+                ];
+            }),
         ]);
     }
 }

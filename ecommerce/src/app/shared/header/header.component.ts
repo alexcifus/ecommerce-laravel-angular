@@ -74,7 +74,12 @@ export class HeaderComponent {
       this.totalCarts = this.listCarts.reduce((sum:number, item:any) => sum + item.total, 0);
     })
   }
-  
+  logout(){
+    this.cartService.authService.logout();
+    setTimeout(() => {
+      window.location.reload()
+    }, 50);
+  }
   deleteCart(CART:any) {
     this.cartService.deleteCart(CART.id).subscribe((resp:any) => {
       this.toastr.info("Eliminación","Se elimino el producto "+CART.product.title + " del carrito de compra");

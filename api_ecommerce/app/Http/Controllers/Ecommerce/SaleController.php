@@ -6,11 +6,14 @@ use App\Mail\SaleMail;
 use App\Models\Sale\Cart;
 use App\Models\Sale\Sale;
 use Illuminate\Http\Request;
+use App\Models\Product\Product;
 use App\Models\Sale\SaleAddres;
 use App\Models\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Product\ProductVariation;
 use App\Http\Resources\Ecommerce\Sale\SaleResource;
+use App\Http\Resources\Ecommerce\Sale\SaleCollection;
 
 class SaleController extends Controller
 {
@@ -20,6 +23,16 @@ class SaleController extends Controller
     public function index()
     {
         //
+    }
+    
+    public function orders(){
+        $user = auth("api")->user();
+
+        $sales = Sale::where("user_id",$user->id)->orderBy("id","desc")->get();
+
+        return response()->json([
+            "sales" => SaleCollection::make($sales),
+        ]);
     }
 
     /**
@@ -34,11 +47,33 @@ class SaleController extends Controller
         $carts = Cart::where("user_id",auth("api")->user()->id)->get();
 
         foreach ($carts as $key => $cart) {
+            $nCart = $cart;
             $new_detail = [];
             $new_detail = $cart->toArray();
             $new_detail["sale_id"] = $sale->id;
             SaleDetail::create($new_detail);
+            // DESCUENTO DE STOCK DEL PRODUCTO
+            if($cart->product_variation_id){
+               $variation = ProductVariation::find($cart->product_variation_id);
+               if($variation->variation_father){
+                    $variation->variation_father->update([
+                        "stock" => $variation->variation_father->stock - $cart->quantity
+                    ]);
+                    $variation->update([
+                        "stock" => $variation->stock - $cart->quantity
+                    ]);
+               }else{
+                    $variation->update([
+                        "stock" => $variation->stock - $cart->quantity
+                    ]);
+               }
+            }else{
+                $product = Product::find($cart->product_id);
+                $product->update([
+                    "stock" => $product->stock - $cart->quantity
+                ]);
             // LA ELIMINACIÓN DEL CARRITO
+            $cart->delete();
         }
         $sale_addres = $request->sale_address;
         $sale_addres["sale_id"] = $sale->id;
@@ -50,7 +85,7 @@ class SaleController extends Controller
             "message" => 200,
         ]);
     }
-
+    }
     /**
      * Display the specified resource.
      */
