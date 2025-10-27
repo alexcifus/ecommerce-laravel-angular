@@ -19,12 +19,13 @@ declare var $:any;
 export class HeaderComponent {
 
   categories_menus:any = [];
-  currency:string = 'EUR';
+  currency:string = 'PEN';
 
   user:any;
   listCarts:any = [];
   totalCarts:number = 0;
   isLoading:boolean = false;
+  searchT:string = '';
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -36,7 +37,7 @@ export class HeaderComponent {
         console.log(resp);
         this.categories_menus = resp.categories_menus;
       })
-      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
+      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
       this.user = this.cartService.authService.user;
       
       if(this.user){
@@ -106,5 +107,9 @@ export class HeaderComponent {
         window.location.reload();
       }, 25);
     }
+  }
+
+  searchProduct(){
+    window.location.href = "/productos-busqueda?search="+this.searchT;
   }
 }

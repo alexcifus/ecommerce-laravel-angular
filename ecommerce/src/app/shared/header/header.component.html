@@ -138,7 +138,7 @@
                 </div>
                 <form action="#">
                    <div class="tp-search-input mb-10">
-                      <input type="text" placeholder="Search for product...">
+                      <input type="text" (keyup.enter)="searchProduct()" [(ngModel)]="searchT" name="searchT" placeholder="Search for product...">
                       <button type="submit"><i class="flaticon-search-1"></i></button>
                    </div>
                    <div class="tp-search-category">
@@ -266,11 +266,11 @@
                          <div class="tp-header-top-menu-item tp-header-currency" *ngIf="isLoading">
                             <span class="tp-header-currency-toggle" id="tp-header-currency-toggle" >{{ currency }}</span>
                             <ul>
-                               <li *ngIf="currency == 'EUR'">
+                               <li *ngIf="currency == 'PEN'">
                                   <a href="#" onclick="return false;" (click)="changeCurrency('USD')">USD</a>
                                </li>
                                <li *ngIf="currency == 'USD'">
-                                  <a href="#" onclick="return false;" (click)="changeCurrency('EUR')">EUR</a>
+                                  <a href="#" onclick="return false;" (click)="changeCurrency('PEN')">PEN</a>
                                </li>
                             </ul>
                          </div>
@@ -314,7 +314,7 @@
                       <form action="#">
                          <div class="tp-header-search-wrapper d-flex align-items-center">
                             <div class="tp-header-search-box">
-                               <input type="text" placeholder="Search for Products...">
+                               <input type="text" (keyup.enter)="searchProduct()" [(ngModel)]="searchT" name="searchT" placeholder="Search for Products...">
                             </div>
                             <div class="tp-header-search-category">
                                <select>
