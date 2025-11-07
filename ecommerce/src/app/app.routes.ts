@@ -10,6 +10,8 @@ import { CheckoutComponent } from './pages/view-auth/checkout/checkout.component
 import { ThankYouOrderComponent } from './pages/view-auth/thank-you-order/thank-you-order.component';
 import { ProfileClientComponent } from './pages/view-auth/profile-client/profile-client.component';
 import { FilterAdvanceComponent } from './pages/guest-view/filter-advance/filter-advance.component';
+import { CampaingLinkComponent } from './pages/guest-view/campaing-link/campaing-link.component';
+import { CompareProductComponent } from './pages/guest-view/compare-product/compare-product.component';
 
 export const routes: Routes = [
     {
@@ -57,5 +59,13 @@ export const routes: Routes = [
     {
         path: 'productos-busqueda',
         component: FilterAdvanceComponent,
+    },
+    {
+        path: 'discount/:code',
+        component: CampaingLinkComponent,
+    },
+    {
+        path: 'compare-product',
+        component: CompareProductComponent,
     },
 ];

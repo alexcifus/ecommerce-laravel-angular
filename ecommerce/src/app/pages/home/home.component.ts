@@ -101,6 +101,22 @@ export class HomeComponent {
     //Add 'implements OnInit' to the class.
     this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
   }
+  addCompareProduct(TRADING_PRODUCT:any){
+    let COMPARES = localStorage.getItem("compares") ? JSON.parse(localStorage.getItem("compares") ?? '') : [];
+
+    let INDEX = COMPARES.findIndex((item:any) => item.id == TRADING_PRODUCT.id);
+    if(INDEX != -1){
+      this.toastr.error("Validacion","El producto ya existe en la lista");
+      return;
+    }
+    COMPARES.push(TRADING_PRODUCT);
+    this.toastr.success("Exito","El producto se agrego a lista de comparacion");
+
+    localStorage.setItem("compares",JSON.stringify(COMPARES));
+    if(COMPARES.length > 1){
+      this.router.navigateByUrl("/compare-product");
+    }
+  }
 
   addCart(PRODUCT:any) {
     if(!this.cartService.authService.user){

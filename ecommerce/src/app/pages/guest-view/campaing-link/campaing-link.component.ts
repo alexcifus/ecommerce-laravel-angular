@@ -1,22 +1,22 @@
 import { Component, afterNextRender } from '@angular/core';
-import { HomeService } from '../../home/service/home.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
+import { CartService } from '../../home/service/cart.service';
+import { HomeService } from '../../home/service/home.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ModalProductComponent } from '../component/modal-product/modal-product.component';
-import { CartService } from '../../home/service/cart.service';
-import { ToastrService } from 'ngx-toastr';
 
 declare var $:any;
 @Component({
-  selector: 'app-filter-advance',
+  selector: 'app-campaing-link',
   standalone: true,
   imports: [FormsModule,RouterModule,CommonModule,ModalProductComponent],
-  templateUrl: './filter-advance.component.html',
-  styleUrl: './filter-advance.component.css'
+  templateUrl: './campaing-link.component.html',
+  styleUrl: './campaing-link.component.css'
 })
-export class FilterAdvanceComponent {
+export class CampaingLinkComponent {
 
   Categories:any = [];
   Colors:any = [];
@@ -35,7 +35,8 @@ export class FilterAdvanceComponent {
   min_price:number = 0;
   max_price:number = 0;
   options_aditional:any = [];
-  search:string = '';
+  CODE_DISCOUNT:any = null;
+  DISCOUNT_LINK:any = null;
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -53,13 +54,18 @@ export class FilterAdvanceComponent {
       this.Products_relateds = resp.product_relateds.data;
     })
 
-    this.activedRoute.queryParams.subscribe((resp:any) => {
-      this.search = resp.search;
+    this.activedRoute.params.subscribe((resp:any) => {
+      this.CODE_DISCOUNT = resp.code;
     })
 
-    this.homeService.filterAdvanceProduct({search: this.search,}).subscribe((resp:any) => {
+    this.homeService.campaingDiscountLink({code_discount: this.CODE_DISCOUNT}).subscribe((resp:any) => {
       console.log(resp);
-      this.PRODUCTS = resp.products.data;
+      if(resp.message == 403){
+        this.toastr.info("Validación",resp.message_text);
+        return;
+      }
+      this.PRODUCTS = resp.products;
+      this.DISCOUNT_LINK = resp.discount;
     })
 
     afterNextRender(() => {
@@ -73,7 +79,7 @@ export class FilterAdvanceComponent {
           this.min_price = ui.values[0];
           this.max_price = ui.values[1];
         },stop: () => {
-          this.filterAdvanceProduct();
+          // this.filterAdvanceProduct();
         }
       });
       $("#amount").val(this.currency+ " " + $("#slider-range").slider("values", 0) +
@@ -85,6 +91,9 @@ export class FilterAdvanceComponent {
     this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
   }
 
+  reset(){
+    window.location.href = "/productos-busqueda";
+  }
   addCompareProduct(TRADING_PRODUCT:any){
     let COMPARES = localStorage.getItem("compares") ? JSON.parse(localStorage.getItem("compares") ?? '') : [];
 
@@ -101,11 +110,6 @@ export class FilterAdvanceComponent {
       this.router.navigateByUrl("/compare-product");
     }
   }
-  
-  reset(){
-    window.location.href = "/productos-busqueda";
-  }
-
   addOptionAditional(option:string){
     let INDEX = this.options_aditional.findIndex((item:any) => item == option);
     if(INDEX != -1){
@@ -157,12 +161,11 @@ export class FilterAdvanceComponent {
       max_price: this.max_price,
       currency: this.currency,
       options_aditional: this.options_aditional,
-      search: this.search,
     }
-    this.homeService.filterAdvanceProduct(data).subscribe((resp:any) => {
-      console.log(resp);
-      this.PRODUCTS = resp.products.data;
-    })
+    // this.homeService.filterAdvanceProduct(data).subscribe((resp:any) => {
+    //   console.log(resp);
+    //   this.PRODUCTS = resp.products.data;
+    // })
   }
 
   getTotalCurrency(PRODUCT:any){
@@ -192,8 +195,8 @@ export class FilterAdvanceComponent {
   }
 
   getTotalPriceProduct(PRODUCT:any){
-    if(PRODUCT.discount_g){
-      return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
+    if(this.DISCOUNT_LINK){
+      return this.getNewTotal(PRODUCT,this.DISCOUNT_LINK);
     }
     if(this.currency == 'PEN'){
       return PRODUCT.price_pen;
@@ -262,4 +265,5 @@ export class FilterAdvanceComponent {
       // MODAL_PRODUCT_DETAIL($);
     }, 50);
   }
+  
 }
