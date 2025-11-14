@@ -14,9 +14,19 @@ export class CardsWidget17Component implements OnInit {
   @Input() chartLine: number = 11;
   @Input() chartRotate?: number = 145;
 
+  @Input() report_sale_for_week:any;
+
+  percentageV:number = 0;
+  sale_total_week:number = 0;
+  categories:any = [];
+
   constructor() {}
 
   ngOnInit(): void {
+    console.log(this.report_sale_for_week);
+    this.percentageV = this.report_sale_for_week.porcentageV;
+    this.sale_total_week =  this.report_sale_for_week.sales_week;
+    this.categories  = this.report_sale_for_week.sales_week_categories;
     setTimeout(() => {
       initChart(this.chartSize, this.chartLine, this.chartRotate);
     }, 10);

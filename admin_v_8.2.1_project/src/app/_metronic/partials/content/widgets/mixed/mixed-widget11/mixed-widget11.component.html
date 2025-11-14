@@ -10,13 +10,24 @@
 >
   <div class="d-flex flex-stack flex-wrap flex-grow-1 px-9 pt-9 pb-3">
     <div class="me-2">
-      <span class="fw-bolder text-gray-800 d-block fs-3">Sales</span>
+      <span class="fw-bolder text-gray-800 d-block fs-3">Venta X Año</span>
 
-      <span class="text-gray-500 fw-bold">Oct 8 - Oct 26 2021</span>
+      <select
+        class="form-control form-select-solid fw-bolder"
+        name="year_1"
+        placeholder="Selec. Año"
+        [(ngModel)]="year_1"
+        (change)="reportSaleForYear()"
+      >
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+      </select>
     </div>
 
     <div class="fw-bolder fs-3" [ngClass]="'fs-3 text-' + chartColor">
-      $15,300
+      {{ report_sale_for_year ? report_sale_for_year.sales_form_month_year_total : 0 }} EUR
     </div>
   </div>
 

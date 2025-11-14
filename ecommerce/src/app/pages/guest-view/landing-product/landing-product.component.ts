@@ -30,7 +30,7 @@ export class LandingProductComponent {
   CAMPAING_CODE:any;
   DISCOUNT_CAMPAING:any;
 
-  currency:string = 'PEN';
+  currency:string = 'EUR';
   plus:number = 0;
 
   reviews:any = [];
@@ -70,7 +70,7 @@ export class LandingProductComponent {
           MODAL_PRODUCT_DETAIL($);
             LANDING_PRODUCT($);
         }, 50);
-        this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+        this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
       })
   }
   ngOnInit(): void {
@@ -104,18 +104,18 @@ export class LandingProductComponent {
   }
 
   getNewTotal(PRODUCT:any,DISCOUNT_FLASH_P:any){
-    if(this.currency == 'PEN'){
+    if(this.currency == 'EUR'){
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
-        return ((PRODUCT.price_pen+this.plus) - (PRODUCT.price_pen+this.plus)*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
-        return ((PRODUCT.price_pen+this.plus) - DISCOUNT_FLASH_P.discount).toFixed(2);
+        return ((PRODUCT.price_eur+this.plus) - (PRODUCT.price_eur+this.plus)*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+      }else{//-EUR/-USD 
+        return ((PRODUCT.price_eur+this.plus) - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }else{
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
         return ((PRODUCT.price_usd+this.plus) - (PRODUCT.price_usd+this.plus)*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
+      }else{//-EUR/-USD 
         return ((PRODUCT.price_usd+this.plus) - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }
@@ -126,16 +126,16 @@ export class LandingProductComponent {
     if(PRODUCT.discount_g){
       return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
     }
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen + this.plus;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur + this.plus;
     }else{
       return PRODUCT.price_usd + this.plus;
     }
   }
 
   getTotalCurrency(PRODUCT:any){
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur;
     }else{
       return PRODUCT.price_usd;
     }
@@ -211,7 +211,7 @@ export class LandingProductComponent {
       code_discount: discount_g ? discount_g.code : null,
       product_variation_id: product_variation_id,
       quantity: $("#tp-cart-input-val").val(),
-      price_unit: this.currency == 'PEN' ? this.PRODUCT_SELECTED.price_pen : this.PRODUCT_SELECTED.price_usd,
+      price_unit: this.currency == 'EUR' ? this.PRODUCT_SELECTED.price_eur : this.PRODUCT_SELECTED.price_usd,
       subtotal: this.getTotalPriceProduct(this.PRODUCT_SELECTED),
       total: this.getTotalPriceProduct(this.PRODUCT_SELECTED)*$("#tp-cart-input-val").val(),
       currency: this.currency,

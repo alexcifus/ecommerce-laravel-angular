@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import * as ApexCharts from 'apexcharts';
 import { getCSSVariableValue } from '../../../../../../kt/_utils';
+import { SalesService } from 'src/app/modules/sales/service/sales.service';
 
 @Component({
   selector: 'app-new-charts-widget8',
@@ -26,14 +27,26 @@ export class NewChartsWidget8Component implements OnInit {
   chart2Options: any = {};
   hadDelay: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  @Input() year_current:string;
+  @Input() month_current:string;
+  @Input() meses:any = [];
+
+  year_1:string = '';
+  month_1:string = '';
+  report_sale_for_categories:any;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    public salesService: SalesService,) {}
 
   ngOnInit(): void {
-    this.setupCharts();
+    // this.setupCharts();
+    this.year_1 = this.year_current;
+    this.month_1 = this.month_current;
+    this.reportSaleForCategories();
   }
 
   init() {
-    this.chart1Options = getChart1Options(this.chartHeightNumber);
+    // this.chart1Options = getChart1Options(this.chartHeightNumber);
     this.chart2Options = getChart2Options(this.chartHeightNumber);
   }
 
@@ -44,7 +57,7 @@ export class NewChartsWidget8Component implements OnInit {
     }
 
     if (_tab === 'Month') {
-      this.chart1Options = getChart1Options(this.chartHeightNumber);
+      // this.chart1Options = getChart1Options(this.chartHeightNumber);
     }
 
     this.setupCharts();
@@ -57,47 +70,76 @@ export class NewChartsWidget8Component implements OnInit {
       this.cdr.detectChanges();
     }, 100);
   }
+
+  reportSaleForCategories(){
+    let data = {
+       year: this.year_1,
+       month: this.month_1,
+    }
+    this.report_sale_for_categories = null;
+    this.salesService.reportSaleForCategories(data).subscribe((resp:any) => {
+       console.log(resp);
+      //  var categories_labels:any = [];
+       var series_data:any = [];
+       this.report_sale_for_categories = resp;
+       this.report_sale_for_categories.sale_for_categories.forEach((element:any) => {
+          series_data.push({
+            name: element.categorie_name,
+            data: [[element.categories_avg,element.categories_total,element.categories_quantity]]
+          });
+       });
+      //  var max_data = Math.max(...series_data);
+      //  var min_data = Math.min(...series_data);
+      //  console.log(max_data,min_data);
+      this.hadDelay = true;
+      this.chart1Options = getChart1Options(this.chartHeightNumber,series_data)
+    })
+   }
 }
 
-function getChart1Options(chartHeightNumber: number) {
-  const data = [
-    [[100, 250, 30]],
-    [[225, 300, 35]],
-    [[300, 350, 25]],
-    [[350, 350, 20]],
-    [[450, 400, 25]],
-    [[550, 350, 35]],
-  ];
+function getChart1Options(chartHeightNumber: number,series_data:Array<any>) {
+  // X El numero de ventas de la categoria
+  // Y El total de ventas de la categoria
+  // Z El promedio ponderado de la categoria
+  // const data = [
+  //   [[100, 250, 30]],
+  //   [[225, 300, 35]],
+  //   [[300, 350, 25]],
+  //   [[350, 350, 20]],
+  //   [[450, 400, 25]],
+  //   [[550, 350, 35]],
+  // ];
   const height = chartHeightNumber;
   const borderColor = getCSSVariableValue('--bs-border-dashed-color');
-
+  console.log(series_data);
   const options = {
-    series: [
-      {
-        name: 'Social Campaigns',
-        data: data[0], // array value is of the format [x, y, z] where x (timestamp) and y are the two axes coordinates,
-      },
-      {
-        name: 'Email Newsletter',
-        data: data[1],
-      },
-      {
-        name: 'TV Campaign',
-        data: data[2],
-      },
-      {
-        name: 'Google Ads',
-        data: data[3],
-      },
-      {
-        name: 'Courses',
-        data: data[4],
-      },
-      {
-        name: 'Radio',
-        data: data[5],
-      },
-    ],
+    series: series_data,
+    // [
+    //   {
+    //     name: 'Social Campaigns',
+    //     data: data[0], // array value is of the format [x, y, z] where x (timestamp) and y are the two axes coordinates,
+    //   },
+    //   {
+    //     name: 'Email Newsletter',
+    //     data: data[1],
+    //   },
+    //   {
+    //     name: 'TV Campaign',
+    //     data: data[2],
+    //   },
+    //   {
+    //     name: 'Google Ads',
+    //     data: data[3],
+    //   },
+    //   {
+    //     name: 'Courses',
+    //     data: data[4],
+    //   },
+    //   {
+    //     name: 'Radio',
+    //     data: data[5],
+    //   },
+    // ],
     chart: {
       fontFamily: 'inherit',
       type: 'bubble',
@@ -123,7 +165,7 @@ function getChart1Options(chartHeightNumber: number) {
       type: 'numeric',
       tickAmount: 7,
       min: 0,
-      max: 700,
+      // max: 2000,
       axisBorder: {
         show: false,
       },
@@ -143,7 +185,7 @@ function getChart1Options(chartHeightNumber: number) {
     yaxis: {
       tickAmount: 7,
       min: 0,
-      max: 700,
+      // max: 2000,
       labels: {
         style: {
           colors: getCSSVariableValue('--bs-gray-500'),
@@ -157,16 +199,16 @@ function getChart1Options(chartHeightNumber: number) {
       },
       x: {
         formatter: function (val: string) {
-          return 'Clicks: ' + val;
+          return 'Avg: ' + val;
         },
       },
       y: {
         formatter: function (val: string) {
-          return '$' + val + 'K';
+          return val + ' EUR';
         },
       },
       z: {
-        title: 'Impression: ',
+        title: 'Cantidad de venta: ',
       },
     },
     crosshairs: {

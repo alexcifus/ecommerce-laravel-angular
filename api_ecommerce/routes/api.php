@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Ecommerce\UserAddressController;
 use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\Product\CategorieController;
+use App\Http\Controllers\Admin\Sale\KpiSaleReportController;
 use App\Http\Controllers\Admin\Product\AttributeProductController;
 use App\Http\Controllers\Admin\Product\ProductVariationsController;
 use App\Http\Controllers\Admin\Product\ProductSpecificationsController;
@@ -87,6 +88,21 @@ Route::group([
     Route::resource("discounts",DiscountController::class);
 
     Route::post("sales/list",[SalesController::class,"list"]);
+
+    Route::group([
+        "prefix" => "kpi",
+    ],function ($router) {
+        Route::get("config",[KpiSaleReportController::class,"config"]);
+        Route::post("report_sales_country_for_year",[KpiSaleReportController::class,"report_sales_country_for_year"]);
+        Route::post("report_sales_week_categorias",[KpiSaleReportController::class,"report_sales_week_categorias"]);
+        Route::post("report_sales_week_discounts",[KpiSaleReportController::class,"report_sales_week_discounts"]);
+        Route::post("report_sales_month_selected",[KpiSaleReportController::class,"report_sales_month_selected"]);
+        Route::post("report_sales_for_month_year_selected",[KpiSaleReportController::class,"report_sales_for_month_year_selected"]);
+        Route::post("report_discount_cupone_year",[KpiSaleReportController::class,"report_discount_cupone_year"]);
+        Route::post("report_sales_for_categories",[KpiSaleReportController::class,"report_sales_for_categories"]);
+        Route::post("report_sales_for_categories_details",[KpiSaleReportController::class,"report_sales_for_categories_details"]);
+        Route::post("report_sales_for_brand",[KpiSaleReportController::class,"report_sales_for_brand"]);
+    });
 });
 
 Route::get("sales/list-excel",[SalesController::class,"list_excel"]);

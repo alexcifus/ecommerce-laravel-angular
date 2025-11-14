@@ -24,7 +24,7 @@ export class FilterAdvanceComponent {
   Products_relateds:any = [];
 
   PRODUCTS:any = [];
-  currency:string = 'PEN';
+  currency:string = 'EUR';
 
   product_selected:any = null;
   variation_selected:any = null;
@@ -82,7 +82,7 @@ export class FilterAdvanceComponent {
   }
 
   ngOnInit(): void {
-    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+    this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
   }
 
   addCompareProduct(TRADING_PRODUCT:any){
@@ -166,26 +166,26 @@ export class FilterAdvanceComponent {
   }
 
   getTotalCurrency(PRODUCT:any){
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur;
     }else{
       return PRODUCT.price_usd;
     }
   }
 
   getNewTotal(PRODUCT:any,DISCOUNT_FLASH_P:any){
-    if(this.currency == 'PEN'){
+    if(this.currency == 'EUR'){
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
-        return (PRODUCT.price_pen - PRODUCT.price_pen*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
-        return (PRODUCT.price_pen - DISCOUNT_FLASH_P.discount).toFixed(2);
+        return (PRODUCT.price_eur - PRODUCT.price_eur*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
+      }else{//-EUR/-USD 
+        return (PRODUCT.price_eur - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }else{
       if(DISCOUNT_FLASH_P.type_discount == 1){//% DE DESCUENT0 50
         // 100 / 100*(50*0.01) 100*0.5=50
         return (PRODUCT.price_usd - PRODUCT.price_usd*(DISCOUNT_FLASH_P.discount*0.01)).toFixed(2)
-      }else{//-PEN/-USD 
+      }else{//-EUR/-USD 
         return (PRODUCT.price_usd - DISCOUNT_FLASH_P.discount).toFixed(2);
       }
     }
@@ -195,8 +195,8 @@ export class FilterAdvanceComponent {
     if(PRODUCT.discount_g){
       return this.getNewTotal(PRODUCT,PRODUCT.discount_g);
     }
-    if(this.currency == 'PEN'){
-      return PRODUCT.price_pen;
+    if(this.currency == 'EUR'){
+      return PRODUCT.price_eur;
     }else{
       return PRODUCT.price_usd;
     }
@@ -230,7 +230,7 @@ export class FilterAdvanceComponent {
       code_discount: discount_g ? discount_g.code : null,
       product_variation_id: null,
       quantity: 1,
-      price_unit: this.currency == 'PEN' ? PRODUCT.price_pen : PRODUCT.price_usd,
+      price_unit: this.currency == 'EUR' ? PRODUCT.price_eur : PRODUCT.price_usd,
       subtotal: this.getTotalPriceProduct(PRODUCT),
       total: this.getTotalPriceProduct(PRODUCT)*1,
       currency: this.currency,

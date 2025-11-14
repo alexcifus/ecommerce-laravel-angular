@@ -38,7 +38,7 @@ class SaleResource extends JsonResource
                         "id" => $sale_detail->product->id,
                         "title" => $sale_detail->product->title,
                         "slug"  => $sale_detail->product->slug,
-                        "price_pen"  => $sale_detail->product->price_pen,
+                        "price_eur"  => $sale_detail->product->price_eur,
                         "price_usd"  => $sale_detail->product->price_usd,
                         "imagen"  => env("APP_URL")."storage/".$sale_detail->product->imagen,
                         "brand_id"  => $sale_detail->product->brand_id,

@@ -27,7 +27,7 @@ class SaleSeeder extends Seeder
                 "name" => $faker->name(),
                 "surname" => $faker->lastName(),
                 "company" =>  $faker->word(),
-                "country_region" =>  $faker->word(),
+                "country_region" =>  $faker->randomElement(['Perú','Argentina','Bolivia','Brasil','Chile','Costa Rica','Cuba','Ecuador','El Salvador','Uruguay','Venezuela','México']),
                 "address" =>  $faker->word(),
                 "street" =>  $faker->word(),
                 "city" =>  $faker->word(),
@@ -67,7 +67,7 @@ class SaleSeeder extends Seeder
             $sale = Sale::findOrFail($p->id);
             
             if($p->currency_total != $p->currency_payment){
-                $sum_total_sale = round(($sum_total_sale/0.87),2);
+                $sum_total_sale = round(($sum_total_sale/3.85),2);
                 $sale->update([
                     "subtotal" => $sum_total_sale,
                     "total" => $sum_total_sale,

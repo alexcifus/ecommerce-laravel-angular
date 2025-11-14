@@ -19,7 +19,7 @@ declare var $:any;
 export class HeaderComponent {
 
   categories_menus:any = [];
-  currency:string = 'PEN';
+  currency:string = 'EUR';
 
   user:any;
   listCarts:any = [];
@@ -37,7 +37,7 @@ export class HeaderComponent {
         console.log(resp);
         this.categories_menus = resp.categories_menus;
       })
-      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'PEN';
+      this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
       this.user = this.cartService.authService.user;
       
       if(this.user){
