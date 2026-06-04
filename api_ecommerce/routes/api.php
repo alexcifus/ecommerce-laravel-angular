@@ -20,6 +20,9 @@ use App\Http\Controllers\Admin\Product\AttributeProductController;
 use App\Http\Controllers\Admin\Product\ProductVariationsController;
 use App\Http\Controllers\Admin\Product\ProductSpecificationsController;
 use App\Http\Controllers\Admin\Product\ProductVariationsAnidadoController;
+use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\MobileCheckoutController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +34,15 @@ use App\Http\Controllers\Admin\Product\ProductVariationsAnidadoController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/mobile/login', [MobileAuthController::class, 'login']);
+Route::get('/mobile/products', [HomeController::class, 'mobileProducts']);
+
+Route::group([
+    "middleware" => "auth:api"
+], function ($router) {
+    Route::post("mobile/checkout", [MobileCheckoutController::class, "store"]);
+});
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

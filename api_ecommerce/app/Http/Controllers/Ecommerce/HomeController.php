@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Slider;
 use App\Models\Sale\Review;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Models\Product\Brand;
 use App\Models\Product\Product;
 use App\Models\Discount\Discount;
@@ -341,4 +342,20 @@ class HomeController extends Controller
             "products" => $DISCOUNT_LINK_PRODUCTS
         ]);
     }
+
+    public function mobileProducts(Request $request): JsonResponse
+{
+    // Reutilizamos la lógica de home()
+    $response = $this->home($request);      // home() ya la usas en /ecommerce/home
+
+    // Si home() ya devuelve JsonResponse, lo convertimos a array asociativo
+    $homeArray = $response->getData(true);
+
+    // Sacamos solo la parte de productos
+    $products = $homeArray['product_tranding_new']['data'] ?? [];
+
+    return response()->json([
+        'data' => $products,
+    ]);
+}
 }

@@ -1,0 +1,150 @@
+
+  GET|HEAD        / .................................................................................................. 
+  GET|HEAD        api/admin/anidado_variations anidado_variations.index › Admin\Product\ProductVariationsAnidadoContr…
+  POST            api/admin/anidado_variations anidado_variations.store › Admin\Product\ProductVariationsAnidadoContr…
+  GET|HEAD        api/admin/anidado_variations/create anidado_variations.create › Admin\Product\ProductVariationsAnid…
+  GET|HEAD        api/admin/anidado_variations/{anidado_variation} anidado_variations.show › Admin\Product\ProductVar…
+  PUT|PATCH       api/admin/anidado_variations/{anidado_variation} anidado_variations.update › Admin\Product\ProductV…
+  DELETE          api/admin/anidado_variations/{anidado_variation} anidado_variations.destroy › Admin\Product\Product…
+  GET|HEAD        api/admin/anidado_variations/{anidado_variation}/edit anidado_variations.edit › Admin\Product\Produ…
+  GET|HEAD        api/admin/attributes ............. attributes.index › Admin\Product\AttributeProductController@index
+  POST            api/admin/attributes ............. attributes.store › Admin\Product\AttributeProductController@store
+  GET|HEAD        api/admin/attributes/create .... attributes.create › Admin\Product\AttributeProductController@create
+  GET|HEAD        api/admin/attributes/{attribute} ... attributes.show › Admin\Product\AttributeProductController@show
+  PUT|PATCH       api/admin/attributes/{attribute} attributes.update › Admin\Product\AttributeProductController@update
+  DELETE          api/admin/attributes/{attribute} attributes.destroy › Admin\Product\AttributeProductController@dest…
+  GET|HEAD        api/admin/attributes/{attribute}/edit attributes.edit › Admin\Product\AttributeProductController@ed…
+  GET|HEAD        api/admin/brands ................................ brands.index › Admin\Product\BrandController@index
+  POST            api/admin/brands ................................ brands.store › Admin\Product\BrandController@store
+  GET|HEAD        api/admin/brands/create ....................... brands.create › Admin\Product\BrandController@create
+  GET|HEAD        api/admin/brands/{brand} .......................... brands.show › Admin\Product\BrandController@show
+  PUT|PATCH       api/admin/brands/{brand} ...................... brands.update › Admin\Product\BrandController@update
+  DELETE          api/admin/brands/{brand} .................... brands.destroy › Admin\Product\BrandController@destroy
+  GET|HEAD        api/admin/brands/{brand}/edit ..................... brands.edit › Admin\Product\BrandController@edit
+  GET|HEAD        api/admin/categories .................... categories.index › Admin\Product\CategorieController@index
+  POST            api/admin/categories .................... categories.store › Admin\Product\CategorieController@store
+  GET|HEAD        api/admin/categories/config ............................... Admin\Product\CategorieController@config
+  GET|HEAD        api/admin/categories/create ........... categories.create › Admin\Product\CategorieController@create
+  GET|HEAD        api/admin/categories/{category} ........... categories.show › Admin\Product\CategorieController@show
+  PUT|PATCH       api/admin/categories/{category} ....... categories.update › Admin\Product\CategorieController@update
+  DELETE          api/admin/categories/{category} ..... categories.destroy › Admin\Product\CategorieController@destroy
+  GET|HEAD        api/admin/categories/{category}/edit ...... categories.edit › Admin\Product\CategorieController@edit
+  POST            api/admin/categories/{id} ................................. Admin\Product\CategorieController@update
+  GET|HEAD        api/admin/cupones .............................. cupones.index › Admin\Cupone\CuponeController@index
+  POST            api/admin/cupones .............................. cupones.store › Admin\Cupone\CuponeController@store
+  GET|HEAD        api/admin/cupones/config ...................................... Admin\Cupone\CuponeController@config
+  GET|HEAD        api/admin/cupones/create ..................... cupones.create › Admin\Cupone\CuponeController@create
+  GET|HEAD        api/admin/cupones/{cupone} ....................... cupones.show › Admin\Cupone\CuponeController@show
+  PUT|PATCH       api/admin/cupones/{cupone} ................... cupones.update › Admin\Cupone\CuponeController@update
+  DELETE          api/admin/cupones/{cupone} ................. cupones.destroy › Admin\Cupone\CuponeController@destroy
+  GET|HEAD        api/admin/cupones/{cupone}/edit .................. cupones.edit › Admin\Cupone\CuponeController@edit
+  GET|HEAD        api/admin/discounts ...................... discounts.index › Admin\Discount\DiscountController@index
+  POST            api/admin/discounts ...................... discounts.store › Admin\Discount\DiscountController@store
+  GET|HEAD        api/admin/discounts/create ............. discounts.create › Admin\Discount\DiscountController@create
+  GET|HEAD        api/admin/discounts/{discount} ............. discounts.show › Admin\Discount\DiscountController@show
+  PUT|PATCH       api/admin/discounts/{discount} ......... discounts.update › Admin\Discount\DiscountController@update
+  DELETE          api/admin/discounts/{discount} ....... discounts.destroy › Admin\Discount\DiscountController@destroy
+  GET|HEAD        api/admin/discounts/{discount}/edit ........ discounts.edit › Admin\Discount\DiscountController@edit
+  GET|HEAD        api/admin/kpi/config ..................................... Admin\Sale\KpiSaleReportController@config
+  POST            api/admin/kpi/report_discount_cupone_year Admin\Sale\KpiSaleReportController@report_discount_cupone…
+  POST            api/admin/kpi/report_sales_country_for_year Admin\Sale\KpiSaleReportController@report_sales_country…
+  POST            api/admin/kpi/report_sales_for_brand ..... Admin\Sale\KpiSaleReportController@report_sales_for_brand
+  POST            api/admin/kpi/report_sales_for_categories Admin\Sale\KpiSaleReportController@report_sales_for_categ…
+  POST            api/admin/kpi/report_sales_for_categories_details Admin\Sale\KpiSaleReportController@report_sales_f…
+  POST            api/admin/kpi/report_sales_for_month_year_selected Admin\Sale\KpiSaleReportController@report_sales_…
+  POST            api/admin/kpi/report_sales_month_selected Admin\Sale\KpiSaleReportController@report_sales_month_sel…
+  POST            api/admin/kpi/report_sales_week_categorias Admin\Sale\KpiSaleReportController@report_sales_week_cat…
+  POST            api/admin/kpi/report_sales_week_discounts Admin\Sale\KpiSaleReportController@report_sales_week_disc…
+  GET|HEAD        api/admin/products .......................... products.index › Admin\Product\ProductController@index
+  POST            api/admin/products .......................... products.store › Admin\Product\ProductController@store
+  GET|HEAD        api/admin/products/config ................................... Admin\Product\ProductController@config
+  GET|HEAD        api/admin/products/create ................. products.create › Admin\Product\ProductController@create
+  POST            api/admin/products/imagens ................................. Admin\Product\ProductController@imagens
+  DELETE          api/admin/products/imagens/{id} ...................... Admin\Product\ProductController@delete_imagen
+  POST            api/admin/products/index ..................................... Admin\Product\ProductController@index
+  POST            api/admin/products/{id} ..................................... Admin\Product\ProductController@update
+  GET|HEAD        api/admin/products/{product} .................. products.show › Admin\Product\ProductController@show
+  PUT|PATCH       api/admin/products/{product} .............. products.update › Admin\Product\ProductController@update
+  DELETE          api/admin/products/{product} ............ products.destroy › Admin\Product\ProductController@destroy
+  GET|HEAD        api/admin/products/{product}/edit ............. products.edit › Admin\Product\ProductController@edit
+  POST            api/admin/properties ...................... Admin\Product\AttributeProductController@store_propertie
+  DELETE          api/admin/properties/{id} ............... Admin\Product\AttributeProductController@destroy_propertie
+  POST            api/admin/sales/list ............................................... Admin\Sale\SalesController@list
+  GET|HEAD        api/admin/sliders ..................................... sliders.index › Admin\SliderController@index
+  POST            api/admin/sliders ..................................... sliders.store › Admin\SliderController@store
+  GET|HEAD        api/admin/sliders/create ............................ sliders.create › Admin\SliderController@create
+  POST            api/admin/sliders/{id} ............................................... Admin\SliderController@update
+  GET|HEAD        api/admin/sliders/{slider} .............................. sliders.show › Admin\SliderController@show
+  PUT|PATCH       api/admin/sliders/{slider} .......................... sliders.update › Admin\SliderController@update
+  DELETE          api/admin/sliders/{slider} ........................ sliders.destroy › Admin\SliderController@destroy
+  GET|HEAD        api/admin/sliders/{slider}/edit ......................... sliders.edit › Admin\SliderController@edit
+  GET|HEAD        api/admin/specifications specifications.index › Admin\Product\ProductSpecificationsController@index
+  POST            api/admin/specifications specifications.store › Admin\Product\ProductSpecificationsController@store
+  GET|HEAD        api/admin/specifications/create specifications.create › Admin\Product\ProductSpecificationsControll…
+  GET|HEAD        api/admin/specifications/{specification} specifications.show › Admin\Product\ProductSpecificationsC…
+  PUT|PATCH       api/admin/specifications/{specification} specifications.update › Admin\Product\ProductSpecification…
+  DELETE          api/admin/specifications/{specification} specifications.destroy › Admin\Product\ProductSpecificatio…
+  GET|HEAD        api/admin/specifications/{specification}/edit specifications.edit › Admin\Product\ProductSpecificat…
+  GET|HEAD        api/admin/variations ............ variations.index › Admin\Product\ProductVariationsController@index
+  POST            api/admin/variations ............ variations.store › Admin\Product\ProductVariationsController@store
+  GET|HEAD        api/admin/variations/config ....................... Admin\Product\ProductVariationsController@config
+  GET|HEAD        api/admin/variations/create ... variations.create › Admin\Product\ProductVariationsController@create
+  GET|HEAD        api/admin/variations/{variation} .. variations.show › Admin\Product\ProductVariationsController@show
+  PUT|PATCH       api/admin/variations/{variation} variations.update › Admin\Product\ProductVariationsController@upda…
+  DELETE          api/admin/variations/{variation} variations.destroy › Admin\Product\ProductVariationsController@des…
+  GET|HEAD        api/admin/variations/{variation}/edit variations.edit › Admin\Product\ProductVariationsController@e…
+  POST            api/auth/login ........................................................ login › AuthController@login
+  POST            api/auth/login_ecommerce .......................... login_ecommerce › AuthController@login_ecommerce
+  POST            api/auth/logout ..................................................... logout › AuthController@logout
+  POST            api/auth/me ................................................................. me › AuthController@me
+  POST            api/auth/new_password ................................... new_password › AuthController@new_password
+  POST            api/auth/refresh .................................................. refresh › AuthController@refresh
+  POST            api/auth/register ............................................... register › AuthController@register
+  POST            api/auth/verified_auth ................................ verified_auth › AuthController@verified_auth
+  POST            api/auth/verified_code ................................ verified_code › AuthController@verified_code
+  POST            api/auth/verified_email ............................. verified_email › AuthController@verified_email
+  POST            api/ecommerce/campaing-discount-link ............... Ecommerce\HomeController@campaing_discount_link
+  GET|HEAD        api/ecommerce/carts ................................... carts.index › Ecommerce\CartController@index
+  POST            api/ecommerce/carts ................................... carts.store › Ecommerce\CartController@store
+  POST            api/ecommerce/carts/apply_cupon ............................... Ecommerce\CartController@apply_cupon
+  GET|HEAD        api/ecommerce/carts/create .......................... carts.create › Ecommerce\CartController@create
+  DELETE          api/ecommerce/carts/delete_all ................................. Ecommerce\CartController@delete_all
+  GET|HEAD        api/ecommerce/carts/{cart} .............................. carts.show › Ecommerce\CartController@show
+  PUT|PATCH       api/ecommerce/carts/{cart} .......................... carts.update › Ecommerce\CartController@update
+  DELETE          api/ecommerce/carts/{cart} ........................ carts.destroy › Ecommerce\CartController@destroy
+  GET|HEAD        api/ecommerce/carts/{cart}/edit ......................... carts.edit › Ecommerce\CartController@edit
+  POST            api/ecommerce/checkout .............................................. Ecommerce\SaleController@store
+  POST            api/ecommerce/checkout-mercadopago ................... Ecommerce\SaleController@checkout_mercadopago
+  POST            api/ecommerce/checkout-temp ................................. Ecommerce\SaleController@checkout_temp
+  GET|HEAD        api/ecommerce/config-filter-advance ................. Ecommerce\HomeController@config_filter_advance
+  POST            api/ecommerce/filter-advance-product ............... Ecommerce\HomeController@filter_advance_product
+  GET|HEAD        api/ecommerce/home ................................................... Ecommerce\HomeController@home
+  GET|HEAD        api/ecommerce/menus ................................................. Ecommerce\HomeController@menus
+  GET|HEAD        api/ecommerce/mercadopago ..................................... Ecommerce\SaleController@mercadopago
+  GET|HEAD        api/ecommerce/product/{slug} ................................. Ecommerce\HomeController@show_product
+  POST            api/ecommerce/profile_client ................................................. AuthController@update
+  GET|HEAD        api/ecommerce/profile_client/me .................................................. AuthController@me
+  GET|HEAD        api/ecommerce/profile_client/orders ................................ Ecommerce\SaleController@orders
+  GET|HEAD        api/ecommerce/reviews ............................. reviews.index › Ecommerce\ReviewController@index
+  POST            api/ecommerce/reviews ............................. reviews.store › Ecommerce\ReviewController@store
+  GET|HEAD        api/ecommerce/reviews/create .................... reviews.create › Ecommerce\ReviewController@create
+  GET|HEAD        api/ecommerce/reviews/{review} ...................... reviews.show › Ecommerce\ReviewController@show
+  PUT|PATCH       api/ecommerce/reviews/{review} .................. reviews.update › Ecommerce\ReviewController@update
+  DELETE          api/ecommerce/reviews/{review} ................ reviews.destroy › Ecommerce\ReviewController@destroy
+  GET|HEAD        api/ecommerce/reviews/{review}/edit ................. reviews.edit › Ecommerce\ReviewController@edit
+  GET|HEAD        api/ecommerce/sale/{id} .............................................. Ecommerce\SaleController@show
+  GET|HEAD        api/ecommerce/user_address .............. user_address.index › Ecommerce\UserAddressController@index
+  POST            api/ecommerce/user_address .............. user_address.store › Ecommerce\UserAddressController@store
+  GET|HEAD        api/ecommerce/user_address/create ..... user_address.create › Ecommerce\UserAddressController@create
+  GET|HEAD        api/ecommerce/user_address/{user_address} . user_address.show › Ecommerce\UserAddressController@show
+  PUT|PATCH       api/ecommerce/user_address/{user_address} user_address.update › Ecommerce\UserAddressController@upd…
+  DELETE          api/ecommerce/user_address/{user_address} user_address.destroy › Ecommerce\UserAddressController@de…
+  GET|HEAD        api/ecommerce/user_address/{user_address}/edit user_address.edit › Ecommerce\UserAddressController@…
+  GET|HEAD        api/sales/list-excel ......................................... Admin\Sale\SalesController@list_excel
+  GET|HEAD        api/sales/report-pdf/{id} .................................... Admin\Sale\SalesController@report_pdf
+  GET|HEAD        sanctum/csrf-cookie .............. sanctum.csrf-cookie › Laravel\Sanctum › CsrfCookieController@show
+  GET|HEAD        storage/{path} ....................................................................... storage.local
+  GET|HEAD        up ................................................................................................. 
+
+                                                                                                  Showing [146] routes
+
