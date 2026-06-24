@@ -104,6 +104,7 @@
                             [(ngModel)]="method_payment"
                         >
                             <option value="">Selec. Metdo</option>
+                            <option value="WEB">WEB</option>
                             <option value="PAYPAL">PAYPAL</option>
                             <option value="MERCADOPAGO">MERCADOPAGO</option>
                         </select>
@@ -178,7 +179,7 @@
                                         
                                         <div class="d-flex justify-content-start flex-column">
                                             <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">{{ sale.user.full_name }}</a>
-                                            <span class="text-muted fw-semibold text-muted d-block fs-7">{{ sale.user.phone }}</span>
+                                            <span class="text-muted fw-semibold text-muted d-block fs-7">{{ sale.user.phone || sale.user.email }}</span>
                                         </div>
                                     </div>                                
                                 </td>
@@ -209,7 +210,7 @@
                                 </td>
                                 <td>
                                     <span>
-                                        {{ sale.sale_address.country_region }} / {{ sale.sale_address.city }} / {{ sale.sale_address.company }}
+                                        {{ sale.sale_address?.country_region || 'Sin region' }} / {{ sale.sale_address?.city || 'Sin ciudad' }} / {{ sale.sale_address?.company || 'Sin empresa' }}
                                     </span>
                                 </td>
                                 

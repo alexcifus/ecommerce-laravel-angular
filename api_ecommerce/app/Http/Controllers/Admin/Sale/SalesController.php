@@ -8,7 +8,6 @@ use App\Exports\SaleExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Resources\Ecommerce\Sale\SaleCollection;
 
 class SalesController extends Controller
 {
@@ -27,13 +26,41 @@ class SalesController extends Controller
 
         $method_payment = $request->method_payment;
 
-        $sales = Sale::filterAdvanceAdmin($search,$start_date,$end_date,$brand_id,$categorie_first_id,
+        $sales = Sale::with(["user", "sale_addres"])
+                        ->filterAdvanceAdmin($search,$start_date,$end_date,$brand_id,$categorie_first_id,
                         $categorie_second_id,$categorie_third_id,$method_payment)
                         ->orderBy("id","desc")->paginate(25);
 
         return response()->json([
             "total" => $sales->total(),
-            "sales" => SaleCollection::make($sales),
+            "sales" => [
+                "data" => $sales->getCollection()->map(function ($sale) {
+                    return [
+                        "id" => $sale->id,
+                        "user_id" => $sale->user_id,
+                        "user" => $sale->user ? [
+                            "avatar" => $sale->user->avatar ? env("APP_URL"). "storage/". $sale->user->avatar : 'https://cdn-icons-png.flaticon.com/512/1476/1476614.png',
+                            "full_name" => trim($sale->user->name. ' '.$sale->user->surname),
+                            "phone" => $sale->user->phone,
+                            "email" => $sale->user->email,
+                        ] : [
+                            "avatar" => 'https://cdn-icons-png.flaticon.com/512/1476/1476614.png',
+                            "full_name" => "Cliente no disponible",
+                            "phone" => null,
+                            "email" => null,
+                        ],
+                        "method_payment" => $sale->method_payment,
+                        "currency_total" => $sale->currency_total,
+                        "currency_payment" => $sale->currency_payment,
+                        "discount" => $sale->discount,
+                        "subtotal" => $sale->subtotal,
+                        "total" => $sale->total,
+                        "n_transaccion" => $sale->n_transaccion,
+                        "sale_address" => $sale->sale_addres,
+                        "created_at" => $sale->created_at->format("Y-m-d h:i A"),
+                    ];
+                }),
+            ],
         ]);
     }
 
