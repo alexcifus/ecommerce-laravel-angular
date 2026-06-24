@@ -143,6 +143,7 @@ export class CheckoutComponent {
           }
           this.cartService.checkout(dataSale).subscribe((resp:any) => {
             console.log(resp);
+            this.cartService.resetCart();
             this.toastr.success("Exito","La compra se a realizado");
             this.router.navigateByUrl("/gracias-por-tu-compra/"+Order.purchase_units[0].payments.captures[0].id);
             // La redirección a la pagina de gracias
@@ -163,6 +164,74 @@ export class CheckoutComponent {
     }else{
       return (this.totalCarts/this.price_dolar).toFixed(2);
     }
+  }
+
+  placeOrder(event?: Event){
+    event?.preventDefault();
+
+    if(!this.validateCheckout()){
+      return;
+    }
+
+    let n_transaccion = "WEB-" + new Date().getTime();
+    let dataSale = {
+      method_payment: 'WEB',
+      currency_total: this.currency,
+      currency_payment: this.currency,
+      discount: 0,
+      subtotal: this.totalCarts,
+      total: this.totalCarts,
+      price_dolar: 1,
+      n_transaccion: n_transaccion,
+      description: this.description,
+      sale_address: this.getSaleAddress(),
+    }
+
+    this.cartService.checkout(dataSale).subscribe((resp:any) => {
+      console.log(resp);
+      this.cartService.resetCart();
+      this.toastr.success("Exito","La compra se a realizado");
+      this.router.navigateByUrl("/gracias-por-tu-compra/"+n_transaccion);
+    });
+  }
+
+  validateCheckout(){
+    if(this.totalCarts == 0){
+      this.toastr.error("Validacion","No puedes procesar el pedido con un monto de 0");
+      return false;
+    }
+    if(this.listCarts.length == 0){
+      this.toastr.error("Validacion","No puedes procesar el pedido con un carrito de compra vacio");
+      return false;
+    }
+    if(!this.name ||
+      !this.surname ||
+      !this.country_region ||
+      !this.city ||
+      !this.address ||
+      !this.street ||
+      !this.postcode_zip ||
+      !this.phone ||
+      !this.email){
+      this.toastr.error("Validacion","Todos los campos de la direccion son necesarios");
+      return false;
+    }
+    return true;
+  }
+
+  getSaleAddress(){
+    return {
+      name: this.name,
+      surname: this.surname,
+      company: this.company,
+      country_region: this.country_region,
+      city: this.city,
+      address: this.address,
+      street: this.street,
+      postcode_zip: this.postcode_zip,
+      phone: this.phone,
+      email: this.email,
+    };
   }
 
   registerAddress(){

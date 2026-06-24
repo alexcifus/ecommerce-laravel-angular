@@ -10,6 +10,8 @@ use App\Models\Product\Product;
 use App\Models\Sale\SaleAddres;
 use App\Models\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Product\ProductVariation;
 use App\Http\Resources\Ecommerce\Sale\SaleResource;
@@ -24,11 +26,12 @@ class SaleController extends Controller
     {
         //
     }
-    
-    public function orders(){
+
+    public function orders()
+    {
         $user = auth("api")->user();
 
-        $sales = Sale::where("user_id",$user->id)->orderBy("id","desc")->get();
+        $sales = Sale::where("user_id", $user->id)->orderBy("id", "desc")->get();
 
         return response()->json([
             "sales" => SaleCollection::make($sales),
@@ -40,59 +43,120 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->request->add(["user_id" => auth("api")->user()->id]);
-        $sale = Sale::create($request->all());
+        $request->validate([
+            "method_payment" => "required|string",
+            "currency_total" => "required|string",
+            "currency_payment" => "required|string",
+            "discount" => "required|numeric|min:0",
+            "subtotal" => "required|numeric|min:0",
+            "total" => "required|numeric|min:0",
+            "price_dolar" => "nullable|numeric|min:0",
+            "description" => "nullable|string",
+            "n_transaccion" => "required|string",
+            "sale_address" => "required|array",
+            "sale_address.name" => "required|string",
+            "sale_address.surname" => "required|string",
+            "sale_address.company" => "nullable|string",
+            "sale_address.country_region" => "required|string",
+            "sale_address.city" => "required|string",
+            "sale_address.address" => "required|string",
+            "sale_address.street" => "required|string",
+            "sale_address.postcode_zip" => "required|string",
+            "sale_address.phone" => "required|string",
+            "sale_address.email" => "required|email",
+        ]);
 
-        $carts = Cart::where("user_id",auth("api")->user()->id)->get();
+        $user = auth("api")->user();
+        $carts = Cart::where("user_id", $user->id)->get();
 
-        foreach ($carts as $key => $cart) {
-            $nCart = $cart;
-            $new_detail = [];
-            $new_detail = $cart->toArray();
-            $new_detail["sale_id"] = $sale->id;
-            SaleDetail::create($new_detail);
-            // DESCUENTO DE STOCK DEL PRODUCTO
-            if($cart->product_variation_id){
-               $variation = ProductVariation::find($cart->product_variation_id);
-               if($variation->variation_father){
-                    $variation->variation_father->update([
-                        "stock" => $variation->variation_father->stock - $cart->quantity
-                    ]);
-                    $variation->update([
-                        "stock" => $variation->stock - $cart->quantity
-                    ]);
-               }else{
-                    $variation->update([
-                        "stock" => $variation->stock - $cart->quantity
-                    ]);
-               }
-            }else{
-                $product = Product::find($cart->product_id);
-                $product->update([
-                    "stock" => $product->stock - $cart->quantity
-                ]);
-            // LA ELIMINACIÓN DEL CARRITO
-            $cart->delete();
+        if ($carts->isEmpty()) {
+            return response()->json([
+                "message" => 422,
+                "message_text" => "El carrito de compra esta vacio",
+            ], 422);
         }
-        $sale_addres = $request->sale_address;
-        $sale_addres["sale_id"] = $sale->id;
-        $sale_address = SaleAddres::create($sale_addres);
-        // EL CORREO QUE LE DEBE LLEGAR AL CLIENTE CON LA COMPRA QUE ACABA DE REALIZAR
+
+        $sale = DB::transaction(function () use ($request, $user, $carts) {
+            $sale = Sale::create([
+                "user_id" => $user->id,
+                "method_payment" => $request->method_payment,
+                "currency_total" => $request->currency_total,
+                "currency_payment" => $request->currency_payment,
+                "discount" => $request->discount,
+                "subtotal" => $request->subtotal,
+                "total" => $request->total,
+                "price_dolar" => $request->price_dolar ?? 0,
+                "description" => $request->description,
+                "n_transaccion" => $request->n_transaccion,
+            ]);
+
+            foreach ($carts as $cart) {
+                SaleDetail::create([
+                    "sale_id" => $sale->id,
+                    "product_id" => $cart->product_id,
+                    "type_discount" => $cart->type_discount,
+                    "discount" => $cart->discount,
+                    "type_campaing" => $cart->type_campaing,
+                    "code_cupon" => $cart->code_cupon,
+                    "code_discount" => $cart->code_discount,
+                    "product_variation_id" => $cart->product_variation_id,
+                    "quantity" => $cart->quantity,
+                    "price_unit" => $cart->price_unit,
+                    "subtotal" => $cart->subtotal,
+                    "total" => $cart->total,
+                    "currency" => $cart->currency,
+                ]);
+
+                if ($cart->product_variation_id) {
+                    $variation = ProductVariation::findOrFail($cart->product_variation_id);
+
+                    if ($variation->variation_father) {
+                        $variation->variation_father->update([
+                            "stock" => $variation->variation_father->stock - $cart->quantity
+                        ]);
+                    }
+
+                    $variation->update([
+                        "stock" => $variation->stock - $cart->quantity
+                    ]);
+                } else {
+                    $product = Product::findOrFail($cart->product_id);
+                    $product->update([
+                        "stock" => $product->stock - $cart->quantity
+                    ]);
+                }
+
+                $cart->delete();
+            }
+
+            $sale_addres = $request->sale_address;
+            $sale_addres["sale_id"] = $sale->id;
+            SaleAddres::create($sale_addres);
+
+            return $sale;
+        });
+
         $sale_new = Sale::findOrFail($sale->id);
-        Mail::to(auth("api")->user()->email)->send(new SaleMail(auth("api")->user(),$sale_new));
+
+        try {
+            Mail::to($user->email)->send(new SaleMail($user, $sale_new));
+        } catch (\Throwable $exception) {
+            Log::warning("No se pudo enviar el correo de la venta {$sale->id}: " . $exception->getMessage());
+        }
+
         return response()->json([
             "message" => 200,
+            "sale_id" => $sale->id,
+            "n_transaccion" => $sale->n_transaccion,
         ]);
     }
-    }
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
-        $sale = Sale::where("n_transaccion",$id)->first();
+        $sale = Sale::where("n_transaccion", $id)->first();
 
         return response()->json([
             "sale" => SaleResource::make($sale),
