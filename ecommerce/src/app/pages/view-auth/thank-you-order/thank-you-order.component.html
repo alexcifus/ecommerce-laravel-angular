@@ -8,7 +8,7 @@
                 <div class="breadcrumb__content p-relative z-index-1">
                    <h3 class="breadcrumb__title">Gracias por tu pedido</h3>
                    <div class="breadcrumb__list">
-                      <span><a href="#">Home</a></span>
+                      <span><a href="#">Inicio</a></span>
                       <span>Gracias por tu pedido</span>
                    </div>
                 </div>
@@ -38,33 +38,33 @@
                             </span>
                          </div>
                          <div class="tp-order-details-content">
-                            <h3 class="tp-order-details-title">Su Confirmación de Pedido</h3>
-                            <p>Le enviaremos un correo de confirmación de envío tan pronto <br> como se envíe tu pedido</p>
+                            <h3 class="tp-order-details-title">Confirmación de pedido</h3>
+                            <p>Te enviaremos un correo de confirmación <br> con los detalles de tu pedido</p>
                          </div>
                       </div>
                       <div class="tp-order-details-item-wrapper">
                          <div class="row">
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
-                                  <h4>Order Date:</h4>
+                                  <h4>Fecha del pedido:</h4>
                                   <p>{{ ORDER_SELECTED.created_at }}</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
-                                  <h4>Expected Delivery: </h4>
-                                  <p>April 16, 2023</p>
+                                  <h4>Entrega estimada:</h4>
+                                  <p>Pendiente de confirmar</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
-                                  <h4>Order Number:</h4>
+                                  <h4>Número de pedido:</h4>
                                   <p>#{{ ORDER_SELECTED.n_transaccion }}</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
-                                  <h4>Payment Method:</h4>
+                                  <h4>Método de pago:</h4>
                                   <p>{{ ORDER_SELECTED.method_payment }}</p>
                                </div>
                             </div>
@@ -74,14 +74,14 @@
                 </div>
                 <div class="col-lg-6">
                    <div class="tp-order-info-wrapper">
-                      <h4 class="tp-order-info-title">Order Details</h4>
+                      <h4 class="tp-order-info-title">Detalles del pedido</h4>
 
                       <div class="tp-order-info-list">
                          <ul>
 
                             <!-- header -->
                             <li class="tp-order-info-list-header">
-                               <h4>Product</h4>
+                               <h4>Producto</h4>
                                <h4>Total</h4>
                             </li>
 
@@ -100,16 +100,15 @@
                             </li>
 
                             <!-- shipping -->
-                         <!-- shipping -->
-                         <li class="tp-order-info-list-shipping">
-                            <span>Shipping</span>
-                            <div class="tp-order-info-list-shipping-item d-flex flex-column align-items-end">
-                               <span>
-                                  <input id="shipping_info" type="checkbox">
-                                  <label for="shipping_info">Flat rate: <span>0.00</span></label>
-                               </span>
-                            </div>
-                         </li>
+                            <li class="tp-order-info-list-shipping">
+                               <span>Envío</span>
+                               <div class="tp-order-info-list-shipping-item d-flex flex-column align-items-end">
+                                  <span>
+                                     <input id="shipping_info" type="checkbox">
+                                     <label for="shipping_info">Tarifa fija: <span>0.00</span></label>
+                                  </span>
+                               </div>
+                            </li>
 
                             <!-- total -->
                             <li class="tp-order-info-list-total">
@@ -127,4 +126,3 @@
     <!-- order area end -->
 
  </main>
- 
