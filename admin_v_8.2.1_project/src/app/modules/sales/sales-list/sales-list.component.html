@@ -157,6 +157,9 @@
                                Total
                             </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
+                               Estado
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
                                 N° de Transaccion
                             </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
@@ -196,6 +199,11 @@
                                 <td>
                                     <span>
                                         {{ sale.total }} {{ sale.currency_payment }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{ statusLabel(sale.status) }}
                                     </span>
                                 </td>
                                 <td>

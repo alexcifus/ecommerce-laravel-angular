@@ -142,4 +142,16 @@ export class SalesListComponent {
     this.listSales($event);
   }
 
+  statusLabel(status:string){
+    const statuses:any = {
+      pending_payment: 'Pendiente de pago',
+      paid: 'Pagado',
+      preparing: 'En preparación',
+      shipped: 'Enviado',
+      cancelled: 'Cancelado',
+    };
+
+    return statuses[status] || status || 'Sin estado';
+  }
+
 }

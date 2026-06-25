@@ -88,6 +88,7 @@ class SaleController extends Controller
                 "price_dolar" => $request->price_dolar ?? 0,
                 "description" => $request->description,
                 "n_transaccion" => $request->n_transaccion,
+                "status" => "pending_payment",
             ]);
 
             foreach ($carts as $cart) {

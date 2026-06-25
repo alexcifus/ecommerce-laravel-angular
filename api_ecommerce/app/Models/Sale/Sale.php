@@ -24,6 +24,7 @@ class Sale extends Model
         "price_dolar",
         "description",
         "n_transaccion",
+        "status",
         "preference_id",
         // 
         "created_at",

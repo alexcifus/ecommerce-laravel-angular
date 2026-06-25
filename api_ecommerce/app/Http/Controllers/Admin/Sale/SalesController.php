@@ -55,6 +55,7 @@ class SalesController extends Controller
                         "discount" => $sale->discount,
                         "subtotal" => $sale->subtotal,
                         "total" => $sale->total,
+                        "status" => $sale->status,
                         "n_transaccion" => $sale->n_transaccion,
                         "sale_address" => $sale->sale_addres,
                         "created_at" => $sale->created_at->format("Y-m-d h:i A"),

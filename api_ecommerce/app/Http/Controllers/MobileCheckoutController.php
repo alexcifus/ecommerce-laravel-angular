@@ -36,6 +36,7 @@ class MobileCheckoutController extends Controller
                 "price_dolar" => 1,
                 "description" => "Pedido realizado desde la app móvil",
                 "n_transaccion" => "MOBILE-" . time(),
+                "status" => "pending_payment",
             ]);
 
             foreach ($request->items as $item) {
