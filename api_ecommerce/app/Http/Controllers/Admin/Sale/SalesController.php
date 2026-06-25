@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\Rule;
+use App\Mail\SaleStatusChangedMail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SalesController extends Controller
 {
@@ -82,19 +85,59 @@ class SalesController extends Controller
             ],
         ]);
 
-        $sale = Sale::findOrFail($id);
+        $sale = Sale::with("user")->findOrFail($id);
+        $previous_status = $sale->status;
+
+        if ($previous_status === $request->status) {
+            return response()->json([
+                "message" => 200,
+                "message_text" => "El estado no ha cambiado",
+                "email_sent" => false,
+                "sale" => [
+                    "id" => $sale->id,
+                    "status" => $sale->status,
+                ],
+            ]);
+        }
+
         $sale->update([
             "status" => $request->status,
         ]);
 
+        $changed_at = now();
+        $email_sent = false;
+        $sale->refresh();
+        $sale->load("user");
+
+        if ($sale->user && $sale->user->email) {
+            try {
+                Mail::to($sale->user->email)->send(new SaleStatusChangedMail($sale, $this->status_label($sale->status), $changed_at));
+                $email_sent = true;
+            } catch (\Throwable $exception) {
+                Log::warning("No se pudo enviar el correo de cambio de estado de la venta {$sale->id}: ".$exception->getMessage());
+            }
+        }
+
         return response()->json([
             "message" => 200,
             "message_text" => "Estado actualizado correctamente",
+            "email_sent" => $email_sent,
             "sale" => [
                 "id" => $sale->id,
                 "status" => $sale->status,
             ],
         ]);
+    }
+
+    private function status_label(string $status): string
+    {
+        return [
+            "pending_payment" => "Pendiente de pago",
+            "paid" => "Pagado",
+            "preparing" => "En preparación",
+            "shipped" => "Enviado",
+            "cancelled" => "Cancelado",
+        ][$status] ?? $status;
     }
 
     public function list_excel(Request $request){
