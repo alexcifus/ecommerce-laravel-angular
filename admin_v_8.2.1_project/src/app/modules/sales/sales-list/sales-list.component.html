@@ -202,9 +202,15 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span>
-                                        {{ statusLabel(sale.status) }}
-                                    </span>
+                                    <select
+                                        class="form-control form-select-solid fw-bolder"
+                                        [ngModel]="sale.status"
+                                        (change)="changeStatus(sale,$event)"
+                                    >
+                                        <option *ngFor="let status of statuses" [value]="status.value">
+                                            {{ status.label }}
+                                        </option>
+                                    </select>
                                 </td>
                                 <td>
                                     <span>

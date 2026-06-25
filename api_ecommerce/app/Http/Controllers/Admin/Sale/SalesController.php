@@ -8,6 +8,7 @@ use App\Exports\SaleExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\Rule;
 
 class SalesController extends Controller
 {
@@ -61,6 +62,37 @@ class SalesController extends Controller
                         "created_at" => $sale->created_at->format("Y-m-d h:i A"),
                     ];
                 }),
+            ],
+        ]);
+    }
+
+    public function update_status(Request $request, $id)
+    {
+        $request->validate([
+            "status" => [
+                "required",
+                "string",
+                Rule::in([
+                    "pending_payment",
+                    "paid",
+                    "preparing",
+                    "shipped",
+                    "cancelled",
+                ]),
+            ],
+        ]);
+
+        $sale = Sale::findOrFail($id);
+        $sale->update([
+            "status" => $request->status,
+        ]);
+
+        return response()->json([
+            "message" => 200,
+            "message_text" => "Estado actualizado correctamente",
+            "sale" => [
+                "id" => $sale->id,
+                "status" => $sale->status,
             ],
         ]);
     }

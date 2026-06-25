@@ -29,6 +29,15 @@ export class SalesService {
     );
   }
 
+  updateStatus(sale_id:any,status:string) {
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});
+    let URL = URL_SERVICIOS+"/admin/sales/"+sale_id+"/status";
+    return this.http.patch(URL,{status: status},{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   configAll(){
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});

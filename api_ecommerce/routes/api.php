@@ -100,6 +100,7 @@ Route::group([
     Route::resource("discounts",DiscountController::class);
 
     Route::post("sales/list",[SalesController::class,"list"]);
+    Route::patch("sales/{id}/status",[SalesController::class,"update_status"]);
 
     Route::group([
         "prefix" => "kpi",

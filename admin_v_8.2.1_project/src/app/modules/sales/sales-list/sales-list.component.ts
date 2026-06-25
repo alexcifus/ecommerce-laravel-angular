@@ -32,17 +32,22 @@ export class SalesListComponent {
   end_date:any;
   method_payment:any;
   URL_SERVICIOST:any = URL_SERVICIOS;
+  statuses:any = [
+    {value: 'pending_payment', label: 'Pendiente de pago'},
+    {value: 'paid', label: 'Pagado'},
+    {value: 'preparing', label: 'En preparación'},
+    {value: 'shipped', label: 'Enviado'},
+    {value: 'cancelled', label: 'Cancelado'},
+  ];
+
   constructor(
     public salesService: SalesService,
-    // public modalService: NgbModal,
     private toastr: ToastrService,
   ) {
-    
+
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.listSales();
     this.isLoading$ = this.salesService.isLoading$;
     this.configAll();
@@ -57,6 +62,7 @@ export class SalesListComponent {
       this.categories_thirds = resp.categories_thirds;
     })
   }
+
   listSales(page = 1){
     let data = {
       search: this.search,
@@ -78,6 +84,7 @@ export class SalesListComponent {
       this.toastr.error("API RESPONSE - COMUNIQUESE CON EL DESARROLLADOR",err.error.message);
     })
   }
+
   reset() {
     this.search = '';
     this.marca_id = '';
@@ -119,16 +126,18 @@ export class SalesListComponent {
     if(this.method_payment){
       LINK += "&method_payment="+this.method_payment;
     }
-     
+
     window.open(URL_SERVICIOS+"/sales/list-excel?k=1"+LINK,"_blank");
   }
+
   changeDepartamento(){
-    this.categories_seconds_backups = this.categories_seconds.filter((item:any) => 
+    this.categories_seconds_backups = this.categories_seconds.filter((item:any) =>
     item.categorie_second_id == this.categorie_first_id
     )
   }
+
   changeCategorie(){
-    this.categories_thirds_backups = this.categories_thirds.filter((item:any) => 
+    this.categories_thirds_backups = this.categories_thirds.filter((item:any) =>
     item.categorie_second_id == this.categorie_second_id
     )
   }
@@ -143,15 +152,22 @@ export class SalesListComponent {
   }
 
   statusLabel(status:string){
-    const statuses:any = {
-      pending_payment: 'Pendiente de pago',
-      paid: 'Pagado',
-      preparing: 'En preparación',
-      shipped: 'Enviado',
-      cancelled: 'Cancelado',
-    };
+    const statusSelected = this.statuses.find((item:any) => item.value == status);
+    return statusSelected ? statusSelected.label : status || 'Sin estado';
+  }
 
-    return statuses[status] || status || 'Sin estado';
+  changeStatus(sale:any,event:any){
+    const previousStatus = sale.status;
+    const newStatus = event.target.value;
+    sale.status = newStatus;
+
+    this.salesService.updateStatus(sale.id,newStatus).subscribe((resp:any) => {
+      sale.status = resp.sale.status;
+      this.toastr.success("Exitoso","Estado actualizado correctamente");
+    },(err:any) => {
+      sale.status = previousStatus;
+      this.toastr.error("API RESPONSE - COMUNIQUESE CON EL DESARROLLADOR",err.error.message);
+    });
   }
 
 }
