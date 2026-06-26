@@ -38,22 +38,6 @@ export class HeaderComponent {
         this.categories_menus = resp.categories_menus;
       })
       this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
-      this.user = this.cartService.authService.user;
-      
-      if(this.user){
-        this.cartService.listCart().subscribe((resp:any) => {
-          console.log(resp);
-          resp.carts.data.forEach((cart:any) => {
-            if(cart.currency != this.currency){
-              this.cookieService.set("currency",cart.currency);
-              setTimeout(() => {
-                window.location.reload();
-              }, 25);
-            }
-            this.cartService.changeCart(cart)
-          });
-        })
-      }
     })
     afterRender(() => {
       setTimeout(() => {
@@ -66,9 +50,14 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    console.log(this.user);
+    this.cartService.authService.currentUser$.subscribe((user:any) => {
+      this.user = user;
+      this.cartService.resetCart();
+      if(this.user){
+        this.loadUserCart();
+      }
+    })
+
     this.cartService.currentDataCart$.subscribe((resp:any) => {
       // console.log(resp);
       this.listCarts = resp;
@@ -77,9 +66,21 @@ export class HeaderComponent {
   }
   logout(){
     this.cartService.authService.logout();
-    setTimeout(() => {
-      window.location.reload()
-    }, 50);
+  }
+
+  loadUserCart(){
+    this.cartService.listCart().subscribe((resp:any) => {
+      console.log(resp);
+      resp.carts.data.forEach((cart:any) => {
+        if(cart.currency != this.currency){
+          this.cookieService.set("currency",cart.currency);
+          setTimeout(() => {
+            window.location.reload();
+          }, 25);
+        }
+        this.cartService.changeCart(cart)
+      });
+    })
   }
   deleteCart(CART:any) {
     this.cartService.deleteCart(CART.id).subscribe((resp:any) => {

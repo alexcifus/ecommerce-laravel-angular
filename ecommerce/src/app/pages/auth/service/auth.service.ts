@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, afterNextRender } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, of } from 'rxjs';
 import { URL_SERVICIOS } from '../../../config/config';
 
 @Injectable({
@@ -11,20 +11,31 @@ export class AuthService {
 
   token:string = '';
   user:any;
+
+  private userSubject = new BehaviorSubject<any>(null);
+  currentUser$ = this.userSubject.asObservable();
+
   constructor(
     public http: HttpClient,
     public router: Router,
   ) { 
-    afterNextRender(() => {
-      this.initAuth();
-    })
+    this.initAuth();
   }
 
   initAuth(){
-    if(localStorage.getItem("token")){
-      this.user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") ?? '') : null;
-      this.token = localStorage.getItem("token")+"";
+    this.clearLegacyLocalStorage();
+
+    const token = this.getSessionItem("token");
+    const user = this.getSessionItem("user");
+
+    if(token && user && this.isTokenValid(token)){
+      this.user = JSON.parse(user);
+      this.token = token;
+      this.userSubject.next(this.user);
+      return;
     }
+
+    this.clearSession(false);
   }
 
   login(email:string,password:string) {
@@ -32,7 +43,7 @@ export class AuthService {
     return this.http.post(URL,{email,password}).pipe(
       map((resp:any) => {
         console.log(resp);
-        const result = this.saveLocalStorage(resp);
+        const result = this.saveSessionStorage(resp);
         return result;
       }),
       catchError((err:any) => {
@@ -42,10 +53,13 @@ export class AuthService {
     )
   }
 
-  saveLocalStorage(resp:any){
+  saveSessionStorage(resp:any){
     if(resp && resp.access_token){
-      localStorage.setItem("token",resp.access_token);
-      localStorage.setItem("user",JSON.stringify(resp.user));
+      this.setSessionItem("token",resp.access_token);
+      this.setSessionItem("user",JSON.stringify(resp.user));
+      this.token = resp.access_token;
+      this.user = resp.user;
+      this.userSubject.next(this.user);
       return true;
     }
     return false;
@@ -76,13 +90,68 @@ export class AuthService {
     return this.http.post(URL,data);
   }
 
-  logout(){
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  hasValidSession(): boolean {
+    return !!this.user && !!this.token && this.isTokenValid(this.token);
+  }
+
+  clearSession(redirectToLogin:boolean = false){
+    this.removeSessionItem("token");
+    this.removeSessionItem("user");
+    this.clearLegacyLocalStorage();
     this.user = null;
     this.token = '';
-    setTimeout(() => {
+    this.userSubject.next(null);
+
+    if(redirectToLogin){
       this.router.navigateByUrl("/login");
-    }, 500);
+    }
+  }
+
+  logout(){
+    this.clearSession(true);
+  }
+
+  handleUnauthorized(){
+    this.clearSession(true);
+  }
+
+  private isTokenValid(token:string): boolean {
+    try {
+      const expiration = (JSON.parse(atob(token.split(".")[1]))).exp;
+      return Math.floor((new Date).getTime() / 1000) <= expiration;
+    } catch {
+      return false;
+    }
+  }
+
+  private getSessionItem(key:string): string | null {
+    try {
+      if(typeof sessionStorage === 'undefined') return null;
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+
+  private setSessionItem(key:string,value:string){
+    try {
+      if(typeof sessionStorage === 'undefined') return;
+      sessionStorage.setItem(key,value);
+    } catch {}
+  }
+
+  private removeSessionItem(key:string){
+    try {
+      if(typeof sessionStorage === 'undefined') return;
+      sessionStorage.removeItem(key);
+    } catch {}
+  }
+
+  private clearLegacyLocalStorage(){
+    try {
+      if(typeof localStorage === 'undefined') return;
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } catch {}
   }
 }

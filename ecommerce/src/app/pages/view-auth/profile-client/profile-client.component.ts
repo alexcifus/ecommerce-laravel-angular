@@ -28,8 +28,10 @@ export class ProfileClientComponent {
     public authService: AuthService,
     public profileClient: ProfileClientService
   ) {
-    this.user = this.authService.user;  
-    this.authService.logout
+    this.authService.currentUser$.subscribe((user:any) => {
+      this.user = user;
+    });
+
     this.profileClient.showUsers().subscribe((resp:any) => {
       this.imagen_previsualiza = resp.avatar;
     })
@@ -41,8 +43,5 @@ export class ProfileClientComponent {
 
   logout(){
     this.authService.logout();
-    setTimeout(() => {
-      window.location.reload()
-    }, 50);
   }
 }

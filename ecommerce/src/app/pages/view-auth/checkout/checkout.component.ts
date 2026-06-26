@@ -115,18 +115,35 @@ export class CheckoutComponent {
       // finalize the transaction
       onApprove: async (data:any, actions:any) => {
           
-          let Order = await actions.order.capture();
-          // Order.purchase_units[0].payments.captures[0].id
+          let Order:any;
+          try {
+            Order = await actions.order.capture();
+          } catch (error) {
+            console.error('PayPal capture failed', error);
+            this.toastr.error("PayPal", "No se pudo confirmar el pago con PayPal. Intentalo de nuevo.");
+            return;
+          }
+
+          const capture = Order?.purchase_units?.[0]?.payments?.captures?.[0];
+          const captureStatus = capture?.status;
+
+          if(Order?.status !== 'COMPLETED' || !capture?.id || (captureStatus && captureStatus !== 'COMPLETED')){
+            console.error('Invalid PayPal capture response', Order);
+            this.toastr.error("PayPal", "PayPal no confirmo el pago correctamente. No se ha creado el pedido.");
+            return;
+          }
 
           let dataSale = {
             method_payment: 'PAYPAL',
+            payment_status: 'paid',
+            paypal_order_id: data.orderID,
             currency_total: this.currency,
             currency_payment: 'USD',
             discount: 0,
             subtotal: this.totalPaypayl(),
             total: this.totalPaypayl(),
             price_dolar: 0,
-            n_transaccion: Order.purchase_units[0].payments.captures[0].id,
+            n_transaccion: capture.id,
             description: this.description,
             sale_address: {
               name: this.name,
@@ -145,8 +162,14 @@ export class CheckoutComponent {
             console.log(resp);
             this.cartService.resetCart();
             this.toastr.success("Exito","La compra se a realizado");
-            this.router.navigateByUrl("/gracias-por-tu-compra/"+Order.purchase_units[0].payments.captures[0].id);
+            this.router.navigateByUrl("/gracias-por-tu-compra/"+capture.id);
             // La redirección a la pagina de gracias
+          },(error:any) => {
+            console.error('Checkout failed after PayPal capture', error);
+            this.toastr.error(
+              "Pedido no guardado",
+              "PayPal pudo haber confirmado el pago, pero no se pudo guardar el pedido. Contacta con soporte indicando la transaccion " + capture.id
+            );
           });
           // return actions.order.capture().then(captureOrderHandler);
       },
@@ -154,6 +177,7 @@ export class CheckoutComponent {
       // handle unrecoverable errors
       onError: (err:any) => {
           console.error('An error prevented the buyer from checking out with PayPal');
+          this.toastr.error("PayPal", "Ocurrio un error durante el pago con PayPal. Intentalo de nuevo.");
       }
   }).render(this.paypalElement?.nativeElement);
   }

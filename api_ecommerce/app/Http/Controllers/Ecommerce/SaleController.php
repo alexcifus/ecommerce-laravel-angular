@@ -51,6 +51,8 @@ class SaleController extends Controller
             "subtotal" => "required|numeric|min:0",
             "total" => "required|numeric|min:0",
             "price_dolar" => "nullable|numeric|min:0",
+            "payment_status" => "nullable|string",
+            "paypal_order_id" => "nullable|string",
             "description" => "nullable|string",
             "n_transaccion" => "required|string",
             "sale_address" => "required|array",
@@ -76,7 +78,11 @@ class SaleController extends Controller
             ], 422);
         }
 
-        $sale = DB::transaction(function () use ($request, $user, $carts) {
+        $status = $request->method_payment === "PAYPAL" && $request->payment_status === "paid"
+            ? "paid"
+            : "pending_payment";
+
+        $sale = DB::transaction(function () use ($request, $user, $carts, $status) {
             $sale = Sale::create([
                 "user_id" => $user->id,
                 "method_payment" => $request->method_payment,
@@ -88,7 +94,7 @@ class SaleController extends Controller
                 "price_dolar" => $request->price_dolar ?? 0,
                 "description" => $request->description,
                 "n_transaccion" => $request->n_transaccion,
-                "status" => "pending_payment",
+                "status" => $status,
             ]);
 
             foreach ($carts as $cart) {

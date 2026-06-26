@@ -1,9 +1,9 @@
-import { Component, afterNextRender, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID, afterNextRender } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../service/auth.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 
 declare global { interface Window { password_show_toggle?: () => void } }
 
@@ -28,26 +28,19 @@ export class LoginComponent {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) return;    // 👈 evita SSR
+      if (!isPlatformBrowser(this.platformId)) return;
       setTimeout(() => window.password_show_toggle?.(), 0);
     });
   }
 
   ngOnInit(): void {
-    // 1) Si hay token pero está EXPIRADO o es inválido, límpialo en vez de redirigir
-    if (this.isTokenValid()) {
-      // usuario ya logueado → ve a inicio (opcional)
+    if (this.authService.hasValidSession()) {
       setTimeout(() => this.router.navigateByUrl('/'), 0);
       return;
-    } else {
-      // limpia restos de sesión inválida
-      try {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      } catch {}
     }
 
-    // 2) Lee código de verificación (igual que tenías)
+    this.authService.clearSession(false);
+
     this.activedRoute.queryParams.subscribe((resp: any) => {
       this.code_user = resp.code;
       if (this.code_user) {
@@ -61,21 +54,6 @@ export class LoginComponent {
         });
       }
     });
-  }
-
-  // ✅ Valida JWT por fecha de expiración (claim "exp")
-  private isTokenValid(): boolean {
-    try {
-      if (!isPlatformBrowser(this.platformId)) return false;
-      const t = localStorage.getItem('token');
-      if (!t) return false;
-      const payload = JSON.parse(atob((t.split('.')[1] || '')));
-      const exp = Number(payload?.exp);
-      const now = Math.floor(Date.now() / 1000);
-      return !!exp && now < exp;
-    } catch {
-      return false;
-    }
   }
 
   login() {
