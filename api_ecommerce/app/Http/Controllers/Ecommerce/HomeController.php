@@ -27,6 +27,7 @@ class HomeController extends Controller
         $categories_randoms = Categorie::withCount(["product_categorie_firsts"])
                             ->where("categorie_second_id",NULL)
                             ->where("categorie_third_id",NULL)
+                            ->where("state",1)
                             ->inRandomOrder()->limit(5)->get();
         
 
@@ -144,6 +145,7 @@ class HomeController extends Controller
     public function menus(){
         $categories_menus = Categorie::where("categorie_second_id",NULL)
                             ->where("categorie_third_id",NULL)
+                            ->where("state",1)
                             ->orderBy("position","desc")
                             ->get();
 
@@ -153,12 +155,24 @@ class HomeController extends Controller
                     "id" => $departament->id,
                     "name" => $departament->name,
                     "icon" => $departament->icon,
-                    "categories" => $departament->categorie_seconds->map(function($categorie) {
+                    "categories" => $departament->categorie_seconds()
+                        ->where("state",1)
+                        ->where("categorie_third_id",NULL)
+                        ->orderBy("position","desc")
+                        ->get()
+                        ->map(function($categorie) {
                         return [
                             "id" => $categorie->id,
                             "name" => $categorie->name,
                             "imagen" => $categorie->imagen ? env("APP_URL")."storage/".$categorie->imagen : NULL,
-                            "subcategories" => $categorie->categorie_seconds->map(function($subcategorie) {
+                            "subcategories" => Categorie::where("state",1)
+                                ->where(function($query) use ($categorie) {
+                                    $query->where("categorie_second_id", $categorie->id)
+                                        ->orWhere("categorie_third_id", $categorie->id);
+                                })
+                                ->orderBy("position","desc")
+                                ->get()
+                                ->map(function($subcategorie) {
                                 return  [
                                     "id" => $subcategorie->id,
                                     "name" => $subcategorie->name,
@@ -213,7 +227,9 @@ class HomeController extends Controller
     public function config_filter_advance() {
         $categories = Categorie::withCount(["product_categorie_firsts"])
                     ->where("categorie_second_id",NULL)
-                    ->where("categorie_third_id",NULL)->get();
+                    ->where("categorie_third_id",NULL)
+                    ->where("state",1)
+                    ->get();
 
         $brands = Brand::withCount(["products"])->where("state",1)->get();
 

@@ -31,9 +31,15 @@ export class DeleteCategorieComponent {
       if(resp.message == 403){
         this.toastr.error('Validacion',resp.message_text);
       }else{
-      this.CategorieD.emit({message:200});
-      this.modal.close();
+        this.toastr.success('Categoria eliminada correctamente');
+        this.CategorieD.emit({message:200});
+        this.modal.close();
       }
+    },(err:any) => {
+      this.toastr.error(
+        'No se pudo eliminar la categoria',
+        err.error?.message_text || err.error?.message || 'Revise si la categoria tiene relaciones o contacte con el desarrollador.'
+      );
     })
   }
 

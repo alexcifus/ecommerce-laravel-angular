@@ -93,14 +93,25 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::findOrFail($id);
 
-        if($categorie->product_categorie_firsts()->count() > 0 ||
-        $categorie->product_categorie_seconds()->count() > 0 ||
-        $categorie->product_categorie_thirds()->count() > 0){
-            return response()->json(['message' => 403,"message_text" => "LA CATEGORÍA YA ESTA RELACIONADA CON ALGUNOS O UN PRODUCTO"]);
+        $has_products = $categorie->product_categorie_firsts()->exists()
+            || $categorie->product_categorie_seconds()->exists()
+            || $categorie->product_categorie_thirds()->exists();
+
+        $has_child_categories = Categorie::where("categorie_second_id", $categorie->id)
+            ->orWhere("categorie_third_id", $categorie->id)
+            ->exists();
+
+        $has_commercial_relations = $categorie->discount_categories()->exists()
+            || $categorie->cupone_categories()->exists();
+
+        if ($has_products || $has_child_categories || $has_commercial_relations) {
+            return response()->json([
+                'message' => 403,
+                "message_text" => "La categoria tiene productos, subcategorias, cupones o descuentos relacionados. Marcala como inactiva en lugar de eliminarla.",
+            ]);
         }
 
         $categorie->delete();
-        //validar que la no esté en ningún producto
         return response()->json(['message' => 200]);
     }
 }
