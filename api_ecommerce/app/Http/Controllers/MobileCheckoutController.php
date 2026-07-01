@@ -7,59 +7,97 @@ use App\Models\Sale\Sale;
 use App\Models\Sale\SaleDetail;
 use App\Models\Product\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class MobileCheckoutController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             "items" => "required|array|min:1",
             "items.*.product_id" => "required|integer|exists:products,id",
             "items.*.quantity" => "required|integer|min:1",
-            "items.*.price" => "required|numeric|min:0",
+            "items.*.price" => "nullable|numeric|min:0",
             "total" => "required|numeric|min:0",
+            "method_payment" => "nullable|in:MOBILE_MANUAL,PAYPAL,CARD",
         ]);
 
         $user = auth("api")->user();
+        $methodPayment = $validated["method_payment"] ?? "mobile";
 
         DB::beginTransaction();
 
         try {
+            $requestedItems = collect($validated["items"])
+                ->groupBy("product_id")
+                ->map(fn ($items) => $items->sum("quantity"));
+
+            $products = Product::whereIn("id", $requestedItems->keys())
+                ->lockForUpdate()
+                ->get()
+                ->keyBy("id");
+
+            $saleItems = [];
+            $total = 0;
+
+            foreach ($requestedItems as $productId => $quantity) {
+                $product = $products->get($productId);
+
+                if (!$product) {
+                    throw ValidationException::withMessages([
+                        "items" => ["Uno de los productos ya no está disponible."],
+                    ]);
+                }
+
+                if ($quantity > $product->stock) {
+                    throw ValidationException::withMessages([
+                        "items" => ["Stock insuficiente para {$product->title}."],
+                    ]);
+                }
+
+                if (!is_numeric($product->price_eur)) {
+                    throw ValidationException::withMessages([
+                        "items" => ["El producto {$product->title} no tiene un precio válido."],
+                    ]);
+                }
+
+                $price = (float) $product->price_eur;
+                $subtotal = round($price * $quantity, 2);
+                $total += $subtotal;
+                $saleItems[] = compact("product", "quantity", "price", "subtotal");
+            }
+
+            $total = round($total, 2);
+
             $sale = Sale::create([
                 "user_id" => $user->id,
-                "method_payment" => "mobile",
+                "method_payment" => $methodPayment,
                 "currency_total" => "EUR",
                 "currency_payment" => "EUR",
                 "discount" => 0,
-                "subtotal" => $request->total,
-                "total" => $request->total,
+                "subtotal" => $total,
+                "total" => $total,
                 "price_dolar" => 1,
                 "description" => "Pedido realizado desde la app móvil",
                 "n_transaccion" => "MOBILE-" . time(),
                 "status" => "pending_payment",
             ]);
 
-            foreach ($request->items as $item) {
-                $subtotal = $item["price"] * $item["quantity"];
-
+            foreach ($saleItems as $item) {
                 SaleDetail::create([
                     "sale_id" => $sale->id,
-                    "product_id" => $item["product_id"],
+                    "product_id" => $item["product"]->id,
                     "quantity" => $item["quantity"],
                     "price_unit" => $item["price"],
-                    "subtotal" => $subtotal,
-                    "total" => $subtotal,
+                    "subtotal" => $item["subtotal"],
+                    "total" => $item["subtotal"],
                     "currency" => "EUR",
                     "discount" => 0,
                 ]);
 
-                $product = Product::find($item["product_id"]);
-
-                if ($product) {
-                    $product->update([
-                        "stock" => max(0, $product->stock - $item["quantity"])
-                    ]);
-                }
+                $item["product"]->update([
+                    "stock" => $item["product"]->stock - $item["quantity"],
+                ]);
             }
 
             DB::commit();
@@ -70,6 +108,9 @@ class MobileCheckoutController extends Controller
                 "sale_id" => $sale->id,
             ]);
 
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
 
