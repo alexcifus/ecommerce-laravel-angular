@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Product\ProductSpecificationsController;
 use App\Http\Controllers\Admin\Product\ProductVariationsAnidadoController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\MobileCheckoutController;
+use App\Http\Controllers\MobilePayPalController;
 
 
 /*
@@ -41,6 +42,8 @@ Route::group([
     "middleware" => "auth:api"
 ], function ($router) {
     Route::post("mobile/checkout", [MobileCheckoutController::class, "store"]);
+    Route::post("mobile/paypal/orders", [MobilePayPalController::class, "createOrder"]);
+    Route::post("mobile/paypal/orders/{paypalOrderId}/capture", [MobilePayPalController::class, "capture"]);
 });
 
 

@@ -25,6 +25,9 @@ class Sale extends Model
         "description",
         "n_transaccion",
         "status",
+        "payment_request_id",
+        "paypal_order_id",
+        "paypal_capture_id",
         "preference_id",
         // 
         "created_at",
