@@ -360,18 +360,28 @@ class HomeController extends Controller
     }
 
     public function mobileProducts(Request $request): JsonResponse
-{
-    // Reutilizamos la lógica de home()
-    $response = $this->home($request);      // home() ya la usas en /ecommerce/home
+    {
+        $products = Product::query()
+            ->select(['id', 'title', 'slug', 'price_eur', 'stock', 'imagen'])
+            ->where('state', 2)
+            ->where('stock', '>', 0)
+            ->orderByDesc('id')
+            ->get()
+            ->map(function (Product $product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->title,
+                    'slug' => $product->slug,
+                    'price_eur' => (int) $product->price_eur,
+                    'stock' => (int) $product->stock,
+                    'imagen' => $product->imagen
+                        ? rtrim((string) config('app.url'), '/').'/storage/'.ltrim($product->imagen, '/')
+                        : '',
+                ];
+            });
 
-    // Si home() ya devuelve JsonResponse, lo convertimos a array asociativo
-    $homeArray = $response->getData(true);
-
-    // Sacamos solo la parte de productos
-    $products = $homeArray['product_tranding_new']['data'] ?? [];
-
-    return response()->json([
-        'data' => $products,
-    ]);
-}
+        return response()->json([
+            'data' => $products,
+        ]);
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class PayPalService
@@ -74,15 +75,15 @@ class PayPalService
         $response = $this->send(function (string $accessToken) use ($paypalOrderId, $requestId) {
             return Http::withToken($accessToken)
                 ->acceptJson()
-                ->asJson()
                 ->timeout($this->timeout)
                 ->withHeaders([
                     'PayPal-Request-Id' => $requestId,
                     'Prefer' => 'return=representation',
                 ])
-                ->post(
-                    $this->baseUrl.'/v2/checkout/orders/'.urlencode($paypalOrderId).'/capture',
-                    []
+                ->withBody('{}', 'application/json')
+                ->send(
+                    'POST',
+                    $this->baseUrl.'/v2/checkout/orders/'.urlencode($paypalOrderId).'/capture'
                 );
         }, 'capturar la orden');
 
@@ -148,6 +149,13 @@ class PayPalService
             $debugId = $response->header('PayPal-Debug-Id');
             $message = $response->json('message') ?: 'Respuesta no válida de PayPal';
             $debugText = $debugId ? " PayPal-Debug-Id: {$debugId}." : '';
+
+            Log::error('PayPal API request failed', [
+                'operation' => $operation,
+                'status' => $response->status(),
+                'paypal_debug_id' => $debugId,
+                'response_body' => $response->body(),
+            ]);
 
             throw new RuntimeException(
                 "No se pudo {$operation} ({$response->status()}): {$message}.{$debugText}"

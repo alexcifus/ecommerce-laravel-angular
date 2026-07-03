@@ -535,11 +535,16 @@ table tr td:last-child {
         <td>
             <b>Datos de Envío: </b>
             <br>
-            DIRECCIÓN: <strong>{{ $sale->sale_addres->address }}</strong>
+            DIRECCIÓN: <strong>{{ $sale->sale_addres?->address ?? 'No disponible' }}</strong>
             <br>
-            EMPRESA: <strong>{{ $sale->sale_addres->company }}</strong>
+            EMPRESA: <strong>{{ $sale->sale_addres?->company ?? 'No indicada' }}</strong>
             <br>
-            REGION/CIUDAD: <strong>{{ $sale->sale_addres->country_region}} / {{ $sale->sale_addres->city }}</strong>
+            REGION/CIUDAD:
+            <strong>
+                {{ $sale->sale_addres?->country_region ?? 'No disponible' }}
+                /
+                {{ $sale->sale_addres?->city ?? 'No disponible' }}
+            </strong>
         </td>
         <td></td>
     </tr>
