@@ -484,16 +484,15 @@ table tr td:last-child {
         <tbody>
             <tr>
                 <td style="padding: 0 !important;border-bottom:none;">
-                    <img
-                        style="width:210px;height: 65px;background:black;border-radius:5px;"
-                        src="{{ public_path('milogo.png') }}"
-                    >
+                    <div style="width:210px;height:65px;line-height:65px;font-size:30px;font-weight:bold;color:#111;">
+                        Jazz y Más
+                    </div>
                 </td>
                 <td style="padding: 0 !important;border-bottom:none;">
                     <br>
-                    <small>Tel. 099 122 6607</small>
+                    <strong>Jazz y Más</strong>
                     <br>
-                    <small>Km. 6,5 via Daule Lotizacion Santa <br> Adriana Mz. 25 Solar 11 090505 <br> Guayaquil, Ecuador </small>
+                    <small>Calle del Jazz, 12 <br> 28004 Madrid, España <br> Tel. 910 000 000</small>
                 </td>
             </tr>
         </tbody>
