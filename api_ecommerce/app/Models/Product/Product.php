@@ -153,10 +153,18 @@ class Product extends Model
     }
 
     public function scopefilterAdvanceEcommerce($query,$categories_selected,$colors_product_selected,
-    $brands_selected,$min_price,$max_price,$currency,$product_general_ids_array,$options_aditional,$search){
+    $brands_selected,$min_price,$max_price,$currency,$product_general_ids_array,$options_aditional,$search,$category_id = null){
 
         if($categories_selected && sizeof($categories_selected) > 0){
             $query->whereIn("categorie_first_id",$categories_selected);
+        }
+
+        if($category_id){
+            $query->where(function($subquery) use ($category_id) {
+                $subquery->where("categorie_first_id",$category_id)
+                    ->orWhere("categorie_second_id",$category_id)
+                    ->orWhere("categorie_third_id",$category_id);
+            });
         }
 
         if($colors_product_selected && sizeof($colors_product_selected) > 0){

@@ -36,6 +36,7 @@ export class FilterAdvanceComponent {
   max_price:number = 0;
   options_aditional:any = [];
   search:string = '';
+  category_id:number|null = null;
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -54,12 +55,9 @@ export class FilterAdvanceComponent {
     })
 
     this.activedRoute.queryParams.subscribe((resp:any) => {
-      this.search = resp.search;
-    })
-
-    this.homeService.filterAdvanceProduct({search: this.search,}).subscribe((resp:any) => {
-      console.log(resp);
-      this.PRODUCTS = resp.products.data;
+      this.search = resp.search ?? '';
+      this.category_id = resp.category_id ? Number(resp.category_id) : null;
+      this.filterAdvanceProduct();
     })
 
     afterNextRender(() => {
@@ -158,6 +156,7 @@ export class FilterAdvanceComponent {
       currency: this.currency,
       options_aditional: this.options_aditional,
       search: this.search,
+      category_id: this.category_id,
     }
     this.homeService.filterAdvanceProduct(data).subscribe((resp:any) => {
       console.log(resp);

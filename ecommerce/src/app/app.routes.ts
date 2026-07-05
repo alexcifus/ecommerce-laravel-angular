@@ -61,6 +61,10 @@ export const routes: Routes = [
         component: FilterAdvanceComponent,
     },
     {
+        path: 'shop',
+        component: FilterAdvanceComponent,
+    },
+    {
         path: 'discount/:code',
         component: CampaingLinkComponent,
     },

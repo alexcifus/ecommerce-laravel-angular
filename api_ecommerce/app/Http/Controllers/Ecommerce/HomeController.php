@@ -270,6 +270,7 @@ class HomeController extends Controller
         $currency = $request->currency;
         $options_aditional = $request->options_aditional;
         $search = $request->search;
+        $category_id = $request->category_id;
 
         $colors_product_selected = [];
         if($colors_selected && sizeof($colors_selected) > 0){
@@ -301,7 +302,7 @@ class HomeController extends Controller
         }
 
         $products = Product::filterAdvanceEcommerce($categories_selected,$colors_product_selected,
-        $brands_selected,$min_price,$max_price,$currency,$product_general_ids_array,$options_aditional,$search)->orderBy("id","desc")->get();
+        $brands_selected,$min_price,$max_price,$currency,$product_general_ids_array,$options_aditional,$search,$category_id)->orderBy("id","desc")->get();
 
         return response()->json([
             "products" => ProductEcommerceCollection::make($products)
