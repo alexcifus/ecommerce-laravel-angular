@@ -485,12 +485,12 @@ table tr td:last-child {
             <tr>
                 <td style="padding: 0 !important;border-bottom:none;">
                     <div style="width:210px;height:65px;line-height:65px;font-size:30px;font-weight:bold;color:#111;">
-                        Jazz y Más
+                        JazzIt
                     </div>
                 </td>
                 <td style="padding: 0 !important;border-bottom:none;">
                     <br>
-                    <strong>Jazz y Más</strong>
+                    <strong>JazzIt</strong>
                     <br>
                     <small>Calle del Jazz, 12 <br> 28004 Madrid, España <br> Tel. 910 000 000</small>
                 </td>
