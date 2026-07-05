@@ -1,0 +1,26 @@
+.tp-header-main .logo img {
+  display: block;
+  width: 180px;
+  height: auto;
+  max-width: 100%;
+}
+
+.tp-header-sticky-area .logo img,
+.offcanvas__logo img {
+  display: block;
+  width: 162px;
+  height: auto;
+  max-width: 100%;
+}
+
+.tp-header-category:focus-within > .tp-category-menu-content > ul {
+  display: block;
+}
+
+@media (max-width: 991px) {
+  .tp-header-main .logo img,
+  .tp-header-sticky-area .logo img,
+  .offcanvas__logo img {
+    width: 147px;
+  }
+}
