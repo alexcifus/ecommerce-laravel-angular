@@ -1,4 +1,4 @@
-import { Component, afterNextRender, afterRender } from '@angular/core';
+import { Component, afterNextRender, afterRender, ChangeDetectorRef } from '@angular/core';
 import { HomeService } from '../../pages/home/service/home.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -26,16 +26,20 @@ export class HeaderComponent {
   totalCarts:number = 0;
   isLoading:boolean = false;
   searchT:string = '';
+  selectedCategoryId:string = '';
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
     public cartService: CartService,
     private toastr: ToastrService,
+    private cdr: ChangeDetectorRef,
   ) {
     afterNextRender(() => {
       this.homeService.menus().subscribe((resp:any) => {
         console.log(resp);
-        this.categories_menus = resp.categories_menus;
+        this.categories_menus = resp.categories_menus ?? [];
+        this.cdr.detectChanges();
+        this.syncSearchCategorySelect();
       })
       this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
     })
@@ -95,6 +99,35 @@ export class HeaderComponent {
     return '';
   }
 
+  private syncSearchCategorySelect(attempt:number = 0){
+    setTimeout(() => {
+      const categorySelect = $('.tp-header-search-category select');
+
+      if(!categorySelect.length){
+        return;
+      }
+
+      if(categorySelect.find('option').length <= 1 && attempt < 5){
+        this.syncSearchCategorySelect(attempt + 1);
+        return;
+      }
+
+      if(typeof categorySelect.niceSelect === 'function'){
+        if(categorySelect.next('.nice-select').length){
+          categorySelect.niceSelect('update');
+        }else{
+          categorySelect.niceSelect();
+        }
+      }
+
+      categorySelect
+        .off('change.headerSearchCategory')
+        .on('change.headerSearchCategory', (event:any) => {
+          this.selectedCategoryId = event.target.value;
+        });
+    }, 50);
+  }
+
   changeCurrency(val:string){
     if(this.user){
       this.cartService.deleteCartsAll().subscribe((resp:any) => {
@@ -111,6 +144,14 @@ export class HeaderComponent {
   }
 
   searchProduct(){
-    window.location.href = "/productos-busqueda?search="+this.searchT;
+    const queryParams = new URLSearchParams({
+      search: this.searchT,
+    });
+
+    if(this.selectedCategoryId){
+      queryParams.set("category_id", this.selectedCategoryId);
+    }
+
+    window.location.href = "/productos-busqueda?"+queryParams.toString();
   }
 }

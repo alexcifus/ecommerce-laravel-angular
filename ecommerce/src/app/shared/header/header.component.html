@@ -314,15 +314,20 @@
                       <form (ngSubmit)="searchProduct()">
                          <div class="tp-header-search-wrapper d-flex align-items-center">
                             <div class="tp-header-search-box">
-                               <input type="text" [(ngModel)]="searchT" name="searchT" placeholder="Busca Productos...">
+                               <input type="text" (keydown.enter)="$event.preventDefault(); searchProduct()" [(ngModel)]="searchT" name="searchT" placeholder="Busca Productos...">
                             </div>
                             <div class="tp-header-search-category">
-                               <select>
-                                  <option>Selecciona Categoría</option>
-                                  <option>CDs</option>
-                                  <option>Vinilos</option>
-                                  <option>Merchandaising</option>
-                                  <option>Libros</option>
+                               <select [(ngModel)]="selectedCategoryId" name="category_id">
+                                  <option value="">Selecciona Categoría</option>
+                                  @for(MENU_CAT of categories_menus; track MENU_CAT.id) {
+                                     <option [value]="MENU_CAT.id">{{ MENU_CAT.name }}</option>
+                                     @for(categorie of MENU_CAT.categories; track categorie.id) {
+                                        <option [value]="categorie.id">— {{ categorie.name }}</option>
+                                        @for(subcategorie of categorie.subcategories; track subcategorie.id) {
+                                           <option [value]="subcategorie.id">—— {{ subcategorie.name }}</option>
+                                        }
+                                     }
+                                  }
                                </select>
                             </div>
                             <div class="tp-header-search-btn">
