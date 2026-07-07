@@ -20,7 +20,7 @@
           <div class="offcanvas__category pb-40">
              <button class="tp-offcanvas-category-toggle">
                 <i class="fa-solid fa-bars"></i>
-                All Categories
+                Todas las categorías
              </button>
              <div class="tp-category-mobile-menu">
                 
@@ -41,7 +41,7 @@
              </div>
           </div>
           <div class="offcanvas__btn">
-             <a href="contact.html" class="tp-btn-2 tp-btn-border-2">Contact Us</a>
+             <a href="contact.html" class="tp-btn-2 tp-btn-border-2">Contacto</a>
           </div>
        </div>
        <div class="offcanvas__bottom">
@@ -86,7 +86,7 @@
              <div class="tp-mobile-item text-center">
                 <a href="shop.html" class="tp-mobile-item-btn">
                    <i class="flaticon-store"></i>
-                   <span>Store</span>
+                   <span>Tienda</span>
                 </a>
              </div>
           </div>
@@ -94,7 +94,7 @@
              <div class="tp-mobile-item text-center">
                 <button class="tp-mobile-item-btn tp-search-open-btn">
                    <i class="flaticon-search-1"></i>
-                   <span>Search</span>
+                   <span>Buscar</span>
                 </button>
              </div>
           </div>
@@ -102,7 +102,7 @@
              <div class="tp-mobile-item text-center">
                 <a href="wishlist.html" class="tp-mobile-item-btn">
                    <i class="flaticon-love"></i>
-                   <span>Wishlist</span>
+                   <span>Favoritos</span>
                 </a>
              </div>
           </div>
@@ -110,7 +110,7 @@
              <div class="tp-mobile-item text-center">
                 <a href="profile.html" class="tp-mobile-item-btn">
                    <i class="flaticon-user"></i>
-                   <span>Account</span>
+                   <span>Cuenta</span>
                 </a>
              </div>
           </div>
@@ -118,7 +118,7 @@
              <div class="tp-mobile-item text-center">
                 <button class="tp-mobile-item-btn tp-offcanvas-open-btn">
                    <i class="flaticon-menu-1"></i>
-                   <span>Menu</span>
+                   <span>Menú</span>
                 </button>
              </div>
           </div>
@@ -138,16 +138,16 @@
                 </div>
                 <form action="#">
                    <div class="tp-search-input mb-10">
-                      <input type="text" (keyup.enter)="searchProduct()" [(ngModel)]="searchT" name="searchT" placeholder="Search for product...">
+                      <input type="text" (keyup.enter)="searchProduct()" [(ngModel)]="searchT" name="searchT" placeholder="Buscar productos...">
                       <button type="submit"><i class="flaticon-search-1"></i></button>
                    </div>
                    <div class="tp-search-category">
-                      <span>Search by : </span>
-                      <a href="#">Men, </a>
-                      <a href="#">Women, </a>
-                      <a href="#">Children, </a>
-                      <a href="#">Shirt, </a>
-                      <a href="#">Demin</a>
+                      <span>Buscar por: </span>
+                      <a href="#">Discos, </a>
+                      <a href="#">Vinilos, </a>
+                      <a href="#">Libros, </a>
+                      <a href="#">Merchandising, </a>
+                      <a href="#">Jazz</a>
                    </div>
                 </form>
              </div>
@@ -163,7 +163,7 @@
         <div class="cartmini__top-wrapper">
             <div class="cartmini__top p-relative">
                 <div class="cartmini__top-title">
-                    <h4>Shopping cart</h4>
+                    <h4>Carrito</h4>
                 </div>
                 <div class="cartmini__close">
                     <button type="button" class="cartmini__close-btn cartmini-close-btn"><i class="fal fa-times"></i></button>
@@ -208,8 +208,8 @@
             <!-- if no item in cart -->
             <div class="cartmini__empty text-center d-none">
                 <img src="assets/img/product/cartmini/empty-cart.png" alt="">
-                <p>Your Cart is empty</p>
-                <a href="/" class="tp-btn">Go to Shop</a>
+                <p>Tu carrito está vacío</p>
+                <a href="/" class="tp-btn">Ir a la tienda</a>
             </div>
         </div>
         <div class="cartmini__checkout">
@@ -218,8 +218,8 @@
                 <span>{{ totalCarts }} {{ currency }}</span>
             </div>
             <div class="cartmini__checkout-btn">
-                <a routerLink="/carrito-de-compra" class="tp-btn mb-10 w-100"> view cart</a>
-                <a routerLink="/proceso-de-pago" class="tp-btn tp-btn-border w-100"> checkout</a>
+                <a routerLink="/carrito-de-compra" class="tp-btn mb-10 w-100">Ver carrito</a>
+                <a routerLink="/proceso-de-pago" class="tp-btn tp-btn-border w-100">Finalizar compra</a>
             </div>
         </div>
     </div>
@@ -275,19 +275,19 @@
                             </ul>
                          </div>
                          <div class="tp-header-top-menu-item tp-header-setting">
-                            <span class="tp-header-setting-toggle" id="tp-header-setting-toggle">Setting</span>
+                            <span class="tp-header-setting-toggle" id="tp-header-setting-toggle">Cuenta</span>
                             <ul>
                                <li>
-                                  <a href="profile.html">My Profile</a>
+                                  <a href="profile.html">Mi perfil</a>
                                </li>
                                <li>
-                                  <a href="wishlist.html">Wishlist</a>
+                                  <a href="wishlist.html">Favoritos</a>
                                </li>
                                <li>
-                                  <a href="cart.html">Cart</a>
+                                  <a href="cart.html">Carrito</a>
                                </li>
                                <li>
-                                  <a href="#" onclick="return false" (click)="logout()">Logout</a>
+                                  <a href="#" onclick="return false" (click)="logout()">Cerrar sesión</a>
                                </li>
                             </ul>
                          </div>
@@ -513,7 +513,7 @@
                          <nav class="tp-main-menu-content">
                             <ul>
                                <li class="has-dropdown has-mega-menu">
-                                  <a href="index.html">Home</a>
+                                  <a href="index.html">Inicio</a>
                                   <div class="home-menu tp-submenu tp-mega-menu">
                                      <div class="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
                                         <div class="col">
@@ -580,48 +580,48 @@
                                   </div>
                                </li>
                                <li  class="has-dropdown has-mega-menu">
-                                  <a href="shop.html">Shop</a>
+                                  <a href="shop.html">Catálogo</a>
                                   <div class="shop-mega-menu tp-submenu tp-mega-menu">
                                      <div class="row">
                                         <div class="col-lg-2">
                                            <div class="shop-mega-menu-list">
-                                                 <a href="shop.html" class="shop-mega-menu-title">Shop Pages</a>
+                                                 <a href="shop.html" class="shop-mega-menu-title">Páginas de tienda</a>
                                                  <ul>
-                                                     <li><a href="shop-category.html">Grid Category</a></li>
-                                                     <li><a href="shop.html">Grid Layout</a></li>
-                                                     <li><a href="shop-list.html">List Layout</a></li>
-                                                     <li><a href="shop-masonary.html">Masonary Layout</a></li>
-                                                     <li><a href="shop-full-width.html">Full width Layout</a></li>
-                                                     <li><a href="shop-1600.html">1600px Layout</a></li>
-                                                     <li><a href="shop.html">Left Sidebar</a></li>
-                                                     <li><a href="shop-right-sidebar.html">Right Sidebar</a></li>
-                                                     <li><a href="shop-no-sidebar.html">Hidden Sidebar</a></li>
+                                                     <li><a href="shop-category.html">Categorías en cuadrícula</a></li>
+                                                     <li><a href="shop.html">Vista en cuadrícula</a></li>
+                                                     <li><a href="shop-list.html">Vista en lista</a></li>
+                                                     <li><a href="shop-masonary.html">Vista mosaico</a></li>
+                                                     <li><a href="shop-full-width.html">Vista ancho completo</a></li>
+                                                     <li><a href="shop-1600.html">Vista 1600px</a></li>
+                                                     <li><a href="shop.html">Barra lateral izquierda</a></li>
+                                                     <li><a href="shop-right-sidebar.html">Barra lateral derecha</a></li>
+                                                     <li><a href="shop-no-sidebar.html">Sin barra lateral</a></li>
                                                  </ul>
                                            </div>
                                         </div>
                                         <div class="col-lg-2">
                                            <div class="shop-mega-menu-list">
-                                                 <a href="shop.html" class="shop-mega-menu-title">Features</a>
+                                                 <a href="shop.html" class="shop-mega-menu-title">Funciones</a>
                                                  <ul>
-                                                    <li><a href="shop-filter-dropdown.html">Filter Dropdown</a></li>
-                                                    <li><a href="shop-filter-offcanvas.html">Filters Offcanvas</a></li>
-                                                    <li><a href="shop.html">Filters Sidebar</a></li>
-                                                    <li><a href="shop-load-more.html">Load More button</a></li>
-                                                    <li><a href="shop-infinite-scroll.html">Infinit scrolling</a></li>
-                                                    <li><a href="shop-list.html">Collections list</a></li>
-                                                    <li><a href="shop.html">Hidden search</a></li>
-                                                    <li><a href="shop.html">Search Full screen</a></li>
+                                                    <li><a href="shop-filter-dropdown.html">Filtro desplegable</a></li>
+                                                    <li><a href="shop-filter-offcanvas.html">Filtros laterales</a></li>
+                                                    <li><a href="shop.html">Filtros en barra lateral</a></li>
+                                                    <li><a href="shop-load-more.html">Botón cargar más</a></li>
+                                                    <li><a href="shop-infinite-scroll.html">Scroll infinito</a></li>
+                                                    <li><a href="shop-list.html">Lista de colecciones</a></li>
+                                                    <li><a href="shop.html">Búsqueda oculta</a></li>
+                                                    <li><a href="shop.html">Búsqueda a pantalla completa</a></li>
                                                  </ul>
                                            </div>
                                         </div>
                                         <div class="col-lg-2">
                                            <div class="shop-mega-menu-list">
-                                                 <a href="shop.html" class="shop-mega-menu-title">Hover Style</a>
+                                                 <a href="shop.html" class="shop-mega-menu-title">Estilo hover</a>
                                                  <ul>
-                                                    <li><a href="shop.html">Hover Style 1</a></li>
-                                                    <li><a href="shop.html">Hover Style 2</a></li>
-                                                    <li><a href="shop.html">Hover Style 3</a></li>
-                                                    <li><a href="shop.html">Hover Style 4</a></li>
+                                                    <li><a href="shop.html">Estilo hover 1</a></li>
+                                                    <li><a href="shop.html">Estilo hover 2</a></li>
+                                                    <li><a href="shop.html">Estilo hover 3</a></li>
+                                                    <li><a href="shop.html">Estilo hover 4</a></li>
                                                  </ul>
                                            </div>
                                         </div>
@@ -629,7 +629,7 @@
                                            <div class="shop-mega-menu-img">
                                               <img src="assets/img/menu/product/menu-product-img-1.jpg" alt="">
                                               <div class="shop-mega-menu-btn">
-                                                 <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Phones</a>
+                                                 <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Teléfonos</a>
                                               </div>
                                            </div>
                                         </div>
@@ -637,7 +637,7 @@
                                            <div class="shop-mega-menu-img">
                                               <img src="assets/img/menu/product/menu-product-img-2.jpg" alt="">
                                               <div class="shop-mega-menu-btn">
-                                                 <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Cameras</a>
+                                                 <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Cámaras</a>
                                               </div>
                                            </div>
                                         </div>
@@ -646,77 +646,77 @@
                               </li>
                                <li class="has-dropdown has-mega-menu ">
                                   
-                                  <a href="shop.html">Products</a>
+                                  <a href="shop.html">Productos</a>
                                   <ul class="tp-submenu tp-mega-menu mega-menu-style-2">
                                      <!-- first col -->
                                      <li class="has-dropdown">
-                                        <a href="shop.html" class="mega-menu-title">Shop Page</a>
+                                        <a href="shop.html" class="mega-menu-title">Página de tienda</a>
                                         <ul class="tp-submenu">
-                                           <li><a href="shop-category.html">Only Categories</a></li>
-                                           <li><a href="shop-filter-offcanvas.html">Shop Grid</a></li>
-                                           <li><a href="shop.html">Shop Grid with Sideber</a></li>
-                                           <li><a href="shop-list.html">Shop List</a></li>
-                                           <li><a href="shop-category.html">Categories</a></li>
-                                           <li><a href="product-details.html">Product Details</a></li>
-                                           <li><a href="product-details-progress.html">Product Details Progress</a></li>
+                                           <li><a href="shop-category.html">Solo categorías</a></li>
+                                           <li><a href="shop-filter-offcanvas.html">Tienda en cuadrícula</a></li>
+                                           <li><a href="shop.html">Tienda con barra lateral</a></li>
+                                           <li><a href="shop-list.html">Tienda en lista</a></li>
+                                           <li><a href="shop-category.html">Categorías</a></li>
+                                           <li><a href="product-details.html">Detalle de producto</a></li>
+                                           <li><a href="product-details-progress.html">Detalle con progreso</a></li>
                                         </ul>
                                      </li>
                                      <!-- third col -->
                                      <li  class="has-dropdown">
-                                        <a href="product-details.html" class="mega-menu-title">Products</a>
+                                        <a href="product-details.html" class="mega-menu-title">Productos</a>
                                         <ul class="tp-submenu">
                                            
-                                           <li><a href="product-details.html">Product Simple</a></li>
-                                           <li><a href="product-details-video.html">With Video</a></li>
-                                           <li><a href="product-details-countdown.html">With Countdown Timer</a></li>
-                                           <li><a href="product-details-presentation.html">Product Presentation</a></li>
-                                           <li><a href="product-details-swatches.html">Variations Swatches</a></li>
-                                           <li><a href="product-details-list.html">List View</a></li>
-                                           <li><a href="product-details-gallery.html">Details Gallery</a></li>
-                                           <li><a href="product-details-slider.html">With Slider</a></li>
+                                           <li><a href="product-details.html">Producto simple</a></li>
+                                           <li><a href="product-details-video.html">Con vídeo</a></li>
+                                           <li><a href="product-details-countdown.html">Con cuenta atrás</a></li>
+                                           <li><a href="product-details-presentation.html">Presentación de producto</a></li>
+                                           <li><a href="product-details-swatches.html">Variaciones</a></li>
+                                           <li><a href="product-details-list.html">Vista en lista</a></li>
+                                           <li><a href="product-details-gallery.html">Galería de detalles</a></li>
+                                           <li><a href="product-details-slider.html">Con slider</a></li>
                                         </ul>
                                      </li>
                                      <!-- third col -->
                                      <li  class="has-dropdown">
                                         <a href="shop.html" class="mega-menu-title">eCommerce</a>
                                         <ul class="tp-submenu">
-                                           <li><a href="cart.html">Shopping Cart</a></li>
-                                           <li><a href="order.html">Track Your Order</a></li>
-                                           <li><a href="compare.html">Compare</a></li>
-                                           <li><a href="wishlist.html">Wishlist</a></li>
-                                           <li><a href="checkout.html">Checkout</a></li>
-                                           <li><a href="profile.html">My account</a></li>
+                                           <li><a href="cart.html">Carrito</a></li>
+                                           <li><a href="order.html">Seguir pedido</a></li>
+                                           <li><a href="compare.html">Comparar</a></li>
+                                           <li><a href="wishlist.html">Favoritos</a></li>
+                                           <li><a href="checkout.html">Finalizar compra</a></li>
+                                           <li><a href="profile.html">Mi cuenta</a></li>
                                         </ul>
                                      </li>
   
                                      <!-- second col -->
                                      <li  class="has-dropdown">
-                                        <a href="shop.html" class="mega-menu-title">More Pages</a>
+                                        <a href="shop.html" class="mega-menu-title">Más páginas</a>
                                         <ul class="tp-submenu">
                                            
                                           
-                                           <li><a href="about.html">About</a></li>
-                                           <li><a href="login.html">Login</a></li>
-                                           <li><a href="register.html">Register</a></li>
-                                           <li><a href="forgot.html">Forgot Password</a></li>
+                                           <li><a href="about.html">Sobre nosotros</a></li>
+                                           <li><a href="login.html">Iniciar sesión</a></li>
+                                           <li><a href="register.html">Registro</a></li>
+                                           <li><a href="forgot.html">Recuperar contraseña</a></li>
                                            <li><a href="404.html">404 Error</a></li>
                                         </ul>
                                      </li>
   
                                   </ul>
                                </li>
-                               <li><a href="coupon.html">Coupons</a></li>
+                               <li><a href="coupon.html">Cupones</a></li>
                                <li class="has-dropdown">
                                   <a href="blog.html">Blog</a>
                                   <ul class="tp-submenu">
-                                     <li><a href="blog.html">Blog Standard</a></li>
-                                     <li><a href="blog-grid.html">Blog Grid</a></li>
-                                     <li><a href="blog-list.html">Blog List</a></li>
-                                     <li><a href="blog-details-2.html">Blog Details Full Width</a></li>
-                                     <li><a href="blog-details.html">Blog Details</a></li>
+                                     <li><a href="blog.html">Blog estándar</a></li>
+                                     <li><a href="blog-grid.html">Blog en cuadrícula</a></li>
+                                     <li><a href="blog-list.html">Blog en lista</a></li>
+                                     <li><a href="blog-details-2.html">Detalle de blog ancho completo</a></li>
+                                     <li><a href="blog-details.html">Detalle de blog</a></li>
                                   </ul>
                                </li>
-                               <li><a href="contact.html">Contact</a></li>
+                               <li><a href="contact.html">Contacto</a></li>
                             </ul>
                          </nav>
                       </div>
@@ -761,7 +761,7 @@
                    <nav id="mobile-menu"> 
                       <ul>
                          <li class="has-dropdown has-mega-menu">
-                            <a href="index.html">Home</a>
+                            <a href="index.html">Inicio</a>
                             <div class="home-menu tp-submenu tp-mega-menu">
                                <div class="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
                                   <div class="col">
@@ -828,48 +828,48 @@
                             </div>
                          </li>
                          <li  class="has-dropdown has-mega-menu">
-                            <a href="shop.html">Shop</a>
+                            <a href="shop.html">Catálogo</a>
                             <div class="shop-mega-menu tp-submenu tp-mega-menu">
                                <div class="row">
                                   <div class="col-lg-2">
                                      <div class="shop-mega-menu-list">
-                                           <a href="shop.html" class="shop-mega-menu-title">Shop Pages</a>
+                                           <a href="shop.html" class="shop-mega-menu-title">Páginas de tienda</a>
                                            <ul>
-                                               <li><a href="shop-category.html">Grid Category</a></li>
-                                               <li><a href="shop.html">Grid Layout</a></li>
-                                               <li><a href="shop-list.html">List Layout</a></li>
-                                               <li><a href="shop-masonary.html">Masonary Layout</a></li>
-                                               <li><a href="shop-full-width.html">Full width Layout</a></li>
-                                               <li><a href="shop-1600.html">1600px Layout</a></li>
-                                               <li><a href="shop.html">Left Sidebar</a></li>
-                                               <li><a href="shop-right-sidebar.html">Right Sidebar</a></li>
-                                               <li><a href="shop-no-sidebar.html">Hidden Sidebar</a></li>
+                                               <li><a href="shop-category.html">Categorías en cuadrícula</a></li>
+                                               <li><a href="shop.html">Vista en cuadrícula</a></li>
+                                               <li><a href="shop-list.html">Vista en lista</a></li>
+                                               <li><a href="shop-masonary.html">Vista mosaico</a></li>
+                                               <li><a href="shop-full-width.html">Vista ancho completo</a></li>
+                                               <li><a href="shop-1600.html">Vista 1600px</a></li>
+                                               <li><a href="shop.html">Barra lateral izquierda</a></li>
+                                               <li><a href="shop-right-sidebar.html">Barra lateral derecha</a></li>
+                                               <li><a href="shop-no-sidebar.html">Sin barra lateral</a></li>
                                            </ul>
                                      </div>
                                   </div>
                                   <div class="col-lg-2">
                                      <div class="shop-mega-menu-list">
-                                           <a href="shop.html" class="shop-mega-menu-title">Features</a>
+                                           <a href="shop.html" class="shop-mega-menu-title">Funciones</a>
                                            <ul>
-                                              <li><a href="shop-filter-dropdown.html">Filter Dropdown</a></li>
-                                              <li><a href="shop-filter-offcanvas.html">Filters Offcanvas</a></li>
-                                              <li><a href="shop.html">Filters Sidebar</a></li>
-                                              <li><a href="shop-load-more.html">Load More button</a></li>
-                                              <li><a href="shop-infinite-scroll.html">Infinit scrolling</a></li>
-                                              <li><a href="shop-list.html">Collections list</a></li>
-                                              <li><a href="shop.html">Hidden search</a></li>
-                                              <li><a href="shop.html">Search Full screen</a></li>
+                                              <li><a href="shop-filter-dropdown.html">Filtro desplegable</a></li>
+                                              <li><a href="shop-filter-offcanvas.html">Filtros laterales</a></li>
+                                              <li><a href="shop.html">Filtros en barra lateral</a></li>
+                                              <li><a href="shop-load-more.html">Botón cargar más</a></li>
+                                              <li><a href="shop-infinite-scroll.html">Scroll infinito</a></li>
+                                              <li><a href="shop-list.html">Lista de colecciones</a></li>
+                                              <li><a href="shop.html">Búsqueda oculta</a></li>
+                                              <li><a href="shop.html">Búsqueda a pantalla completa</a></li>
                                            </ul>
                                      </div>
                                   </div>
                                   <div class="col-lg-2">
                                      <div class="shop-mega-menu-list">
-                                           <a href="shop.html" class="shop-mega-menu-title">Hover Style</a>
+                                           <a href="shop.html" class="shop-mega-menu-title">Estilo hover</a>
                                            <ul>
-                                              <li><a href="shop.html">Hover Style 1</a></li>
-                                              <li><a href="shop.html">Hover Style 2</a></li>
-                                              <li><a href="shop.html">Hover Style 3</a></li>
-                                              <li><a href="shop.html">Hover Style 4</a></li>
+                                              <li><a href="shop.html">Estilo hover 1</a></li>
+                                              <li><a href="shop.html">Estilo hover 2</a></li>
+                                              <li><a href="shop.html">Estilo hover 3</a></li>
+                                              <li><a href="shop.html">Estilo hover 4</a></li>
                                            </ul>
                                      </div>
                                   </div>
@@ -877,7 +877,7 @@
                                      <div class="shop-mega-menu-img">
                                         <img src="assets/img/menu/product/menu-product-img-1.jpg" alt="">
                                         <div class="shop-mega-menu-btn">
-                                           <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Phones</a>
+                                           <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Teléfonos</a>
                                         </div>
                                      </div>
                                   </div>
@@ -885,7 +885,7 @@
                                      <div class="shop-mega-menu-img">
                                         <img src="assets/img/menu/product/menu-product-img-2.jpg" alt="">
                                         <div class="shop-mega-menu-btn">
-                                           <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Cameras</a>
+                                           <a href="shop-category.html" class="tp-menu-showcase-btn tp-menu-showcase-btn-2">Cámaras</a>
                                         </div>
                                      </div>
                                   </div>
@@ -894,77 +894,77 @@
                         </li>
                          <li class="has-dropdown has-mega-menu ">
                             
-                            <a href="shop.html">Products</a>
+                            <a href="shop.html">Productos</a>
                             <ul class="tp-submenu tp-mega-menu mega-menu-style-2">
                                <!-- first col -->
                                <li class="has-dropdown">
-                                  <a href="shop.html" class="mega-menu-title">Shop Page</a>
+                                  <a href="shop.html" class="mega-menu-title">Página de tienda</a>
                                   <ul class="tp-submenu">
-                                     <li><a href="shop-category.html">Only Categories</a></li>
-                                     <li><a href="shop-filter-offcanvas.html">Shop Grid</a></li>
-                                     <li><a href="shop.html">Shop Grid with Sideber</a></li>
-                                     <li><a href="shop-list.html">Shop List</a></li>
-                                     <li><a href="shop-category.html">Categories</a></li>
-                                     <li><a href="product-details.html">Product Details</a></li>
-                                     <li><a href="product-details-progress.html">Product Details Progress</a></li>
+                                     <li><a href="shop-category.html">Solo categorías</a></li>
+                                     <li><a href="shop-filter-offcanvas.html">Tienda en cuadrícula</a></li>
+                                     <li><a href="shop.html">Tienda con barra lateral</a></li>
+                                     <li><a href="shop-list.html">Tienda en lista</a></li>
+                                     <li><a href="shop-category.html">Categorías</a></li>
+                                     <li><a href="product-details.html">Detalle de producto</a></li>
+                                     <li><a href="product-details-progress.html">Detalle con progreso</a></li>
                                   </ul>
                                </li>
                                <!-- third col -->
                                <li  class="has-dropdown">
-                                  <a href="product-details.html" class="mega-menu-title">Products</a>
+                                  <a href="product-details.html" class="mega-menu-title">Productos</a>
                                   <ul class="tp-submenu">
                                      
-                                     <li><a href="product-details.html">Product Simple</a></li>
-                                     <li><a href="product-details-video.html">With Video</a></li>
-                                     <li><a href="product-details-countdown.html">With Countdown Timer</a></li>
-                                     <li><a href="product-details-presentation.html">Product Presentation</a></li>
-                                     <li><a href="product-details-swatches.html">Variations Swatches</a></li>
-                                     <li><a href="product-details-list.html">List View</a></li>
-                                     <li><a href="product-details-gallery.html">Details Gallery</a></li>
-                                     <li><a href="product-details-slider.html">With Slider</a></li>
+                                     <li><a href="product-details.html">Producto simple</a></li>
+                                     <li><a href="product-details-video.html">Con vídeo</a></li>
+                                     <li><a href="product-details-countdown.html">Con cuenta atrás</a></li>
+                                     <li><a href="product-details-presentation.html">Presentación de producto</a></li>
+                                     <li><a href="product-details-swatches.html">Variaciones</a></li>
+                                     <li><a href="product-details-list.html">Vista en lista</a></li>
+                                     <li><a href="product-details-gallery.html">Galería de detalles</a></li>
+                                     <li><a href="product-details-slider.html">Con slider</a></li>
                                   </ul>
                                </li>
                                <!-- third col -->
                                <li  class="has-dropdown">
                                   <a href="shop.html" class="mega-menu-title">eCommerce</a>
                                   <ul class="tp-submenu">
-                                     <li><a href="cart.html">Shopping Cart</a></li>
-                                     <li><a href="order.html">Track Your Order</a></li>
-                                     <li><a href="compare.html">Compare</a></li>
-                                     <li><a href="wishlist.html">Wishlist</a></li>
-                                     <li><a href="checkout.html">Checkout</a></li>
-                                     <li><a href="profile.html">My account</a></li>
+                                     <li><a href="cart.html">Carrito</a></li>
+                                     <li><a href="order.html">Seguir pedido</a></li>
+                                     <li><a href="compare.html">Comparar</a></li>
+                                     <li><a href="wishlist.html">Favoritos</a></li>
+                                     <li><a href="checkout.html">Finalizar compra</a></li>
+                                     <li><a href="profile.html">Mi cuenta</a></li>
                                   </ul>
                                </li>
   
                                <!-- second col -->
                                <li  class="has-dropdown">
-                                  <a href="shop.html" class="mega-menu-title">More Pages</a>
+                                  <a href="shop.html" class="mega-menu-title">Más páginas</a>
                                   <ul class="tp-submenu">
                                      
                                     
-                                     <li><a href="about.html">About</a></li>
-                                     <li><a href="login.html">Login</a></li>
-                                     <li><a href="register.html">Register</a></li>
-                                     <li><a href="forgot.html">Forgot Password</a></li>
+                                     <li><a href="about.html">Sobre nosotros</a></li>
+                                     <li><a href="login.html">Iniciar sesión</a></li>
+                                     <li><a href="register.html">Registro</a></li>
+                                     <li><a href="forgot.html">Recuperar contraseña</a></li>
                                      <li><a href="404.html">404 Error</a></li>
                                   </ul>
                                </li>
   
                             </ul>
                          </li>
-                         <li><a href="coupon.html">Coupons</a></li>
+                         <li><a href="coupon.html">Cupones</a></li>
                          <li class="has-dropdown">
                             <a href="blog.html">Blog</a>
                             <ul class="tp-submenu">
-                               <li><a href="blog.html">Blog Standard</a></li>
-                               <li><a href="blog-grid.html">Blog Grid</a></li>
-                               <li><a href="blog-list.html">Blog List</a></li>
-                               <li><a href="blog-details-2.html">Blog Details Full Width</a></li>
-                               <li><a href="blog-details.html">Blog Details</a></li>
+                               <li><a href="blog.html">Blog estándar</a></li>
+                               <li><a href="blog-grid.html">Blog en cuadrícula</a></li>
+                               <li><a href="blog-list.html">Blog en lista</a></li>
+                               <li><a href="blog-details-2.html">Detalle de blog ancho completo</a></li>
+                               <li><a href="blog-details.html">Detalle de blog</a></li>
                             </ul>
                          </li>
-                         <li><a href="contact.html">Contact</a></li>
+                         <li><a href="contact.html">Contacto</a></li>
                       </ul>
                    </nav>
                 </div>
