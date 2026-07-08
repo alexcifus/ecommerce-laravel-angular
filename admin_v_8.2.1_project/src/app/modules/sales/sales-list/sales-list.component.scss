@@ -1,0 +1,98 @@
+.sales-list-card {
+  overflow: hidden;
+}
+
+.sales-list-header {
+  display: block !important;
+  height: auto;
+  padding-bottom: 1rem;
+
+  .card-title {
+    margin-bottom: 0.75rem;
+  }
+
+  .form-control,
+  .form-select-solid {
+    min-height: 38px;
+  }
+}
+
+.sales-search-input {
+  width: 100%;
+}
+
+.sales-table-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.sales-table {
+  min-width: 880px;
+
+  th,
+  td {
+    padding: 0.55rem 0.75rem !important;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  th {
+    min-width: auto !important;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3),
+  th:nth-child(8),
+  td:nth-child(8) {
+    display: none;
+  }
+
+  th:nth-child(1) {
+    width: 240px !important;
+  }
+
+  th:nth-child(2) {
+    width: 120px !important;
+  }
+
+  th:nth-child(4) {
+    width: 105px !important;
+  }
+
+  th:nth-child(5) {
+    width: 135px !important;
+  }
+
+  th:nth-child(6) {
+    width: 145px !important;
+  }
+
+  th:nth-child(7) {
+    width: 120px !important;
+  }
+
+  th:nth-child(9) {
+    width: 90px !important;
+  }
+
+  td:nth-child(6) span {
+    display: inline-block;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+  }
+}
+
+.sales-status-select {
+  width: 128px;
+  min-width: 128px;
+  padding-left: 0.75rem;
+  padding-right: 2rem;
+}
+
+@media (max-width: 991.98px) {
+  .sales-table {
+    min-width: 820px;
+  }
+}

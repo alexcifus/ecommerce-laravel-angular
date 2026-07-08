@@ -33,7 +33,7 @@ export class SalesListComponent {
   method_payment:any;
   URL_SERVICIOST:any = URL_SERVICIOS;
   statuses:any = [
-    {value: 'pending_payment', label: 'Pendiente de pago'},
+    {value: 'pending_payment', label: 'Pendiente'},
     {value: 'paid', label: 'Pagado'},
     {value: 'preparing', label: 'En preparación'},
     {value: 'shipped', label: 'Enviado'},
@@ -154,6 +154,18 @@ export class SalesListComponent {
   statusLabel(status:string){
     const statusSelected = this.statuses.find((item:any) => item.value == status);
     return statusSelected ? statusSelected.label : status || 'Sin estado';
+  }
+
+  statusShortLabel(status:string){
+    const labels:any = {
+      pending_payment: 'Pendiente',
+      paid: 'Pagado',
+      preparing: 'Preparando',
+      shipped: 'Enviado',
+      cancelled: 'Cancelado',
+    };
+
+    return labels[status] || this.statusLabel(status);
   }
 
   changeStatus(sale:any,event:any){

@@ -1,9 +1,9 @@
-<div class="card">
+<div class="card sales-list-card">
     <!--begin::Card header-->
     <span class="spinner-border spinner-border-sm align-middle ms-2" *ngIf="isLoading$ | async"></span>
-    <div class="card-header border-0 pt-6" style="display: inline !important;">
-        <div class="row">
-            <div class="col-2">
+    <div class="card-header border-0 pt-6 sales-list-header">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-xl-3">
                 <!--begin::Card title-->
                 <div class="row">
                     <div class="col-12">
@@ -12,7 +12,7 @@
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                                     <span class="path1"></span><span class="path2"></span></i>                
-                                <input type="text" (keyup.enter)="searchTo()" [(ngModel)]="search" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Orders">
+                                <input type="text" (keyup.enter)="searchTo()" [(ngModel)]="search" data-kt-user-table-filter="search" class="form-control form-control-solid ps-13 sales-search-input" placeholder="Buscar pedido o cliente">
                             </div>
                             <!--end::Search-->
                         </div>
@@ -24,7 +24,7 @@
                             placeholder="Selec. Marca"
                             [(ngModel)]="marca_id"
                         >
-                        <option value="">Selec. Marcas</option>
+                        <option value="">Selec. Marca</option>
                             <ng-container *ngFor="let item of marcas">
                                 <option [value]="item.id">{{ item.name }}</option>
                             </ng-container>
@@ -32,8 +32,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="row">
+            <div class="col-12 col-xl-6">
+                <div class="row g-3">
                     
                     <div class="col-4">
                         <select
@@ -103,7 +103,7 @@
                             placeholder="Selec. Metodo"
                             [(ngModel)]="method_payment"
                         >
-                            <option value="">Selec. Metdo</option>
+                            <option value="">Selec. Metodo</option>
                             <option value="WEB">WEB</option>
                             <option value="PAYPAL">PAYPAL</option>
                             <option value="MERCADOPAGO">MERCADOPAGO</option>
@@ -112,19 +112,19 @@
                 </div>
                 
             </div>
-            <div class="col-3">
+            <div class="col-12 col-xl-3">
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
                     <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                        <a (click)="searchTo()" class="btn btn-primary mx-2">
+                    <div class="d-flex justify-content-xl-end gap-2" data-kt-user-table-toolbar="base">
+                        <a (click)="searchTo()" class="btn btn-primary">
                             <i class="ki-duotone ki-magnifier fs-2"><span class="path1"></span><span class="path2"></span></i> 
                         </a>
-                        <a (click)="reset()" class="btn btn-dark mx-2">
+                        <a (click)="reset()" class="btn btn-dark">
                             <i class="ki-duotone ki-disk fs-2"><span class="path1"></span><span class="path2"></span></i> 
                         </a>
 
-                        <a (click)="export_sale_download()" class="btn btn-success mx-2">
+                        <a (click)="export_sale_download()" class="btn btn-success">
                             <i class="ki-duotone ki-folder-down fs-2"><span class="path1"></span><span class="path2"></span></i> 
                         </a>
                     </div>     
@@ -140,8 +140,8 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-            <div class="table-responsive">
-                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_table_users">
+            <div class="table-responsive sales-table-scroll">
+                <table class="table align-middle table-row-dashed fs-7 gy-3 dataTable no-footer sales-table" id="kt_table_users">
                     <thead>
                         <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="User: activate to sort column ascending" style="width: 275.844px;">
@@ -159,16 +159,16 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
                                Estado
                             </th>
-                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
-                                N° de Transaccion
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Nº transacción" style="width: 161.469px;">
+                                Nº transacción
                             </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
-                                Fecha de registro
+                                Fecha
                             </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Last login: activate to sort column ascending" style="width: 161.469px;">
                                 Region/Ciudad/Pais
                             </th>
-                            <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 129.75px;">Actions</th></tr>
+                            <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1" aria-label="Acciones" style="width: 129.75px;">Acciones</th></tr>
                     </thead>
                     <tbody class="text-gray-600 fw-semibold"> 
                         <ng-container *ngFor="let sale of sales">
@@ -176,12 +176,12 @@
                                 
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="symbol symbol-50px me-5" *ngIf="sale.user.avatar">
+                                        <div class="symbol symbol-35px me-3" *ngIf="sale.user.avatar">
                                             <img [src]="sale.user.avatar" class="" alt="">
                                         </div>
                                         
                                         <div class="d-flex justify-content-start flex-column">
-                                            <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">{{ sale.user.full_name }}</a>
+                                            <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-7">{{ sale.user.full_name }}</a>
                                             <span class="text-muted fw-semibold text-muted d-block fs-7">{{ sale.user.phone || sale.user.email }}</span>
                                         </div>
                                     </div>                                
@@ -203,12 +203,12 @@
                                 </td>
                                 <td>
                                     <select
-                                        class="form-control form-select-solid fw-bolder"
+                                        class="form-control form-select-solid fw-bolder sales-status-select"
                                         [ngModel]="sale.status"
                                         (change)="changeStatus(sale,$event)"
                                     >
                                         <option *ngFor="let status of statuses" [value]="status.value">
-                                            {{ status.label }}
+                                            {{ statusShortLabel(status.value) }}
                                         </option>
                                     </select>
                                 </td>
