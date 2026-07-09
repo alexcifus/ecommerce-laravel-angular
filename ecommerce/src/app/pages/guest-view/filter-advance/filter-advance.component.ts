@@ -3,10 +3,11 @@ import { HomeService } from '../../home/service/home.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { ModalProductComponent } from '../component/modal-product/modal-product.component';
 import { CartService } from '../../home/service/cart.service';
 import { ToastrService } from 'ngx-toastr';
+import { distinctUntilChanged, filter as rxFilter, map, merge } from 'rxjs';
 
 declare var $:any;
 @Component({
@@ -37,6 +38,7 @@ export class FilterAdvanceComponent {
   options_aditional:any = [];
   search:string = '';
   category_id:number|null = null;
+  private latestProductsRequest:number = 0;
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -52,12 +54,6 @@ export class FilterAdvanceComponent {
       this.Colors = resp.colors;
       this.Brands = resp.brands;
       this.Products_relateds = resp.product_relateds.data;
-    })
-
-    this.activedRoute.queryParams.subscribe((resp:any) => {
-      this.search = resp.search ?? '';
-      this.category_id = resp.category_id ? Number(resp.category_id) : null;
-      this.filterAdvanceProduct();
     })
 
     afterNextRender(() => {
@@ -81,6 +77,49 @@ export class FilterAdvanceComponent {
 
   ngOnInit(): void {
     this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
+
+    merge(
+      this.activedRoute.queryParamMap,
+      this.router.events.pipe(
+        rxFilter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        map(() => this.activedRoute.snapshot.queryParamMap)
+      )
+    ).pipe(
+      map((params) => {
+        const categoryId = this.parseCategoryId(params.get('category_id'));
+
+        return {
+          search: params.get('search') ?? '',
+          categoryId,
+        };
+      }),
+      distinctUntilChanged((previous, current) =>
+        previous.search == current.search && previous.categoryId == current.categoryId
+      )
+    ).subscribe((params) => {
+      this.search = params.search;
+      this.category_id = params.categoryId;
+      this.resetRouteFilters();
+      this.filterAdvanceProduct();
+    });
+  }
+
+  private parseCategoryId(categoryId:string|null):number|null {
+    if(!categoryId){
+      return null;
+    }
+
+    const parsedCategoryId = Number(categoryId);
+    return Number.isFinite(parsedCategoryId) ? parsedCategoryId : null;
+  }
+
+  private resetRouteFilters(){
+    this.categories_selected = [];
+    this.colors_selected = [];
+    this.brands_selected = [];
+    this.options_aditional = [];
+    this.min_price = 0;
+    this.max_price = 0;
   }
 
   addCompareProduct(TRADING_PRODUCT:any){
@@ -158,7 +197,13 @@ export class FilterAdvanceComponent {
       search: this.search,
       category_id: this.category_id,
     }
+    const requestId = ++this.latestProductsRequest;
+
     this.homeService.filterAdvanceProduct(data).subscribe((resp:any) => {
+      if(requestId != this.latestProductsRequest){
+        return;
+      }
+
       console.log(resp);
       this.PRODUCTS = resp.products.data;
     })

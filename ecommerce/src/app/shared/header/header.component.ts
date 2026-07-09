@@ -2,7 +2,7 @@ import { Component, afterNextRender, afterRender, ChangeDetectorRef } from '@ang
 import { HomeService } from '../../pages/home/service/home.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../pages/home/service/cart.service';
 import { ToastrService } from 'ngx-toastr';
@@ -33,6 +33,7 @@ export class HeaderComponent {
     public cartService: CartService,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {
     afterNextRender(() => {
       this.homeService.menus().subscribe((resp:any) => {
@@ -97,6 +98,11 @@ export class HeaderComponent {
     var miDiv:any = document.getElementById('icon-'+menu.id);
     miDiv.innerHTML = menu.icon; 
     return '';
+  }
+
+  goToCategory(event:Event, categoryId:any){
+    event.preventDefault();
+    this.router.navigate(['/shop'], { queryParams: { category_id: categoryId } });
   }
 
   private syncSearchCategorySelect(attempt:number = 0){

@@ -435,7 +435,7 @@
 
                                  @if(MENU_CAT.categories.length == 0){
                                     <li>
-                                       <a [routerLink]="['/shop']" [queryParams]="{ category_id: MENU_CAT.id }">
+                                       <a [routerLink]="['/shop']" [queryParams]="{ category_id: MENU_CAT.id }" (click)="goToCategory($event, MENU_CAT.id)">
                                           <span [id]="'icon-'+MENU_CAT.id">
                                              {{ getIconMenu(MENU_CAT) }}
                                           </span>
@@ -445,7 +445,7 @@
 
                                  @if(MENU_CAT.categories.length > 0){
                                     <li class="has-dropdown">
-                                       <a [routerLink]="['/shop']" [queryParams]="{ category_id: MENU_CAT.id }" class="has-mega-menu">
+                                        <a [routerLink]="['/shop']" [queryParams]="{ category_id: MENU_CAT.id }" (click)="goToCategory($event, MENU_CAT.id)" class="has-mega-menu">
                                           <span [id]="'icon-'+MENU_CAT.id">
                                              {{ getIconMenu(MENU_CAT) }}
                                           </span>
@@ -454,14 +454,14 @@
                                           <ul class="mega-menu tp-submenu">
                                              @for(categorie of MENU_CAT.categories;track categorie.id) {
                                                 <li>
-                                                   <a [routerLink]="['/shop']" [queryParams]="{ category_id: categorie.id }" class="mega-menu-title">{{ categorie.name }}</a>
+                                                   <a [routerLink]="['/shop']" [queryParams]="{ category_id: categorie.id }" (click)="goToCategory($event, categorie.id)" class="mega-menu-title">{{ categorie.name }}</a>
                                                    <ul>
                                                       <li *ngIf="categorie.imagen">
                                                          <a href="#" onclick="return false;"><img [src]="categorie.imagen" style="width: 247px;height: 149px;object-fit: contain;" alt=""></a>
                                                       </li>
                                                       @for(subcategorie of categorie.subcategories;track subcategorie.id) {
                                                          <li>
-                                                            <a [routerLink]="['/shop']" [queryParams]="{ category_id: subcategorie.id }">{{ subcategorie.name }}</a>
+                                                             <a [routerLink]="['/shop']" [queryParams]="{ category_id: subcategorie.id }" (click)="goToCategory($event, subcategorie.id)">{{ subcategorie.name }}</a>
                                                          </li>
                                                       }
                                                    </ul>
@@ -512,6 +512,10 @@
                       <div class="main-menu menu-style-1">
                          <nav class="tp-main-menu-content">
                             <ul>
+                               <li><a routerLink="/">Inicio</a></li>
+                               <li><a routerLink="/shop">Catálogo</a></li>
+                               <li><a routerLink="/contacto">Contacto</a></li>
+                               <ng-container *ngIf="false">
                                <li class="has-dropdown has-mega-menu">
                                   <a href="index.html">Inicio</a>
                                   <div class="home-menu tp-submenu tp-mega-menu">
@@ -717,6 +721,7 @@
                                   </ul>
                                </li>
                                <li><a href="contact.html">Contacto</a></li>
+                               </ng-container>
                             </ul>
                          </nav>
                       </div>
@@ -760,8 +765,12 @@
                 <div class="tp-header-sticky-menu main-menu menu-style-1">
                    <nav id="mobile-menu"> 
                       <ul>
-                         <li class="has-dropdown has-mega-menu">
-                            <a href="index.html">Inicio</a>
+                         <li><a routerLink="/">Inicio</a></li>
+                         <li><a routerLink="/shop">Catálogo</a></li>
+                         <li><a routerLink="/contacto">Contacto</a></li>
+                         <ng-container *ngIf="false">
+                          <li class="has-dropdown has-mega-menu">
+                             <a href="index.html">Inicio</a>
                             <div class="home-menu tp-submenu tp-mega-menu">
                                <div class="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
                                   <div class="col">
@@ -965,6 +974,7 @@
                             </ul>
                          </li>
                          <li><a href="contact.html">Contacto</a></li>
+                         </ng-container>
                       </ul>
                    </nav>
                 </div>

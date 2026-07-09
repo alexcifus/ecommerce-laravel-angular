@@ -1,0 +1,97 @@
+<main>
+  <section class="breadcrumb__area include-bg pt-95 pb-50 contacto-hero"
+    style="background-image: url('assets/img/breadcrumb/breadcrumb-bg-1.jpg');">
+    <div class="container">
+      <div class="row">
+        <div class="col-xxl-12">
+          <div class="breadcrumb__content p-relative z-index-1">
+            <h3 class="breadcrumb__title">Contacto</h3>
+            <div class="breadcrumb__list">
+              <span><a routerLink="/">Inicio</a></span>
+              <span>Contacto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contacto-area pt-80 pb-80">
+    <div class="container">
+      <div class="row g-5 align-items-start">
+        <div class="col-xl-5 col-lg-5">
+          <div class="contacto-copy">
+            <span class="contacto-label">JazzIt</span>
+            <h4>Estamos cerca de tu proxima lectura</h4>
+            <p>
+              JazzIt es una tienda online orientada a libros, comics y cultura. Esta pagina de contacto
+              forma parte de la demo del TFG y deja preparado el espacio para futuras consultas reales.
+            </p>
+
+            <div class="contacto-info">
+              <div class="contacto-info-item">
+                <img src="assets/img/contact/contact-icon-1.png" alt="">
+                <div>
+                  <span>Email</span>
+                  <strong>contacto&#64;jazzit.test</strong>
+                </div>
+              </div>
+              <div class="contacto-info-item">
+                <img src="assets/img/contact/contact-icon-2.png" alt="">
+                <div>
+                  <span>Horario</span>
+                  <strong>Lunes a viernes</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-7 col-lg-7">
+          <div class="contacto-form-box">
+            <form (ngSubmit)="sendMessage()" #contactDemoForm="ngForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="contacto-field">
+                    <label for="contacto-nombre">Nombre</label>
+                    <input id="contacto-nombre" type="text" name="nombre" [(ngModel)]="contactForm.nombre" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="contacto-field">
+                    <label for="contacto-email">Email</label>
+                    <input id="contacto-email" type="email" name="email" [(ngModel)]="contactForm.email" required>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="contacto-field">
+                    <label for="contacto-asunto">Asunto</label>
+                    <input id="contacto-asunto" type="text" name="asunto" [(ngModel)]="contactForm.asunto">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="contacto-field">
+                    <label for="contacto-mensaje">Mensaje</label>
+                    <textarea id="contacto-mensaje" name="mensaje" rows="5" [(ngModel)]="contactForm.mensaje" required></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <p class="contacto-demo-note">
+                Formulario demostrativo: todavia no envia emails ni guarda datos.
+              </p>
+
+              <button type="submit" class="tp-btn tp-btn-blue" [disabled]="contactDemoForm.invalid">
+                Enviar mensaje
+              </button>
+
+              <div class="contacto-success" *ngIf="messageSent">
+                Mensaje recibido correctamente.
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
