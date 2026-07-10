@@ -13,8 +13,12 @@
   max-width: 100%;
 }
 
-.tp-header-category:focus-within > .tp-category-menu-content > ul {
-  display: block;
+.tp-header-category > .tp-category-menu-content > ul {
+  display: none !important;
+}
+
+.tp-header-category.is-category-menu-open > .tp-category-menu-content > ul {
+  display: block !important;
 }
 
 @media (max-width: 991px) {

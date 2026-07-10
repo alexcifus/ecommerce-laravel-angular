@@ -27,6 +27,7 @@ export class HeaderComponent {
   isLoading:boolean = false;
   searchT:string = '';
   selectedCategoryId:string = '';
+  isCategoryMenuOpen:boolean = false;
   constructor(
     public homeService: HomeService,
     public cookieService: CookieService,
@@ -102,7 +103,12 @@ export class HeaderComponent {
 
   goToCategory(event:Event, categoryId:any){
     event.preventDefault();
+    this.isCategoryMenuOpen = false;
     this.router.navigate(['/shop'], { queryParams: { category_id: categoryId } });
+  }
+
+  toggleCategoryMenu(){
+    this.isCategoryMenuOpen = !this.isCategoryMenuOpen;
   }
 
   private syncSearchCategorySelect(attempt:number = 0){
