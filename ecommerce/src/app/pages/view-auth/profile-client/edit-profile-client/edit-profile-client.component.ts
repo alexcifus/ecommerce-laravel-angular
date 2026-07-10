@@ -47,7 +47,7 @@ export class EditProfileClientComponent {
   }
   processFile($event:any){
     if($event.target.files[0].type.indexOf("image") < 0){
-      this.toaster.error("Validacion","El archivo no es una imagen");
+      this.toaster.error("Validación","El archivo no es una imagen");
       return;
     }
     this.file_imagen = $event.target.files[0];
@@ -57,7 +57,7 @@ export class EditProfileClientComponent {
   }
   updateUser(){
     if(!this.name || !this.email){
-      this.toaster.error("Validación","Es necesario ingresar un nombre y un correo electronico");
+      this.toaster.error("Validación","Es necesario ingresar un nombre y un correo electrónico");
       return;
     }
     let data = {
@@ -103,7 +103,7 @@ export class EditProfileClientComponent {
       if(resp.message == 403){
         this.toaster.error("Validación",resp.message_text);
       }else{
-        this.toaster.success("Exitos","El usuario ha sido editado correctamente");
+        this.toaster.success("Éxito","El perfil se ha actualizado correctamente");
       }
     })
   }

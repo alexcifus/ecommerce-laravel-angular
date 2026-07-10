@@ -30,7 +30,7 @@ export class RegisterComponent {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      password_show_toggle();  // 👈 aquí llamas tu función
+      password_show_toggle();
     }, 50);
   }
 
@@ -40,7 +40,7 @@ export class RegisterComponent {
       !this.email ||
       !this.password ||
       !this.phone){
-        this.toastr.error('Validacion', 'Necesitas ingresar todos los campos');
+        this.toastr.error('Validación', 'Necesitas completar todos los campos');
       return;
     }
     let data = {
@@ -52,7 +52,7 @@ export class RegisterComponent {
     }
     this.authService.register(data).subscribe((resp:any) => {
       console.log(resp);
-      this.toastr.success('Exito', 'Ingresa tu correo para poder completar tu registro');
+      this.toastr.success('Éxito', 'Revisa tu correo para completar el registro');
       setTimeout(() => {
         this.router.navigateByUrl('/login');
       }, 500);

@@ -56,7 +56,7 @@ export class OrdersProfileClientComponent {
   saveReview() {
 
     if(!this.message || !this.rating){
-      this.toast.error("Validación","Necesitas seleccionar una califación y llenar una reseña");
+      this.toast.error("Validación","Necesitas seleccionar una calificación y llenar una reseña");
       return;
     }
 
@@ -68,12 +68,12 @@ export class OrdersProfileClientComponent {
     }
     if(this.sale_detail_review.review){
       this.profileCliente.updateReview(this.sale_detail_review.review.id,data).subscribe((resp:any) => {
-        this.toast.success("Exito","La reseña se editó correctamente");
+        this.toast.success("Éxito","La reseña se editó correctamente");
         this.sale_detail_review.review = resp.review;
       })
     }else{
       this.profileCliente.registerReview(data).subscribe((resp:any) => {
-        this.toast.success("Exito","La reseña se registro correctamente");
+        this.toast.success("Éxito","La reseña se registró correctamente");
         this.sale_detail_review.review = resp.review;
       })
     }

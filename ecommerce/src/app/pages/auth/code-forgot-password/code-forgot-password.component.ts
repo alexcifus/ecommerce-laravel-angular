@@ -27,7 +27,7 @@ export class CodeForgotPasswordComponent {
   
     verifiedCode() {
       if (!this.code) {
-        this.toastr.error('Validacion', 'Necesitas ingresar el código de verificación');
+        this.toastr.error('Validación', 'Necesitas ingresar el código de verificación');
       }
       let data = {
         code: this.code,
@@ -39,12 +39,12 @@ export class CodeForgotPasswordComponent {
           this.isLoadingCode = 1;
           this.LoadingCodeStatus.emit(this.isLoadingCode);
           this.CodeValue.emit(this.code);
-          this.toastr.success('Exito', 'El correo es correcto, puedes cambiar tu contraseña');
+          this.toastr.success('Éxito', 'El correo es correcto, puedes cambiar tu contraseña');
          
         } else {
           this.isLoadingCode = null;
           this.LoadingCodeStatus.emit(this.isLoadingCode);
-          this.toastr.error('Validación', 'El código no exite');
+          this.toastr.error('Validación', 'El código no existe');
         }
     });
   }

@@ -50,7 +50,7 @@ export class AddressProfileClientComponent {
       !this.postcode_zip ||
       !this.phone ||
       !this.email){
-      this.toastr.error("Validacion","Todos los campos son necesarios");
+      this.toastr.error("Validación","Todos los campos son necesarios");
       return;
     }
 
@@ -68,7 +68,7 @@ export class AddressProfileClientComponent {
     };
     this.addressService.registerAddress(data).subscribe((resp:any) => {
       console.log(resp);
-      this.toastr.success("Exitoso","La dirección se acaba de registrar");
+      this.toastr.success("Éxito","La dirección se ha registrado correctamente");
       this.address_list.unshift(resp.addres);
       this.resertAddress();
     })
@@ -84,7 +84,7 @@ export class AddressProfileClientComponent {
       !this.postcode_zip ||
       !this.phone ||
       !this.email){
-      this.toastr.error("Validacion","Todos los campos son necesarios");
+      this.toastr.error("Validación","Todos los campos son necesarios");
       return;
     }
 
@@ -102,7 +102,7 @@ export class AddressProfileClientComponent {
     };
     this.addressService.updateAddress(this.address_selected.id,data).subscribe((resp:any) => {
       console.log(resp);
-      this.toastr.success("Exitoso","La dirección se acaba de editar");
+      this.toastr.success("Éxito","La dirección se ha actualizado correctamente");
       let INDEX = this.address_list.findIndex((item:any) => item.id == resp.addres.id);
       if(INDEX != -1){
         this.address_list[INDEX] = resp.addres;

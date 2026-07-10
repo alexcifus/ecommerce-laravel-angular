@@ -32,7 +32,7 @@ export class ForgotPasswordComponent {
 
   verifiedMail() {
     if (!this.email) {
-      this.toastr.error('Validacion', 'Necesitas ingresar el correo electronico');
+      this.toastr.error('Validación', 'Necesitas ingresar el correo electrónico');
     }
     let data = {
       email: this.email,
@@ -41,11 +41,11 @@ export class ForgotPasswordComponent {
       console.log(resp);
       if (resp.message == 200) {
         this.isLoadingMail = 1;
-        this.toastr.success('Exito', 'El correo ha sido enviado, revisa tu bandeja de entrada');
+        this.toastr.success('Éxito', 'El correo ha sido enviado. Revisa tu bandeja de entrada');
        
       } else {
         this.isLoadingMail = null;
-        this.toastr.error('Validación', 'Correo electrónico ingresado no existe');
+        this.toastr.error('Validación', 'El correo electrónico ingresado no existe');
       }
   });
 

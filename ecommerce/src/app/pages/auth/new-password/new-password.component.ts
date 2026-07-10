@@ -27,7 +27,7 @@ export class NewPasswordComponent {
   
     verifiedNewPassword() {
       if (!this.new_password) {
-        this.toastr.error('Validacion', 'Necesitas ingresar el código de verificación');
+        this.toastr.error('Validación', 'Necesitas ingresar la nueva contraseña');
       }
       let data = {
         new_password: this.new_password,
@@ -35,7 +35,7 @@ export class NewPasswordComponent {
       }
       this.authService.verifiedCode(data).subscribe((resp:any) => {
         console.log(resp);        
-        this.toastr.success('Exito', 'La contraseña se ha cambiado correctamente');
+        this.toastr.success('Éxito', 'La contraseña se ha cambiado correctamente');
         this.router.navigateByUrl('/login')
       });
     }

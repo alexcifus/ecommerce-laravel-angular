@@ -41,7 +41,7 @@ export class PasswordProfileClientComponent {
       if(resp.message == 403){
         this.toaster.error("Validación",resp.message_text);
       }else{
-        this.toaster.success("Exitos","El usuario ha sido editado correctamente");
+        this.toaster.success("Éxito","El perfil se ha actualizado correctamente");
       }
     })
   }
