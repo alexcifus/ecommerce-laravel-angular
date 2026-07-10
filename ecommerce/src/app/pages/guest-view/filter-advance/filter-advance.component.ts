@@ -25,6 +25,8 @@ export class FilterAdvanceComponent {
   Products_relateds:any = [];
 
   PRODUCTS:any = [];
+  productsPerPage:number = 12;
+  currentPage:number = 1;
   currency:string = 'EUR';
 
   product_selected:any = null;
@@ -100,6 +102,7 @@ export class FilterAdvanceComponent {
       this.search = params.search;
       this.category_id = params.categoryId;
       this.resetRouteFilters();
+      this.currentPage = 1;
       this.filterAdvanceProduct();
     });
   }
@@ -151,6 +154,7 @@ export class FilterAdvanceComponent {
       this.options_aditional.push(option);
     }
     console.log(this.options_aditional);
+    this.currentPage = 1;
     this.filterAdvanceProduct();
     
   }
@@ -162,6 +166,7 @@ export class FilterAdvanceComponent {
       this.categories_selected.push(categorie.id);
     }
     console.log(this.categories_selected);
+    this.currentPage = 1;
     this.filterAdvanceProduct();
   }
   addBrand(Brand:any) {
@@ -172,6 +177,7 @@ export class FilterAdvanceComponent {
       this.brands_selected.push(Brand.id);
     }
     console.log(this.brands_selected);
+    this.currentPage = 1;
     this.filterAdvanceProduct();
   }
   addColor(color:any){
@@ -182,7 +188,45 @@ export class FilterAdvanceComponent {
       this.colors_selected.push(color.id);
     }
     console.log(this.colors_selected);
+    this.currentPage = 1;
     this.filterAdvanceProduct();
+  }
+
+  get productsTotal():number {
+    return this.PRODUCTS.length;
+  }
+
+  get totalPages():number {
+    return Math.ceil(this.productsTotal / this.productsPerPage);
+  }
+
+  get paginationPages():number[] {
+    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+  }
+
+  get paginatedProducts():any[] {
+    const startIndex = (this.currentPage - 1) * this.productsPerPage;
+    return this.PRODUCTS.slice(startIndex, startIndex + this.productsPerPage);
+  }
+
+  get firstProductShown():number {
+    if(this.productsTotal == 0){
+      return 0;
+    }
+
+    return (this.currentPage - 1) * this.productsPerPage + 1;
+  }
+
+  get lastProductShown():number {
+    return Math.min(this.currentPage * this.productsPerPage, this.productsTotal);
+  }
+
+  changePage(page:number){
+    if(page < 1 || page > this.totalPages || page == this.currentPage){
+      return;
+    }
+
+    this.currentPage = page;
   }
 
   filterAdvanceProduct() {
@@ -206,6 +250,9 @@ export class FilterAdvanceComponent {
 
       console.log(resp);
       this.PRODUCTS = resp.products.data;
+      if(this.currentPage > this.totalPages){
+        this.currentPage = this.totalPages || 1;
+      }
     })
   }
 
