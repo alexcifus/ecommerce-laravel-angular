@@ -188,7 +188,13 @@ class Product extends Model
             $query->whereIn("brand_id",$brands_selected);
         }
 
-        if($min_price > 0 && $max_price > 0){
+        if (
+            $min_price !== null &&
+            $max_price !== null &&
+            $min_price >= 0 &&
+            $max_price > 0 &&
+            $min_price <= $max_price
+        ){
             if($currency == "EUR"){
                 $query->whereBetween("price_eur",[$min_price,$max_price]);
             }

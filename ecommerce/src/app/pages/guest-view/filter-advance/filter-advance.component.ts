@@ -1,4 +1,4 @@
-import { Component, afterNextRender } from '@angular/core';
+import { Component, NgZone, afterNextRender } from '@angular/core';
 import { HomeService } from '../../home/service/home.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CommonModule } from '@angular/common';
@@ -48,6 +48,7 @@ export class FilterAdvanceComponent {
     public toastr: ToastrService,
     public router: Router,
     public activedRoute: ActivatedRoute,
+    private ngZone: NgZone,
   ) {
     
     this.homeService.getConfigFilter().subscribe((resp:any) => {
@@ -62,14 +63,17 @@ export class FilterAdvanceComponent {
       $("#slider-range").slider({
         range: true,
         min: 0,
-        max: 2000,
-        values: [200, 500],
+        max: 500,
+        values: [0, 500],
         slide: (event:any, ui:any) => {
           $("#amount").val(this.currency+ " " + ui.values[0] + " - "+this.currency+ " " + ui.values[1]);
           this.min_price = ui.values[0];
           this.max_price = ui.values[1];
         },stop: () => {
-          this.filterAdvanceProduct();
+          this.ngZone.run(() => {
+            this.currentPage = 1;
+            this.filterAdvanceProduct();
+          });
         }
       });
       $("#amount").val(this.currency+ " " + $("#slider-range").slider("values", 0) +
