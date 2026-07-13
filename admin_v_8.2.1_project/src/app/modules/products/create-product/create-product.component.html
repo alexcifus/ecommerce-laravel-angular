@@ -31,6 +31,16 @@
                 placeholder="Por ejemplo: 20 USD">
             </div>
             <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                <label class="fw-semibold fs-6 py-2">Stock inicial</label>
+                <input type="number" name="stock" [(ngModel)]="stock"
+                min="0" step="1"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Por ejemplo: 20">
+                <div class="form-text">Stock general del producto simple. Las variaciones gestionan su propio stock.</div>
+            </div>
+        </div>
+        <div class="row mb-6">
+            <div class="col-lg-4 fv-row fv-plugins-icon-container">
                 <label class="fw-semibold fs-6 py-2">Marcas: *</label>
                 <select
                     class="form-control form-select-solid fw-bolder"

@@ -56,6 +56,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "stock" => "required|integer|min:0",
+        ]);
+
         $isValid = Product::where("title", $request->title)->first();
         if ($isValid) {
             return response()->json(["message" => 403,"mensage_text" => "El producto ya existe"]);
@@ -109,6 +113,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            "stock" => "sometimes|integer|min:0",
+        ]);
+
         $isValid = Product::where("id","<>",$id)->where("title", $request->title)->first();
         if ($isValid) {
             return response()->json(["message" => 403,"mensage_text" => "El producto ya existe"]);

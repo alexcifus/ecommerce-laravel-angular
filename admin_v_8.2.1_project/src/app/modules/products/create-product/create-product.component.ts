@@ -15,6 +15,7 @@ export class CreateProductComponent {
   resumen:string = '';
   price_eur :number = 0;
   price_usd :number = 0;
+  stock: number = 0;
   description:any = "<p> Hello World!</p>";
   imagen_previsualiza:any = 'https://preview.keenthemes.com/metronic8/demo1/assets/media/svg/illustrations/easy/2.svg';
   file_imagen:any = null;
@@ -150,11 +151,18 @@ export class CreateProductComponent {
       return;
     }
 
+    const stockValue = Number(this.stock);
+    if (!Number.isFinite(stockValue) || !Number.isInteger(stockValue) || stockValue < 0) {
+      this.toastr.error('Validacion','El stock debe ser un número entero mayor o igual a 0');
+      return;
+    }
+
     let formDAta = new FormData();
     formDAta.append('title',this.title);
     formDAta.append('sku',this.sku);
     formDAta.append('price_usd',this.price_usd+"");
     formDAta.append('price_eur',this.price_eur+"");
+    formDAta.append('stock', this.stock.toString());
     formDAta.append('brand_id',this.marca_id);
     formDAta.append('portada',this.file_imagen);
     formDAta.append('categorie_first_id',this.categorie_first_id);
@@ -179,6 +187,7 @@ export class CreateProductComponent {
         this.sku = '';
         this.price_usd = 0;
         this.price_eur = 0;
+        this.stock = 0;
         this.categorie_first_id = '';
         this.categorie_second_id = '';
         this.categorie_third_id = '';
