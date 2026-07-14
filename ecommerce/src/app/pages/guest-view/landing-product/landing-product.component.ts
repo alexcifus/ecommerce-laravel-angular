@@ -166,7 +166,7 @@ export class LandingProductComponent {
     }, 50);
   }
 
-  addCart(){
+  addCart(goToCheckout: boolean = false){
     if(!this.cartService.authService.user){
       this.toastr.error("Validacion","Ingrese a la tienda");
       this.router.navigateByUrl("/login");
@@ -223,7 +223,11 @@ export class LandingProductComponent {
         this.toastr.error("Validacion",resp.message_text);
       }else{
         this.cartService.changeCart(resp.cart);
-        this.toastr.success("Exitos","El producto se agrego al carrito de compra");
+        if(goToCheckout){
+          this.router.navigateByUrl("/proceso-de-pago");
+        }else{
+          this.toastr.success("Exitos","El producto se agrego al carrito de compra");
+        }
       }
     },err => {
       console.log(err);
