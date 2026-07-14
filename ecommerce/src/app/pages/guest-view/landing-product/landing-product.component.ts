@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalProductComponent } from '../component/modal-product/modal-product.component';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../home/service/cart.service';
+import { combineLatest } from 'rxjs';
 
 declare function MODAL_PRODUCT_DETAIL([]):any;
 declare function LANDING_PRODUCT([]):any;
@@ -42,29 +43,15 @@ export class LandingProductComponent {
     private cookieService: CookieService,
     public cartService: CartService,
   ) {
-      this.activedRoute.params.subscribe((resp:any) => {
-        this.PRODUCT_SLUG = resp.slug;
+      combineLatest([
+        this.activedRoute.params,
+        this.activedRoute.queryParams,
+      ]).subscribe(([params, queryParams]: any[]) => {
+        const previousSlug = this.PRODUCT_SLUG;
+        this.PRODUCT_SLUG = params.slug;
+        this.CAMPAING_CODE = queryParams.campaing_discount;
+        this.loadProduct(!!previousSlug && previousSlug !== this.PRODUCT_SLUG);
       })
-      this.activedRoute.queryParams.subscribe((resp:any) => {
-        this.CAMPAING_CODE = resp.campaing_discount;
-      })
-      // afterNextRender(() => {
-        this.homeService.showProduct(this.PRODUCT_SLUG,this.CAMPAING_CODE).subscribe((resp:any) => {
-          console.log(resp);
-          if(resp.message == 403){
-            this.toastr.error("Validacion",resp.message_text);
-            this.router.navigateByUrl("/");
-          }else{
-            this.PRODUCT_SELECTED = resp.product;
-            this.PRODUCT_RELATEDS = resp.product_relateds.data;
-            this.DISCOUNT_CAMPAING = resp.discount_campaing;
-            this.reviews = resp.reviews;
-            if(this.DISCOUNT_CAMPAING){
-              this.PRODUCT_SELECTED.discount_g = this.DISCOUNT_CAMPAING;
-            } 
-          }
-        })
-      // })
       afterRender(() => {
         setTimeout(() => {
           MODAL_PRODUCT_DETAIL($);
@@ -72,6 +59,36 @@ export class LandingProductComponent {
         }, 50);
         this.currency = this.cookieService.get("currency") ? this.cookieService.get("currency") : 'EUR';
       })
+  }
+
+  private loadProduct(scrollToTop: boolean = false){
+    this.PRODUCT_SELECTED = null;
+    this.PRODUCT_RELATEDS = [];
+    this.DISCOUNT_CAMPAING = null;
+    this.reviews = [];
+    this.variation_selected = null;
+    this.sub_variation_selected = null;
+    this.product_selected_modal = null;
+    this.plus = 0;
+
+    this.homeService.showProduct(this.PRODUCT_SLUG,this.CAMPAING_CODE).subscribe((resp:any) => {
+      console.log(resp);
+      if(resp.message == 403){
+        this.toastr.error("Validacion",resp.message_text);
+        this.router.navigateByUrl("/");
+      }else{
+        this.PRODUCT_SELECTED = resp.product;
+        this.PRODUCT_RELATEDS = resp.product_relateds.data;
+        this.DISCOUNT_CAMPAING = resp.discount_campaing;
+        this.reviews = resp.reviews;
+        if(this.DISCOUNT_CAMPAING){
+          this.PRODUCT_SELECTED.discount_g = this.DISCOUNT_CAMPAING;
+        }
+        if(scrollToTop && typeof window !== 'undefined'){
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    })
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.

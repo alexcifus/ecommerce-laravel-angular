@@ -201,7 +201,16 @@ class HomeController extends Controller
             ]);
         }
 
-        $product_relateds = Product::where("categorie_first_id",$product->categorie_first_id)->where("state",2)->get();
+        $product_relateds = Product::where(
+                "categorie_first_id",
+                $product->categorie_first_id
+            )
+            ->where("state", 2)
+            ->where("stock", ">", 0)
+            ->where("id", "<>", $product->id)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
 
         $reviews = Review::where("product_id",$product->id)->get();
         return response()->json([
