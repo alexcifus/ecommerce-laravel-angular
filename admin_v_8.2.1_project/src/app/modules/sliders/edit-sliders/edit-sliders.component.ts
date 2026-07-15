@@ -16,6 +16,7 @@ export class EditSlidersComponent {
   link:string = '';
   color:string = '';
   state:number = 1;  
+  type_slider:any = 1;
   imagen_previsualiza:any = 'https://preview.keenthemes.com/metronic8/demo1/assets/media/svg/illustrations/easy/2.svg';
   file_imagen:any = null;
 
@@ -45,6 +46,7 @@ export class EditSlidersComponent {
       this.link = resp.slider.link;
       this.color = resp.slider.color;
       this.state = resp.slider.state;
+      this.type_slider = resp.slider.type_slider;
       this.imagen_previsualiza = resp.slider.imagen;
     })
   }
@@ -84,14 +86,16 @@ export class EditSlidersComponent {
     if(this.file_imagen){
       formDAta.append('image',this.file_imagen);
     }
-    if(this.link){
-    formDAta.append('link',this.link);
-    }
+    formDAta.append('link', this.link || '');
     
     if(this.color){
       formDAta.append('color',this.color);
     }
     formDAta.append('state', this.state.toString());
+    formDAta.append(
+      'type_slider',
+      this.type_slider.toString()
+    );
     
     this.slidersService.updateSliders(this.slider_id,formDAta).subscribe((resp:any)=>{
       console.log(resp);

@@ -63,6 +63,7 @@ class SliderController extends Controller
             'label' => $slider->label,
             'link' => $slider->link,
             'state' => $slider->state,
+            'type_slider' => $slider->type_slider,
             'color' => $slider->color,
             'imagen' => env("APP_URL")."storage/".$slider->imagen,
         ]
