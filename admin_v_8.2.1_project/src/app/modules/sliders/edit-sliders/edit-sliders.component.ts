@@ -91,6 +91,7 @@ export class EditSlidersComponent {
     if(this.color){
       formDAta.append('color',this.color);
     }
+    formDAta.append('state', this.state.toString());
     
     this.slidersService.updateSliders(this.slider_id,formDAta).subscribe((resp:any)=>{
       console.log(resp);
