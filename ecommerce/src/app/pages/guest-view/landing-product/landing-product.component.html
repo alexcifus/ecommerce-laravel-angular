@@ -247,15 +247,15 @@
                        <div class="tp-product-details-tab-nav tp-tab">
                           <nav>
                              <div class="nav nav-tabs justify-content-center p-relative tp-product-tab" id="navPresentationTab" role="tablist">
-                               <button class="nav-link" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Descripción</button>
-                               <button class="nav-link active" id="nav-addInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-addInfo" type="button" role="tab" aria-controls="nav-addInfo" aria-selected="false">Información adicional</button>
+                               <button class="nav-link active" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Descripción</button>
+                               <button class="nav-link" id="nav-addInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-addInfo" type="button" role="tab" aria-controls="nav-addInfo" aria-selected="false">Información adicional</button>
                                <button class="nav-link" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false">Reseñas ({{ PRODUCT_SELECTED.count_reviews }})</button>
     
                                <span id="productTabMarker" class="tp-product-details-tab-line"></span>
                              </div>
                            </nav>  
                            <div class="tab-content" id="navPresentationTabContent">
-                             <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab" tabindex="0">
+                             <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab" tabindex="0">
                                 <div class="tp-product-details-desc-wrapper pt-80">
                                    <div class="row justify-content-center">
                                       <div class="col-xl-10" [innerHtml]="PRODUCT_SELECTED.description">
@@ -264,7 +264,7 @@
                                    </div>
                                 </div>
                              </div>
-                             <div class="tab-pane fade show active" id="nav-addInfo" role="tabpanel" aria-labelledby="nav-addInfo-tab" tabindex="0">
+                             <div class="tab-pane fade" id="nav-addInfo" role="tabpanel" aria-labelledby="nav-addInfo-tab" tabindex="0">
                                 
                                 <div class="tp-product-details-additional-info ">
                                    <div class="row justify-content-center">
