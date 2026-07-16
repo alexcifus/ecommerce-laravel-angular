@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 use Carbon\Carbon;
 use App\Models\Slider;
 use App\Models\Sale\Review;
+use App\Models\Sale\SaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Product\Brand;
@@ -31,9 +32,43 @@ class HomeController extends Controller
                             ->inRandomOrder()->limit(5)->get();
         
 
-        $product_tranding_new = Product::where("state",2)->inRandomOrder()->limit(8)->get();
-        $product_tranding_featured = Product::where("state",2)->inRandomOrder()->limit(8)->get();
-        $product_tranding_top_sellers = Product::where("state",2)->inRandomOrder()->limit(8)->get();
+        $visibleProductsQuery = function () {
+            return Product::where("state", 2)
+                ->where("stock", ">", 0)
+                ->whereNotNull("imagen")
+                ->where("imagen", "<>", "");
+        };
+
+        $product_tranding_new = $visibleProductsQuery()
+            ->orderByDesc("created_at")
+            ->orderByDesc("id")
+            ->limit(8)
+            ->get();
+
+        $product_tranding_featured = $visibleProductsQuery()
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+
+        $product_tranding_top_sellers = $visibleProductsQuery()
+            ->select("products.*")
+            ->selectSub(
+                SaleDetail::query()
+                    ->selectRaw("COALESCE(SUM(quantity), 0)")
+                    ->whereColumn("sale_details.product_id", "products.id")
+                    ->whereNull("sale_details.deleted_at"),
+                "sold_units"
+            )
+            ->whereExists(function ($query) {
+                $query->selectRaw("1")
+                    ->from("sale_details")
+                    ->whereColumn("sale_details.product_id", "products.id")
+                    ->whereNull("sale_details.deleted_at");
+            })
+            ->orderByDesc("sold_units")
+            ->orderByDesc("products.id")
+            ->limit(8)
+            ->get();
 
         $sliders_secundario = Slider::where("state",1)->where("type_slider",2)->orderBy("id","asc")->get();
 
