@@ -158,7 +158,7 @@ class KpiSaleReportController extends Controller
         foreach ($sales_week_discounts_for_day as $key => $sales_week_discount) {
             $discount_for_days->push([
                 "date" => $sales_week_discount->date_format,
-                "percentage" => round((($sales_week_discount->discount_total)/$sales_week_discounts)*100,2)
+                "percentage" => $sales_week_discounts > 0 ? round((($sales_week_discount->discount_total)/$sales_week_discounts)*100,2) : 0
             ]);
         }
         return response()->json([
