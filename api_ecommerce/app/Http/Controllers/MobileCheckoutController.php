@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SaleMail;
 use Illuminate\Http\Request;
 use App\Models\Sale\Sale;
 use App\Models\Sale\SaleDetail;
 use App\Models\Product\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class MobileCheckoutController extends Controller
@@ -102,6 +105,8 @@ class MobileCheckoutController extends Controller
 
             DB::commit();
 
+            $this->sendSaleConfirmationMail($sale, $user);
+
             return response()->json([
                 "message" => 200,
                 "message_text" => "Pedido realizado correctamente",
@@ -119,6 +124,37 @@ class MobileCheckoutController extends Controller
                 "message_text" => "Error al crear el pedido",
                 "error" => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    private function sendSaleConfirmationMail(?Sale $sale, $user): void
+    {
+        if (! $sale) {
+            Log::warning("No se pudo enviar el correo de confirmacion movil: la venta no pudo recargarse.");
+
+            return;
+        }
+
+        if (! filter_var($user->email ?? null, FILTER_VALIDATE_EMAIL)) {
+            Log::warning("No se pudo enviar el correo de confirmacion movil para la venta {$sale->id}: usuario sin email valido.");
+
+            return;
+        }
+
+        try {
+            $sale = $sale->fresh() ?: $sale;
+            $sale->loadMissing([
+                "sale_addres",
+                "sale_details.product",
+                "sale_details.product_variation.attribute",
+                "sale_details.product_variation.propertie",
+                "sale_details.product_variation.variation_father.attribute",
+                "sale_details.product_variation.variation_father.propertie",
+            ]);
+
+            Mail::to($user->email)->send(new SaleMail($user, $sale));
+        } catch (\Throwable $exception) {
+            Log::error("No se pudo enviar el correo de confirmacion movil para la venta {$sale->id}. Excepcion: ".get_class($exception));
         }
     }
 }

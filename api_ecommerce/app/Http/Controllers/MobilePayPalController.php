@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SaleMail;
 use App\Models\Product\Product;
 use App\Models\Sale\Sale;
 use App\Models\Sale\SaleDetail;
@@ -10,6 +11,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
 use Throwable;
@@ -247,6 +250,10 @@ class MobilePayPalController extends Controller
             ], 500);
         }
 
+        if (! $idempotent) {
+            $this->sendSaleConfirmationMail($sale, $user);
+        }
+
         return $this->paidResponse($sale, $idempotent);
     }
 
@@ -339,6 +346,37 @@ class MobilePayPalController extends Controller
             'status' => 'paid',
             'idempotent' => $idempotent,
         ]);
+    }
+
+    private function sendSaleConfirmationMail(?Sale $sale, $user): void
+    {
+        if (! $sale) {
+            Log::warning('No se pudo enviar el correo de confirmacion PayPal movil: la venta no pudo recargarse.');
+
+            return;
+        }
+
+        if (! filter_var($user->email ?? null, FILTER_VALIDATE_EMAIL)) {
+            Log::warning("No se pudo enviar el correo de confirmacion PayPal movil para la venta {$sale->id}: usuario sin email valido.");
+
+            return;
+        }
+
+        try {
+            $sale = $sale->fresh() ?: $sale;
+            $sale->loadMissing([
+                'sale_addres',
+                'sale_details.product',
+                'sale_details.product_variation.attribute',
+                'sale_details.product_variation.propertie',
+                'sale_details.product_variation.variation_father.attribute',
+                'sale_details.product_variation.variation_father.propertie',
+            ]);
+
+            Mail::to($user->email)->send(new SaleMail($user, $sale));
+        } catch (Throwable $exception) {
+            Log::error("No se pudo enviar el correo de confirmacion PayPal movil para la venta {$sale->id}. Excepcion: ".get_class($exception));
+        }
     }
 
     private function formatAmount(mixed $amount): string

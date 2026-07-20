@@ -5,14 +5,23 @@
     <title>Confirmacion de pedido</title>
 </head>
 <body style="margin:0; padding:0; background:#f4f5f7; font-family:Arial, sans-serif; color:#282828;">
+    @php
+        $isPaid = ($sale->status ?? null) === 'paid';
+        $paymentStatusLabel = $isPaid ? 'Pagado' : 'Pago pendiente';
+        $headerTitle = $isPaid ? 'Pedido confirmado' : 'Pedido recibido';
+        $headerText = $isPaid
+            ? 'El pago se ha realizado correctamente.'
+            : 'Hemos recibido tu pedido correctamente. El pago esta pendiente.';
+    @endphp
+
     <table width="100%" cellspacing="0" cellpadding="0" style="background:#f4f5f7; padding:30px 0;">
         <tr>
             <td align="center">
                 <table width="680" cellspacing="0" cellpadding="0" style="background:#ffffff; border-radius:8px; overflow:hidden;">
                     <tr>
                         <td style="padding:28px 32px; background:#0989ff; color:#ffffff;">
-                            <h1 style="margin:0; font-size:24px; line-height:30px;">Gracias por tu compra</h1>
-                            <p style="margin:8px 0 0; font-size:15px; line-height:22px;">Hemos recibido tu pedido correctamente.</p>
+                            <h1 style="margin:0; font-size:24px; line-height:30px;">{{ $headerTitle }}</h1>
+                            <p style="margin:8px 0 0; font-size:15px; line-height:22px;">{{ $headerText }}</p>
                         </td>
                     </tr>
 
@@ -38,6 +47,10 @@
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Metodo de pago</td>
                                     <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->method_payment }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Estado del pago</td>
+                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $paymentStatusLabel }}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Fecha del pedido</td>
