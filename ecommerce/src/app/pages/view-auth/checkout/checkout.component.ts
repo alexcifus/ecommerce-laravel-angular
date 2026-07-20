@@ -38,7 +38,8 @@ export class CheckoutComponent {
   address_selected:any;
   description:string = '';
   @ViewChild('paypal',{static: true}) paypalElement?: ElementRef;
-  price_dolar:number = 0.8806798;
+  private readonly usdToEurRate:number = 0.8806798;
+  private paypalOrderTotalEur:string = '';
   constructor(
     public cartService: CartService,
     public cookieService: CookieService, 
@@ -77,6 +78,7 @@ export class CheckoutComponent {
       createOrder: (data:any, actions:any) => {
           // pass in any options from the v2 orders create call:
           // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+        this.paypalOrderTotalEur = '';
         if(this.totalCarts == 0){
           this.toastr.error("Validación","No puedes procesar el pago con un monto de 0")
           return;
@@ -87,7 +89,6 @@ export class CheckoutComponent {
         }
         if(!this.name ||
           !this.surname ||
-          !this.company ||
           !this.country_region ||
           !this.city ||
           !this.address ||
@@ -98,12 +99,17 @@ export class CheckoutComponent {
           this.toastr.error("Validacion","Todos los campos de la dirección son necesarios");
           return;
         }
+          const paypalTotalEur = this.getPaypalTotalEur();
+          if(!paypalTotalEur){
+            return;
+          }
+          this.paypalOrderTotalEur = paypalTotalEur;
           const createOrderPayload = {
             purchase_units: [
               {
                 amount: {
-                    description: "COMPRAR POR EL ECOMMERCE 2024",
-                    value: this.totalCarts,
+                    currency_code: 'EUR',
+                    value: paypalTotalEur,
                 }
               }
             ]
@@ -133,16 +139,23 @@ export class CheckoutComponent {
             return;
           }
 
+          const paypalTotalEur = this.paypalOrderTotalEur;
+          if(!paypalTotalEur){
+            this.toastr.error("PayPal","No se pudo recuperar el importe confirmado por PayPal.");
+            return;
+          }
+          const paypalTotalEurNumber = Number(paypalTotalEur);
+
           let dataSale = {
             method_payment: 'PAYPAL',
             payment_status: 'paid',
             paypal_order_id: data.orderID,
             currency_total: this.currency,
-            currency_payment: 'USD',
+            currency_payment: 'EUR',
             discount: 0,
-            subtotal: this.totalPaypayl(),
-            total: this.totalPaypayl(),
-            price_dolar: 0,
+            subtotal: paypalTotalEurNumber,
+            total: paypalTotalEurNumber,
+            price_dolar: this.currency == 'USD' ? this.usdToEurRate : 1,
             n_transaccion: capture.id,
             description: this.description,
             sale_address: {
@@ -182,12 +195,15 @@ export class CheckoutComponent {
   }).render(this.paypalElement?.nativeElement);
   }
 
-  totalPaypayl(){
-    if(this.currency == 'USD'){
-      return this.totalCarts;
-    }else{
-      return (this.totalCarts/this.price_dolar).toFixed(2);
+  getPaypalTotalEur(): string {
+    if(this.currency == 'EUR'){
+      return Number(this.totalCarts).toFixed(2);
     }
+    if(this.currency == 'USD'){
+      return (Number(this.totalCarts) * this.usdToEurRate).toFixed(2);
+    }
+    this.toastr.error("PayPal","No se puede procesar PayPal con la moneda seleccionada.");
+    return '';
   }
 
   placeOrder(event?: Event){

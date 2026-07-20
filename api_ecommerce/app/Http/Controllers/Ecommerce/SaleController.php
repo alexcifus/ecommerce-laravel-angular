@@ -94,6 +94,7 @@ class SaleController extends Controller
                 "price_dolar" => $request->price_dolar ?? 0,
                 "description" => $request->description,
                 "n_transaccion" => $request->n_transaccion,
+                "paypal_order_id" => $request->paypal_order_id,
                 "status" => $status,
             ]);
 
