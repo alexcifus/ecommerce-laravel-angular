@@ -44,17 +44,18 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "method_payment" => "required|string",
+            "method_payment" => "required|string|in:PAYPAL,CARD,STORE",
             "currency_total" => "required|string",
             "currency_payment" => "required|string",
             "discount" => "required|numeric|min:0",
             "subtotal" => "required|numeric|min:0",
             "total" => "required|numeric|min:0",
             "price_dolar" => "nullable|numeric|min:0",
-            "payment_status" => "nullable|string",
+            "status" => "nullable|string|in:paid,pending_payment",
+            "payment_status" => "nullable|string|in:paid,pending_payment",
             "paypal_order_id" => "nullable|string",
             "description" => "nullable|string",
-            "n_transaccion" => "required|string",
+            "n_transaccion" => "nullable|string",
             "sale_address" => "required|array",
             "sale_address.name" => "required|string",
             "sale_address.surname" => "required|string",
@@ -78,11 +79,27 @@ class SaleController extends Controller
             ], 422);
         }
 
-        $status = $request->method_payment === "PAYPAL" && $request->payment_status === "paid"
-            ? "paid"
-            : "pending_payment";
+        $status = $this->expectedPaymentStatus($request->method_payment);
+        $transactionNumber = $this->transactionNumberForPaymentMethod($request);
 
-        $sale = DB::transaction(function () use ($request, $user, $carts, $status) {
+        if (
+            ($request->filled("status") && $request->status !== $status) ||
+            ($request->filled("payment_status") && $request->payment_status !== $status)
+        ) {
+            return response()->json([
+                "message" => 422,
+                "message_text" => "El estado no corresponde con el metodo de pago seleccionado",
+            ], 422);
+        }
+
+        if ($request->method_payment === "PAYPAL" && $transactionNumber === "") {
+            return response()->json([
+                "message" => 422,
+                "message_text" => "La transaccion de PayPal es obligatoria",
+            ], 422);
+        }
+
+        $sale = DB::transaction(function () use ($request, $user, $carts, $status, $transactionNumber) {
             $sale = Sale::create([
                 "user_id" => $user->id,
                 "method_payment" => $request->method_payment,
@@ -93,7 +110,7 @@ class SaleController extends Controller
                 "total" => $request->total,
                 "price_dolar" => $request->price_dolar ?? 0,
                 "description" => $request->description,
-                "n_transaccion" => $request->n_transaccion,
+                "n_transaccion" => $transactionNumber,
                 "paypal_order_id" => $request->paypal_order_id,
                 "status" => $status,
             ]);
@@ -164,11 +181,31 @@ class SaleController extends Controller
      */
     public function show(string $id)
     {
-        $sale = Sale::where("n_transaccion", $id)->first();
+        $sale = ctype_digit($id)
+            ? Sale::whereKey((int) $id)->firstOrFail()
+            : Sale::where("n_transaccion", $id)->firstOrFail();
 
         return response()->json([
             "sale" => SaleResource::make($sale),
         ]);
+    }
+
+    private function expectedPaymentStatus(string $methodPayment): string
+    {
+        return [
+            "PAYPAL" => "paid",
+            "CARD" => "paid",
+            "STORE" => "pending_payment",
+        ][$methodPayment];
+    }
+
+    private function transactionNumberForPaymentMethod(Request $request): string
+    {
+        if ($request->method_payment === "PAYPAL") {
+            return trim((string) $request->n_transaccion);
+        }
+
+        return "";
     }
 
     /**

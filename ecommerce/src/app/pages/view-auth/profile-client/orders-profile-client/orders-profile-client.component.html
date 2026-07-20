@@ -2,7 +2,7 @@
     <table class="table" *ngIf="!sale_detail_review">
        <thead>
           <tr>
-             <th scope="col">N° Transacción</th>
+             <th scope="col">N.� pedido</th>
              <th scope="col">Método de pago</th>
              <th scope="col">Fecha de registro</th>
              <th scope="col">Total</th>
@@ -12,8 +12,8 @@
        <tbody>
          @for(sale of sales;track sale.id) {
             <tr>
-               <th scope="row"> #{{ sale.n_transaccion }}</th>
-               <td data-info="title">{{ sale.method_payment }}</td>
+               <th scope="row"> #{{ sale.id }}</th>
+               <td data-info="title">{{ sale.method_payment_label || sale.method_payment }}</td>
                <td >{{ sale.created_at }} </td>
                <td data-info="status pending">{{ sale.total }} {{ sale.currency_payment }}</td>
                <td><a href="#" onclick="return false;" (click)="detailShow(sale)" class="tp-logout-btn">Detalle</a></td>

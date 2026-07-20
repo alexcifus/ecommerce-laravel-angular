@@ -54,12 +54,14 @@ class SalesController extends Controller
                             "email" => null,
                         ],
                         "method_payment" => $sale->method_payment,
+                        "method_payment_label" => $this->payment_method_label($sale->method_payment),
                         "currency_total" => $sale->currency_total,
                         "currency_payment" => $sale->currency_payment,
                         "discount" => $sale->discount,
                         "subtotal" => $sale->subtotal,
                         "total" => $sale->total,
                         "status" => $sale->status,
+                        "status_label" => $this->status_label($sale->status),
                         "n_transaccion" => $sale->n_transaccion,
                         "sale_address" => $sale->sale_addres,
                         "created_at" => $sale->created_at->format("Y-m-d h:i A"),
@@ -138,6 +140,15 @@ class SalesController extends Controller
             "shipped" => "Enviado",
             "cancelled" => "Cancelado",
         ][$status] ?? $status;
+    }
+
+    private function payment_method_label(?string $method_payment): string
+    {
+        return [
+            "PAYPAL" => "PayPal",
+            "CARD" => "Tarjeta",
+            "STORE" => "Pago en tienda",
+        ][$method_payment] ?? ($method_payment ?: "Sin metodo");
     }
 
     public function list_excel(Request $request){

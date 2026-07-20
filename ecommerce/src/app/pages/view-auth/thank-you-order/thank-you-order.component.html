@@ -59,13 +59,19 @@
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
                                   <h4>Número de pedido:</h4>
-                                  <p>#{{ ORDER_SELECTED.n_transaccion }}</p>
+                                  <p>#{{ ORDER_SELECTED.id }}</p>
                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="tp-order-details-item">
                                   <h4>Método de pago:</h4>
-                                  <p>{{ ORDER_SELECTED.method_payment }}</p>
+                                  <p>{{ ORDER_SELECTED.method_payment_label || ORDER_SELECTED.method_payment }}</p>
+                               </div>
+                            </div>
+                            <div class="col-sm-6">
+                               <div class="tp-order-details-item">
+                                  <h4>Estado del pago:</h4>
+                                  <p>{{ ORDER_SELECTED.status_label || ORDER_SELECTED.status }}</p>
                                </div>
                             </div>
                          </div>

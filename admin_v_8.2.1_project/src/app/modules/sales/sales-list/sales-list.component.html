@@ -104,9 +104,7 @@
                             [(ngModel)]="method_payment"
                         >
                             <option value="">Selec. Metodo</option>
-                            <option value="WEB">WEB</option>
-                            <option value="PAYPAL">PAYPAL</option>
-                            <option value="MERCADOPAGO">MERCADOPAGO</option>
+                            <option *ngFor="let method of paymentMethods" [value]="method.value">{{ method.label }}</option>
                         </select>
                     </div>
                 </div>
@@ -191,7 +189,7 @@
                                 </td>
                                 <td>
                                     <span>
-                                        {{ sale.method_payment }}
+                                        {{ sale.method_payment_label || methodPaymentLabel(sale.method_payment) }}
                                     </span>
                                 </td>
                                 <td>

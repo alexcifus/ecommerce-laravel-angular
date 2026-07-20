@@ -6,8 +6,18 @@
 </head>
 <body style="margin:0; padding:0; background:#f4f5f7; font-family:Arial, sans-serif; color:#282828;">
     @php
+        $paymentMethods = [
+            'PAYPAL' => 'PayPal',
+            'CARD' => 'Tarjeta',
+            'STORE' => 'Pago en tienda',
+        ];
+        $paymentStatuses = [
+            'paid' => 'Pagado',
+            'pending_payment' => 'Pendiente de pago',
+        ];
         $isPaid = ($sale->status ?? null) === 'paid';
-        $paymentStatusLabel = $isPaid ? 'Pagado' : 'Pago pendiente';
+        $paymentStatusLabel = $paymentStatuses[$sale->status ?? ''] ?? ($isPaid ? 'Pagado' : 'Pendiente de pago');
+        $paymentMethodLabel = $paymentMethods[$sale->method_payment ?? ''] ?? ($sale->method_payment ?: 'Sin metodo');
         $headerTitle = $isPaid ? 'Pedido confirmado' : 'Pedido recibido';
         $headerText = $isPaid
             ? 'El pago se ha realizado correctamente.'
@@ -38,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Numero de transaccion</td>
-                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->n_transaccion }}</td>
+                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->n_transaccion ?: 'No disponible' }}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Cliente</td>
@@ -46,7 +56,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Metodo de pago</td>
-                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->method_payment }}</td>
+                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $paymentMethodLabel }}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Estado del pago</td>

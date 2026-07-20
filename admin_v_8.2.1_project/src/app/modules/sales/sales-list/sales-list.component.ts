@@ -31,9 +31,14 @@ export class SalesListComponent {
   start_date:any;
   end_date:any;
   method_payment:any;
+  paymentMethods:any = [
+    {value: 'PAYPAL', label: 'PayPal'},
+    {value: 'CARD', label: 'Tarjeta'},
+    {value: 'STORE', label: 'Pago en tienda'},
+  ];
   URL_SERVICIOST:any = URL_SERVICIOS;
   statuses:any = [
-    {value: 'pending_payment', label: 'Pendiente'},
+    {value: 'pending_payment', label: 'Pendiente de pago'},
     {value: 'paid', label: 'Pagado'},
     {value: 'preparing', label: 'En preparación'},
     {value: 'shipped', label: 'Enviado'},
@@ -158,7 +163,7 @@ export class SalesListComponent {
 
   statusShortLabel(status:string){
     const labels:any = {
-      pending_payment: 'Pendiente',
+      pending_payment: 'Pendiente de pago',
       paid: 'Pagado',
       preparing: 'Preparando',
       shipped: 'Enviado',
@@ -166,6 +171,11 @@ export class SalesListComponent {
     };
 
     return labels[status] || this.statusLabel(status);
+  }
+
+  methodPaymentLabel(method_payment:string){
+    const methodSelected = this.paymentMethods.find((item:any) => item.value == method_payment);
+    return methodSelected ? methodSelected.label : method_payment || 'Sin metodo';
   }
 
   changeStatus(sale:any,event:any){

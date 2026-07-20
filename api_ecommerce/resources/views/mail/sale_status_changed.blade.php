@@ -31,7 +31,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Numero de transaccion</td>
-                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->n_transaccion }}</td>
+                                    <td style="padding:12px; border:1px solid #e5e7eb;">{{ $sale->n_transaccion ?: 'No disponible' }}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:12px; border:1px solid #e5e7eb; font-weight:bold;">Nuevo estado</td>

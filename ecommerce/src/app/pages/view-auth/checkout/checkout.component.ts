@@ -37,6 +37,8 @@ export class CheckoutComponent {
 
   address_selected:any;
   description:string = '';
+  selectedPaymentMethod:string = 'PAYPAL';
+  isPlacingOrder:boolean = false;
   @ViewChild('paypal',{static: true}) paypalElement?: ElementRef;
   private readonly usdToEurRate:number = 0.8806798;
   private paypalOrderTotalEur:string = '';
@@ -148,6 +150,7 @@ export class CheckoutComponent {
 
           let dataSale = {
             method_payment: 'PAYPAL',
+            status: 'paid',
             payment_status: 'paid',
             paypal_order_id: data.orderID,
             currency_total: this.currency,
@@ -171,11 +174,16 @@ export class CheckoutComponent {
               email: this.email,
             }
           }
+          if(this.isPlacingOrder){
+            return;
+          }
+
+          this.isPlacingOrder = true;
           this.cartService.checkout(dataSale).subscribe((resp:any) => {
             console.log(resp);
             this.cartService.resetCart();
             this.toastr.success("Exito","La compra se a realizado");
-            this.router.navigateByUrl("/gracias-por-tu-compra/"+capture.id);
+            this.router.navigateByUrl("/gracias-por-tu-compra/"+(resp.sale_id || capture.id));
             // La redirección a la pagina de gracias
           },(error:any) => {
             console.error('Checkout failed after PayPal capture', error);
@@ -183,6 +191,8 @@ export class CheckoutComponent {
               "Pedido no guardado",
               "PayPal pudo haber confirmado el pago, pero no se pudo guardar el pedido. Contacta con soporte indicando la transaccion " + capture.id
             );
+          }).add(() => {
+            this.isPlacingOrder = false;
           });
           // return actions.order.capture().then(captureOrderHandler);
       },
@@ -206,32 +216,57 @@ export class CheckoutComponent {
     return '';
   }
 
-  placeOrder(event?: Event){
+  confirmNonPaypalOrder(event?: Event){
     event?.preventDefault();
 
+    if(!this.selectedPaymentMethod){
+      this.toastr.error("Validacion","Selecciona un metodo de pago");
+      return;
+    }
+
+    if(this.selectedPaymentMethod === 'PAYPAL'){
+      this.toastr.error("Validacion","Usa el boton de PayPal para completar el pago");
+      return;
+    }
+
+    const status = this.selectedPaymentMethod === 'CARD' ? 'paid' : 'pending_payment';
+    this.placeOrder(this.selectedPaymentMethod, status);
+  }
+
+  placeOrder(method_payment:string, status:string){
     if(!this.validateCheckout()){
       return;
     }
 
-    let n_transaccion = "WEB-" + new Date().getTime();
+    if(this.isPlacingOrder){
+      return;
+    }
+
     let dataSale = {
-      method_payment: 'WEB',
+      method_payment: method_payment,
+      status: status,
       currency_total: this.currency,
       currency_payment: this.currency,
       discount: 0,
       subtotal: this.totalCarts,
       total: this.totalCarts,
       price_dolar: 1,
-      n_transaccion: n_transaccion,
+      n_transaccion: null,
       description: this.description,
       sale_address: this.getSaleAddress(),
     }
 
+    this.isPlacingOrder = true;
     this.cartService.checkout(dataSale).subscribe((resp:any) => {
       console.log(resp);
       this.cartService.resetCart();
       this.toastr.success("Exito","La compra se a realizado");
-      this.router.navigateByUrl("/gracias-por-tu-compra/"+n_transaccion);
+      this.router.navigateByUrl("/gracias-por-tu-compra/"+resp.sale_id);
+    },(error:any) => {
+      console.error('Checkout failed', error);
+      this.toastr.error("Pedido no guardado","No se pudo confirmar el pedido. Intentalo de nuevo.");
+    }).add(() => {
+      this.isPlacingOrder = false;
     });
   }
 
@@ -242,6 +277,10 @@ export class CheckoutComponent {
     }
     if(this.listCarts.length == 0){
       this.toastr.error("Validacion","No puedes procesar el pedido con un carrito de compra vacio");
+      return false;
+    }
+    if(!this.selectedPaymentMethod){
+      this.toastr.error("Validacion","Selecciona un metodo de pago");
       return false;
     }
     if(!this.name ||
@@ -278,7 +317,6 @@ export class CheckoutComponent {
 
     if(!this.name ||
       !this.surname ||
-      !this.company ||
       !this.country_region ||
       !this.city ||
       !this.address ||
@@ -311,7 +349,6 @@ export class CheckoutComponent {
   editAddress(){
     if(!this.name ||
       !this.surname ||
-      !this.company ||
       !this.country_region ||
       !this.city ||
       !this.address ||

@@ -22,6 +22,7 @@ class SaleResource extends JsonResource
                 "full_name" => $this->resource->user->name. ' '.$this->resource->user->surname,
             ],
             "method_payment" => $this->resource->method_payment,
+            "method_payment_label" => $this->paymentMethodLabel($this->resource->method_payment),
             "currency_total" => $this->resource->currency_total,
             "currency_payment" => $this->resource->currency_payment,
             "discount" => $this->resource->discount,
@@ -30,6 +31,8 @@ class SaleResource extends JsonResource
             "price_dolar" => $this->resource->price_dolar,
             "description" => $this->resource->description,
             "n_transaccion" => $this->resource->n_transaccion,
+            "status" => $this->resource->status,
+            "status_label" => $this->statusLabel($this->resource->status),
             "sale_details" => $this->resource->sale_details->map(function($sale_detail) {
                 return [
                     "id" => $sale_detail->id,
@@ -95,5 +98,22 @@ class SaleResource extends JsonResource
             "sale_address" => $this->resource->sale_addres,
             "created_at" => $this->resource->created_at->format("Y-m-d h:i A"),
         ];
+    }
+
+    private function paymentMethodLabel(?string $methodPayment): string
+    {
+        return [
+            "PAYPAL" => "PayPal",
+            "CARD" => "Tarjeta",
+            "STORE" => "Pago en tienda",
+        ][$methodPayment] ?? ($methodPayment ?: "Sin metodo");
+    }
+
+    private function statusLabel(?string $status): string
+    {
+        return [
+            "paid" => "Pagado",
+            "pending_payment" => "Pendiente de pago",
+        ][$status] ?? ($status ?: "Sin estado");
     }
 }

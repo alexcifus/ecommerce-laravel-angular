@@ -467,6 +467,19 @@ table tr td:last-child {
   {{-- <script type="text/javascript" src="./web/scripts.js"></script> --}}
 </head>
 <body>
+@php
+    $paymentMethods = [
+        'PAYPAL' => 'PayPal',
+        'CARD' => 'Tarjeta',
+        'STORE' => 'Pago en tienda',
+    ];
+    $paymentStatuses = [
+        'paid' => 'Pagado',
+        'pending_payment' => 'Pendiente de pago',
+    ];
+    $paymentMethodLabel = $paymentMethods[$sale->method_payment ?? ''] ?? ($sale->method_payment ?: 'Sin metodo');
+    $paymentStatusLabel = $paymentStatuses[$sale->status ?? ''] ?? ($sale->status ?: 'Sin estado');
+@endphp
 
 {{-- <button type="button" class="btn btn-light-primary font-weight-bold" onclick="window.print();">Imprimir Pedido</button> --}}
 <div class="web-container">
@@ -612,7 +625,9 @@ table tr td:last-child {
       <tr>
         <td class="payment-info">
             <div>
-                METODO DE PAGO: <strong>{{ $sale->method_payment }}</strong>
+                METODO DE PAGO: <strong>{{ $paymentMethodLabel }}</strong>
+                <br>
+                ESTADO DEL PAGO: <strong>{{ $paymentStatusLabel }}</strong>
             </div>
         </td>
 
