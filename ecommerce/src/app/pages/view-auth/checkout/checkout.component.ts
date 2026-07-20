@@ -86,7 +86,7 @@ export class CheckoutComponent {
           return;
         }
         if(this.listCarts.length == 0){
-          this.toastr.error("Validación","No puedes procesar el pago con un carrito de compra vacio")
+          this.toastr.error("Validación","No puedes procesar el pago con un carrito de compra vacío")
           return;
         }
         if(!this.name ||
@@ -98,7 +98,7 @@ export class CheckoutComponent {
           !this.postcode_zip ||
           !this.phone ||
           !this.email){
-          this.toastr.error("Validacion","Todos los campos de la dirección son necesarios");
+          this.toastr.error("Validación","Todos los campos de la dirección son necesarios");
           return;
         }
           const paypalTotalEur = this.getPaypalTotalEur();
@@ -128,7 +128,7 @@ export class CheckoutComponent {
             Order = await actions.order.capture();
           } catch (error) {
             console.error('PayPal capture failed', error);
-            this.toastr.error("PayPal", "No se pudo confirmar el pago con PayPal. Intentalo de nuevo.");
+            this.toastr.error("PayPal", "No se pudo confirmar el pago con PayPal. Inténtalo de nuevo.");
             return;
           }
 
@@ -137,7 +137,7 @@ export class CheckoutComponent {
 
           if(Order?.status !== 'COMPLETED' || !capture?.id || (captureStatus && captureStatus !== 'COMPLETED')){
             console.error('Invalid PayPal capture response', Order);
-            this.toastr.error("PayPal", "PayPal no confirmo el pago correctamente. No se ha creado el pedido.");
+            this.toastr.error("PayPal", "PayPal no confirmó el pago correctamente. No se ha creado el pedido.");
             return;
           }
 
@@ -182,14 +182,14 @@ export class CheckoutComponent {
           this.cartService.checkout(dataSale).subscribe((resp:any) => {
             console.log(resp);
             this.cartService.resetCart();
-            this.toastr.success("Exito","La compra se a realizado");
+            this.toastr.success("Éxito","La compra se ha realizado");
             this.router.navigateByUrl("/gracias-por-tu-compra/"+(resp.sale_id || capture.id));
             // La redirección a la pagina de gracias
           },(error:any) => {
             console.error('Checkout failed after PayPal capture', error);
             this.toastr.error(
               "Pedido no guardado",
-              "PayPal pudo haber confirmado el pago, pero no se pudo guardar el pedido. Contacta con soporte indicando la transaccion " + capture.id
+              "PayPal pudo haber confirmado el pago, pero no se pudo guardar el pedido. Contacta con soporte indicando la transacción " + capture.id
             );
           }).add(() => {
             this.isPlacingOrder = false;
@@ -200,7 +200,7 @@ export class CheckoutComponent {
       // handle unrecoverable errors
       onError: (err:any) => {
           console.error('An error prevented the buyer from checking out with PayPal');
-          this.toastr.error("PayPal", "Ocurrio un error durante el pago con PayPal. Intentalo de nuevo.");
+          this.toastr.error("PayPal", "Ocurrió un error durante el pago con PayPal. Inténtalo de nuevo.");
       }
   }).render(this.paypalElement?.nativeElement);
   }
@@ -220,12 +220,12 @@ export class CheckoutComponent {
     event?.preventDefault();
 
     if(!this.selectedPaymentMethod){
-      this.toastr.error("Validacion","Selecciona un metodo de pago");
+      this.toastr.error("Validación","Selecciona un método de pago");
       return;
     }
 
     if(this.selectedPaymentMethod === 'PAYPAL'){
-      this.toastr.error("Validacion","Usa el boton de PayPal para completar el pago");
+      this.toastr.error("Validación","Usa el botón de PayPal para completar el pago");
       return;
     }
 
@@ -260,11 +260,11 @@ export class CheckoutComponent {
     this.cartService.checkout(dataSale).subscribe((resp:any) => {
       console.log(resp);
       this.cartService.resetCart();
-      this.toastr.success("Exito","La compra se a realizado");
+      this.toastr.success("Éxito","La compra se ha realizado");
       this.router.navigateByUrl("/gracias-por-tu-compra/"+resp.sale_id);
     },(error:any) => {
       console.error('Checkout failed', error);
-      this.toastr.error("Pedido no guardado","No se pudo confirmar el pedido. Intentalo de nuevo.");
+      this.toastr.error("Pedido no guardado","No se pudo confirmar el pedido. Inténtalo de nuevo.");
     }).add(() => {
       this.isPlacingOrder = false;
     });
@@ -272,15 +272,15 @@ export class CheckoutComponent {
 
   validateCheckout(){
     if(this.totalCarts == 0){
-      this.toastr.error("Validacion","No puedes procesar el pedido con un monto de 0");
+      this.toastr.error("Validación","No puedes procesar el pedido con un monto de 0");
       return false;
     }
     if(this.listCarts.length == 0){
-      this.toastr.error("Validacion","No puedes procesar el pedido con un carrito de compra vacio");
+      this.toastr.error("Validación","No puedes procesar el pedido con un carrito de compra vacío");
       return false;
     }
     if(!this.selectedPaymentMethod){
-      this.toastr.error("Validacion","Selecciona un metodo de pago");
+      this.toastr.error("Validación","Selecciona un método de pago");
       return false;
     }
     if(!this.name ||
@@ -292,7 +292,7 @@ export class CheckoutComponent {
       !this.postcode_zip ||
       !this.phone ||
       !this.email){
-      this.toastr.error("Validacion","Todos los campos de la direccion son necesarios");
+      this.toastr.error("Validación","Todos los campos de la dirección son necesarios");
       return false;
     }
     return true;
@@ -324,7 +324,7 @@ export class CheckoutComponent {
       !this.postcode_zip ||
       !this.phone ||
       !this.email){
-      this.toastr.error("Validacion","Todos los campos son necesarios");
+      this.toastr.error("Validación","Todos los campos son necesarios");
       return;
     }
 
@@ -342,7 +342,7 @@ export class CheckoutComponent {
     };
     this.addressService.registerAddress(data).subscribe((resp:any) => {
       console.log(resp);
-      this.toastr.success("Exitoso","La dirección se acaba de registrar");
+      this.toastr.success("Éxito","La dirección se acaba de registrar");
       this.address_list.unshift(resp.addres);
     })
   }
@@ -356,7 +356,7 @@ export class CheckoutComponent {
       !this.postcode_zip ||
       !this.phone ||
       !this.email){
-      this.toastr.error("Validacion","Todos los campos son necesarios");
+      this.toastr.error("Validación","Todos los campos son necesarios");
       return;
     }
 
@@ -374,7 +374,7 @@ export class CheckoutComponent {
     };
     this.addressService.updateAddress(this.address_selected.id,data).subscribe((resp:any) => {
       console.log(resp);
-      this.toastr.success("Exitoso","La dirección se acaba de editar");
+      this.toastr.success("Éxito","La dirección se acaba de editar");
       let INDEX = this.address_list.findIndex((item:any) => item.id == resp.addres.id);
       if(INDEX != -1){
         this.address_list[INDEX] = resp.addres;

@@ -39,14 +39,14 @@ export class CartComponent {
 
   deleteCart(CART:any) {
     this.cartService.deleteCart(CART.id).subscribe((resp:any) => {
-      this.toastr.info("Eliminación","Se elimino el producto "+CART.product.title + " del carrito de compra");
+      this.toastr.info("Eliminación","Se eliminó el producto "+CART.product.title + " del carrito de compra");
       this.cartService.removeCart(CART);
     })
   }
 
   minusQuantity(cart:any){
     if(cart.quantity == 1){
-      this.toastr.error("Validacion","Ya no puedes disminuir el producto");
+      this.toastr.error("Validación","Ya no puedes disminuir el producto");
       return;
     }
     cart.quantity = cart.quantity - 1;
@@ -54,10 +54,10 @@ export class CartComponent {
     this.cartService.updateCart(cart.id,cart).subscribe((resp:any) => {
       console.log(resp);
       if(resp.message == 403){
-        this.toastr.error("Validacion",resp.message_text);
+        this.toastr.error("Validación",resp.message_text);
       }else{
         this.cartService.changeCart(resp.cart);
-        this.toastr.info("Exito","Se actualizo la cantidad  del producto "+resp.cart.product.title);
+        this.toastr.info("Éxito","Se actualizó la cantidad del producto "+resp.cart.product.title);
       }
     })
   }
@@ -70,17 +70,17 @@ export class CartComponent {
       if(resp.message == 403){
         cart.quantity = quantity_old;
         cart.total = cart.subtotal * cart.quantity;
-        this.toastr.error("Validacion",resp.message_text);
+        this.toastr.error("Validación",resp.message_text);
       }else{
         this.cartService.changeCart(resp.cart);
-        this.toastr.info("Exito","Se actualizo la cantidad  del producto "+resp.cart.product.title);
+        this.toastr.info("Éxito","Se actualizó la cantidad del producto "+resp.cart.product.title);
       }
     })
   }
 
   appyCupon(){
     if(!this.code_cupon){
-      this.toastr.error("Validacion",'Se necesita ingresar un codigo de cupon');
+      this.toastr.error("Validación",'Debes introducir un código de descuento');
       return;
     }
     let data = {
@@ -89,7 +89,7 @@ export class CartComponent {
     this.cartService.applyCupon(data).subscribe((resp:any) => {
       console.log(resp);
       if(resp.message == 403){
-        this.toastr.error("Validacion",resp.message_text);
+        this.toastr.error("Validación",resp.message_text);
         return;
       }else{
         this.cartService.resetCart();
