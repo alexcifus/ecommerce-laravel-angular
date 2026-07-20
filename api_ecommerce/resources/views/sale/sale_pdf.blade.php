@@ -503,12 +503,18 @@ table tr td:last-child {
   <table class="invoice-info-container">
     <tr>
         <td>
-          N° VENTA: <strong>#{{ $sale->n_transaccion }}</strong>
+          N.&ordm; PEDIDO: <strong>#{{ $sale->id }}</strong>
         </td>
 
         <td>
           FECHA: {{ $sale->created_at->format("Y-m-d h:i A") }}
         </td>
+    </tr>
+    <tr>
+        <td>
+          N.&ordm; TRANSACCI&Oacute;N: <strong>{{ $sale->n_transaccion ?: 'No disponible' }}</strong>
+        </td>
+        <td></td>
     </tr>
     <div class="" style="display: block;width:100%;border:1px solid black;height:1px;"></div>
     <tr>

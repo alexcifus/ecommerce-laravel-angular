@@ -159,6 +159,9 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 161.469px;">
                                Estado
                             </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Numero de pedido" style="width: 161.469px;">
+                                N.&ordm; pedido
+                            </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1" colspan="1" aria-label="Nº transacción" style="width: 161.469px;">
                                 Nº transacción
                             </th>
@@ -214,7 +217,12 @@
                                 </td>
                                 <td>
                                     <span>
-                                        {{ sale.n_transaccion }}
+                                        #{{ sale.id }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{ sale.n_transaccion || 'Sin transacción' }}
                                     </span>
                                 </td>
                                 <td>
